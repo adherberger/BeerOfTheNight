@@ -17,7 +17,7 @@ public class BeerOtnHandler {
 	public Object initGame() {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
-		
+		game.setGameState("INIT");
 		gameRepo.save(game);
 		
 		ResponseBean response = new ResponseBean();
