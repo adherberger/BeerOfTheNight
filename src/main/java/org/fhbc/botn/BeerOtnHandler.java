@@ -2,7 +2,6 @@ package org.fhbc.botn;
 
 import java.sql.Timestamp;
 
-import org.fhbc.botn.dto.ResponseBean;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.repo.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
