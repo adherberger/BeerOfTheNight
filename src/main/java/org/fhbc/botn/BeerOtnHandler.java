@@ -15,6 +15,7 @@ public class BeerOtnHandler {
 	
 	public GameEntity initGame() {
 		GameEntity game = new GameEntity();
+		System.out.println("Hello World!");
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState("INIT");
 		return gameRepo.save(game);
