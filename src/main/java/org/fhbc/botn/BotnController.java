@@ -15,7 +15,8 @@ public class BotnController {
 	private BeerOtnHandler handler;
 	
 	@PostMapping("/initGame")
-	public GameEntity initGame() {
+	public Object initGame() {
 		return handler.initGame();
 	}
+
 }
