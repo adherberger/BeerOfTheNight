@@ -1,6 +1,6 @@
 package org.fhbc.botn.dto;
 
-public class ResponseBean {
+public class InitGameResponse {
 
 	private int GameId;
 
@@ -11,6 +11,4 @@ public class ResponseBean {
 	public void setGameId(int gameId) {
 		GameId = gameId;
 	}
-	
-	
 }
