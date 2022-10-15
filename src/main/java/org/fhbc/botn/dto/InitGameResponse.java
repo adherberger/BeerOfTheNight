@@ -1,6 +1,6 @@
 package org.fhbc.botn.dto;
 
-public class ResponseBean {
+public class InitGameResponse {
 
 	private int GameId;
 
