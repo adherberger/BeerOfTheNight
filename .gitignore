@@ -1,7 +1,7 @@
 ### Maven ###
 HELP.md
 botn-backend/target/
-!.mvn/wrapper/maven-wrapper.jar
+!botn-backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
