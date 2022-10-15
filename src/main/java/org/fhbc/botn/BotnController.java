@@ -1,7 +1,7 @@
 package org.fhbc.botn;
 
 import org.fhbc.botn.dto.AddEntryRequest;
-import org.fhbc.botn.entity.GameEntity;
+import org.fhbc.botn.dto.InitGameResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,7 @@ public class BotnController {
 	private BeerOtnHandler handler;
 	
 	@PostMapping("/initGame")
-	public GameEntity initGame() {
+	public InitGameResponse initGame() {
 		return handler.initGame();
 	}
 

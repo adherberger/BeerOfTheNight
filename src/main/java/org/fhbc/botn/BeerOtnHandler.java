@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.entity.EntryEntity;
+import org.fhbc.botn.dto.InitGameResponse;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.repo.EntryRepository;
 import org.fhbc.botn.repo.GameRepository;
@@ -16,15 +17,19 @@ public class BeerOtnHandler {
 	@Autowired
 	GameRepository gameRepo;
 	
-
 	@Autowired
 	EntryRepository entryRepo;
 
-	public GameEntity initGame() {
+	public InitGameResponse initGame() {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState("INIT");
-		return gameRepo.save(game);
+		gameRepo.save(game);
+		
+		InitGameResponse response = new InitGameResponse();
+		response.setGameId(game.getGameId());
+		
+		return response;
 	}
 	
 	public void addEntry(AddEntryRequest req) {
