@@ -12,6 +12,11 @@ import javax.persistence.Table;
 @Table (name = "game_main")
 // Top level table for keeping track of games
 public class GameEntity {
+	public enum GameState {
+		INIT,
+		IN_PROGRESS,
+		COMPLETE
+	}
 	
 	@Id
 	@GeneratedValue(generator="game_id_seq")
@@ -21,7 +26,7 @@ public class GameEntity {
 	private int gameId;
 	
 	@Column(name = "game_state")
-	private String gameState;
+	private GameState gameState;
 	
 	@Column(name = "game_date")
 	private Timestamp gameDate;
@@ -37,11 +42,11 @@ public class GameEntity {
 		this.gameId = gameId;
 	}
 
-	public String getGameState() {
+	public GameState getGameState() {
 		return gameState;
 	}
 
-	public void setGameState(String gameState) {
+	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
 	}
 
