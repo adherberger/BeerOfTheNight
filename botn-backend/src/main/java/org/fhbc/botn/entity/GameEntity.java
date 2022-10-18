@@ -26,6 +26,9 @@ public class GameEntity {
 	@Column(name = "game_date")
 	private Timestamp gameDate;
 	
+	@Column(name = "room_code")
+	private String roomCode;
+	
 	public int getGameId() {
 		return gameId;
 	}
@@ -50,4 +53,11 @@ public class GameEntity {
 		this.gameDate = gameDate;
 	}
 
+	public String getRoomCode() {
+		return roomCode;
+	}
+
+	public void setRoomCode(String roomCode) {
+		this.roomCode = roomCode;
+	}
 }
