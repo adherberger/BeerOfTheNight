@@ -47,9 +47,11 @@ public class BeerOtnHandler {
 	}
 
 	public String generateRoomCode() {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb;
 		
 		do {
+			sb = new StringBuilder();
+			
 			for(int i = 0; i < 4; i++) {
 				// Append a random character between A and Z
 				sb.append((char) ('A' + ThreadLocalRandom.current().nextInt('Z' - 'A' + 1)));
