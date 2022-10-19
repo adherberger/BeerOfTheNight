@@ -27,7 +27,7 @@ function App() {
             </>
           : <></>
         }
-        <button onClick={() => { initGame() }}>Create Room</button>
+        <button className="button-main" onClick={() => { initGame() }}>Create Room</button>
       </header>
     </div>
   );
