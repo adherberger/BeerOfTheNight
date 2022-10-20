@@ -43,7 +43,7 @@ public class BeerOtnHandler {
 		entry.setBrewer(req.getBrewer());
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
-		entryRepo.save(entry);;
+		entryRepo.save(entry);
 	}
 
 	public String generateRoomCode() {
