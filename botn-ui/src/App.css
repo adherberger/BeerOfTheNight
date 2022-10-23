@@ -1,19 +1,24 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-header {
   background-color: #EEBB44;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  flex-grow: 1;
 }
 
 .top-bar {
+  position: sticky;
+  top: 0;
   background: #CC9933;
   color: white;
   display: flex;
@@ -27,11 +32,11 @@
 }
 
 .top-bar > .top-bar-item {
-  padding: 10px 12px 10px 12px;
+  padding: 10px 12px 6px 12px;
 }
 
 .top-bar > .logo {
-  padding: 10px 0px 10px 12px;
+  padding: 10px 0px 6px 12px;
 }
 
 .top-bar-menu {

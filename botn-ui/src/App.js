@@ -7,6 +7,8 @@ import { FaBeer, FaBars } from 'react-icons/fa';
 function App() {
   const [game, setGame] = useState({});
 
+  console.log(process.env);
+
   const initGame = () => {
     axios.post(
       BOTN_INIT_GAME
