@@ -29,10 +29,9 @@ function App() {
       </div>
       <header className="App-header">
         <div style={{display: "flex", alignItems: "baseline"}}>
-          <FaBeer/><h3 style={{margin: "0 18px 0 18px"}}>Beer of the Night</h3><FaBeer/>
         </div>
         {
-          game.gameId ?
+          game.gameId ? 
             <>
               <p>{"Game ID: " + game.gameId}</p>
               <p>{"Room Code: " + game.roomCode}</p>
