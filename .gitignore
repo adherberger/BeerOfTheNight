@@ -20,3 +20,6 @@ botn-backend/.sts4-cache
 ### VS Code ###
 /.vscode/
 /bin/
+
+### Local project config files ###
+botn-ui/.env
