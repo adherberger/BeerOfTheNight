@@ -21,23 +21,19 @@ function App() {
     <div className="App">
       <div className="top-bar">
         <div className="logo"><FaBeer/></div>
-        <div className="top-bar-item">Beer Of The Night</div>
+        <div className="top-bar-item">
+          {
+          game.gameId ?
+          "Room Code: " + game.roomCode
+          : "Beer Of The Night"
+          }
+        </div>
         <div className="flex-spacer"/>
         <div className="top-bar-menu top-bar-item">
           <FaBars/>
         </div>
       </div>
       <header className="App-header">
-        <div style={{display: "flex", alignItems: "baseline"}}>
-        </div>
-        {
-          game.gameId ? 
-            <>
-              <p>{"Game ID: " + game.gameId}</p>
-              <p>{"Room Code: " + game.roomCode}</p>
-            </>
-          : <></>
-        }
         <button className="button-main" onClick={() => { initGame() }}>Create Room</button>
       </header>
     </div>
