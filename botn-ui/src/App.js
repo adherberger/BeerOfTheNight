@@ -1,21 +1,42 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './App.css';
-import axios from 'axios';
-import { BOTN_INIT_GAME } from './constants.js'
 import { FaBeer, FaBars } from 'react-icons/fa';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+import CreateRoom from './CreateRoom';
+import JoinRoom from './JoinRoom';
+
+const GameContext = React.createContext({});
+
+export const useGameContext = () => {
+  return useContext(GameContext);
+}
+
+export const GameContextProvider = ({children}) => {
+  const [ game, setGame ] = useState({});
+
+  return (
+    <GameContext.Provider value = {{...game, setGame}}>
+      {children}
+    </GameContext.Provider>
+  );
+};
 
 function App() {
   const [game, setGame] = useState({});
 
-  console.log(process.env);
-
-  const initGame = () => {
-    axios.post(
-      BOTN_INIT_GAME
-    ).then((result) => {
-      setGame(result.data);
-    });
-  }
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <JoinRoom/>,
+    },
+    {
+      path: "/login",
+      element: <CreateRoom/>,
+    },
+  ]);
 
   return (
     <div className="App">
@@ -33,9 +54,9 @@ function App() {
           <FaBars/>
         </div>
       </div>
-      <header className="App-header">
-        <button className="button-main" onClick={() => { initGame() }}>Create Room</button>
-      </header>
+      <GameContext.Provider value={{...game, setGame}}>
+        <RouterProvider router={router}/>
+      </GameContext.Provider>
     </div>
   );
 }
