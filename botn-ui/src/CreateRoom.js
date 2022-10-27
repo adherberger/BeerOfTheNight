@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGameContext } from './game-context';
 import axios from 'axios';
 import { BOTN_INIT_GAME } from './constants';
@@ -9,8 +9,8 @@ const CreateRoom = () => {
     const initGame = () => {
         axios.post(
         BOTN_INIT_GAME
-        ).then((result) => {
-            gameContext.setGame(result.data);
+        ).then((response) => {
+            gameContext.setGame(response.data);
         });
     }
 

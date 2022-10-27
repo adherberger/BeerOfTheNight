@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
 const GameContext = React.createContext({});
 
@@ -8,10 +8,6 @@ export const useGameContext = () => {
 
 export const GameContextProvider = ({children}) => {
   const [ game, setGame ] = useState({});
-
-  useEffect(() => {
-    console.log(game)
-  }, [game])
 
   return (
     <GameContext.Provider value = {{...game, setGame}}>
