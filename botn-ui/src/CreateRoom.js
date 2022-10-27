@@ -1,5 +1,5 @@
-import React from 'react';
-import { useGameContext } from './App';
+import React, { useEffect } from 'react';
+import { useGameContext } from './game-context';
 import axios from 'axios';
 import { BOTN_INIT_GAME } from './constants';
 
