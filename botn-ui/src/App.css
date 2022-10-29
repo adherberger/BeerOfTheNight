@@ -63,3 +63,31 @@
 .button-main:hover {
   background: #BB8822;
 }
+
+.botn-input {
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  font-family: 'Arial';
+  font-weight: bold;
+}
+
+.botn-input * {
+  margin: 6px;
+}
+
+.text-input-label {
+  text-align: left;
+}
+
+.text-input {
+  height: 40px;
+  padding: 0 8px 0 8px;
+  border-radius: 8px;
+  font-size: calc(10px + 2vmin);
+  font-family:'Courier New', Courier, monospace
+}
+
+.text-input:focus {
+  
+}
