@@ -4,6 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BOTN_JOIN_GAME } from './constants';
 
+const StateInput = ({
+    id,
+    title,
+    stateVar,
+    setStateVar
+}) => {
+    return (
+        <>
+            {
+                title ?
+                <label for={id}>{title}</label>
+                : <></>
+            }
+            <input id={id} value={stateVar} onChange={(e) => {setStateVar(e.target.value)}}/>
+        </>
+    );
+}
+
 const JoinRoom = () => {
     const gameContext = useGameContext();
     const [ name, setName ] = useState("");
@@ -24,10 +42,8 @@ const JoinRoom = () => {
 
     return (
         <div className="main-page">
-            <label for="name-input">Your Name:</label>
-            <input id="name-input" type="text" value={name} onChange={(e) => {setName(e.target.value)}}/>
-            <label for="room-code-input">Room Code:</label>
-            <input id="room-code-input" type="text" value={roomCode} onChange={(e) => {setRoomCode(e.target.value)}}/>
+            <StateInput id="name-input" title="Your Name" stateVar={name} setStateVar={setName}/>
+            <StateInput id="room-code-input" title="Room Code" stateVar={roomCode} setStateVar={setRoomCode}/>
             <button className="button-main" onClick={() => { joinGame(); }}>Join Room</button>
         </div>
     );
