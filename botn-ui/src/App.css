@@ -16,9 +16,7 @@
   flex-grow: 1;
 }
 
-.top-bar {
-  position: sticky;
-  top: 0;
+.bar {
   background: #CC9933;
   color: white;
   display: flex;
@@ -26,6 +24,16 @@
   font-weight: bold;
   font-size: 20px;
   flex-direction: row;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+}
+
+.bottom-bar {
+  position:sticky;
+  bottom: 0;
 }
 
 .flex-spacer {
@@ -49,9 +57,15 @@
   cursor: pointer;
 }
 
-.button-main {
-  background: #CC9933;
+.big-button-wrapper {
+
+}
+
+.big-button {
+  background: #EEBB44;
   color: white;
+  font-weight: bold;
+  border: 2px solid black;
   border-radius: 8px;
   width: 200px;
   height: 60px;
@@ -60,7 +74,13 @@
   margin: 18px;
 }
 
-.button-main:hover {
+.big-button:disabled {
+  border-color: gray;
+  background: #B82;
+  color: gray;
+}
+
+.big-button:hover {
   background: #BB8822;
 }
 
@@ -73,7 +93,7 @@
 }
 
 .botn-input * {
-  margin: 6px;
+  margin: 4px;
 }
 
 .text-input-label {
@@ -81,7 +101,7 @@
 }
 
 .text-input {
-  height: 40px;
+  height: calc(18px + 2vmin);
   padding: 0 8px 0 8px;
   border-radius: 8px;
   font-size: calc(10px + 2vmin);

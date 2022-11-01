@@ -25,7 +25,7 @@ function App() {
 
   return (
       <div className="App">
-        <div className="top-bar">
+        <div className="bar top-bar">
           <div className="logo"><FaBeer/></div>
           <div className="top-bar-item">
             {

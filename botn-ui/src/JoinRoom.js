@@ -29,6 +29,16 @@ const StateInput = ({
     );
 }
 
+const MainButton = ({onClick, disabled}) => {
+    return (
+        <div className="bar bottom-bar">
+            <div className="flex-spacer">
+                <button className="big-button" disabled={disabled} onClick={() => { onClick(); }}>Join Room</button>
+            </div>
+        </div>
+    )
+}
+
 const JoinRoom = () => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
@@ -56,11 +66,27 @@ const JoinRoom = () => {
     }
 
     return (
-        <div className="main-page">
-            <StateInput id="name-input" title="Your Name" stateVar={name} setStateVar={setName} />
-            <StateInput id="room-code-input" title="Room Code" stateVar={roomCode} setStateVar={updateRoomCode} maxLength={4} />
-            <button className="button-main" onClick={() => { joinGame(); }}>Join Room</button>
-        </div>
+        <>
+            <div className="main-page">
+                <StateInput
+                    id="name-input"
+                    title="Your Name"
+                    stateVar={name}
+                    setStateVar={setName}
+                />
+                <StateInput
+                    id="room-code-input"
+                    title="Room Code"
+                    stateVar={roomCode}
+                    setStateVar={updateRoomCode}
+                    maxLength={4}
+                />
+            </div>
+            <MainButton
+                onClick={joinGame}
+                disabled={roomCode.length < 4 || !name}
+            />
+        </>
     );
 }
 

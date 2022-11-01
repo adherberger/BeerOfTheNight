@@ -21,6 +21,11 @@ public class BotnController {
 	public InitGameResponse initGame() {
 		return handler.initGame();
 	}
+	
+	@PostMapping("/joinGame")
+	public JoinGameResponse joinGame(@RequestBody JoinGameRequest req) {
+		
+	}
 
 	@PostMapping("/addEntry")
 	public void addEntry(@RequestBody AddEntryRequest req) {
