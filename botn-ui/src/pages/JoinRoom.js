@@ -1,43 +1,12 @@
 import React, { useState } from 'react';
-import { useGameContext } from './game-context';
+import { useGameContext } from '../utilities/game-context';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BOTN_JOIN_GAME } from './constants';
-
-const StateInput = ({
-    id,
-    title,
-    stateVar,
-    setStateVar,
-    ...props
-}) => {
-    return (
-        <div className="botn-input">
-            {
-                title ?
-                    <label for={id} className="text-input-label">{title}</label>
-                    : <></>
-            }
-            <input
-                id={id}
-                className="text-input"
-                value={stateVar}
-                onChange={(e) => { setStateVar(e.target.value) }}
-                {...props}
-            />
-        </div>
-    );
-}
-
-const MainButton = ({onClick, disabled}) => {
-    return (
-        <div className="bar bottom-bar">
-            <div className="flex-spacer">
-                <button className="big-button" disabled={disabled} onClick={() => { onClick(); }}>Join Room</button>
-            </div>
-        </div>
-    )
-}
+import { BOTN_JOIN_GAME } from '../utilities/constants';
+import {
+    StateInput,
+    MainButton
+} from '../components/components';
 
 const JoinRoom = () => {
     const gameContext = useGameContext();
@@ -83,6 +52,7 @@ const JoinRoom = () => {
                 />
             </div>
             <MainButton
+                text={"Join Game"}
                 onClick={joinGame}
                 disabled={roomCode.length < 4 || !name}
             />

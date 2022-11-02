@@ -1,13 +1,13 @@
 import React from 'react';
-import './App.css';
+import './styles/App.css';
 import { FaBeer, FaBars } from 'react-icons/fa';
 import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import CreateRoom from './CreateRoom';
-import JoinRoom from './JoinRoom';
-import { useGameContext } from './game-context';
+import CreateRoom from './pages/CreateRoom';
+import JoinRoom from './pages/JoinRoom';
+import { useGameContext } from './utilities/game-context';
 
 function App() {
   const gameContext = useGameContext();

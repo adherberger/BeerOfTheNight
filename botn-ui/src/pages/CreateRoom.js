@@ -1,9 +1,11 @@
-import React from 'react';
-import { useGameContext } from './game-context';
+import React, { useState } from 'react';
+import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_INIT_GAME } from './constants';
+import { BOTN_INIT_GAME } from '../utilities/constants';
+import{ MainButton } from '../components/components';
 
 const CreateRoom = () => {
+    const [ name, setName ] = useState("")
     const gameContext = useGameContext();
 
     const initGame = () => {
@@ -16,7 +18,7 @@ const CreateRoom = () => {
 
     return (
       <div className="main-page">
-        <button className="button-main" onClick={() => { initGame() }}>Create Room</button>
+        <MainButton text={"Create Room"} onClick={initGame}/>
       </div>
     )
 }
