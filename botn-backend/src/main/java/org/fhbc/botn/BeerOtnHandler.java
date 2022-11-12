@@ -49,9 +49,9 @@ public class BeerOtnHandler {
 		}
 		
 		MemberEntity member = new MemberEntity();
-		member.setName(req.getName());
+		member.setMemberName(req.getName());
 		member.setGameId(game.getGameId());
-		member.setIsPresent(true);
+		member.setPresent(true);
 		memberRepo.save(member);
 		
 		return new GameDto(game);

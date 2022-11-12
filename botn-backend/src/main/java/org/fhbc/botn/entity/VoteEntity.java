@@ -7,25 +7,32 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "member")
+@Table (name = "vote")
 // Top level table for keeping track of games
-public class MemberEntity {
+public class VoteEntity {
 	
 	@Id
-	@GeneratedValue(generator="member_id_seq")
-	//@SequenceGenerator(name="game_id_seq",sequenceName="GAME_ID_SEQ", allocationSize=1)
+	@GeneratedValue(generator="vote_id_seq")
+
+	@Column(name = "vote_id")
+	private int voteId;
 
 	@Column(name = "member_id")
 	private int memberId;
 
 	@Column(name = "game_id")
 	private int gameId;
-	
-	@Column(name = "member_name")
-	private String memberName;
 
-	@Column(name = "present")
-	private boolean present;
+	@Column(name = "place")
+	private int place;
+
+	public int getVoteId() {
+		return voteId;
+	}
+
+	public void setVoteId(int voteId) {
+		this.voteId = voteId;
+	}
 
 	public int getMemberId() {
 		return memberId;
@@ -33,6 +40,14 @@ public class MemberEntity {
 
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
+	}
+
+	public int getPlace() {
+		return place;
+	}
+
+	public void setPlace(int place) {
+		this.place = place;
 	}
 
 	public int getGameId() {
@@ -43,19 +58,5 @@ public class MemberEntity {
 		this.gameId = gameId;
 	}
 	
-	public String getMemberName() {
-		return memberName;
-	}
 
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-
-	public boolean isPresent() {
-		return present;
-	}
-
-	public void setPresent(boolean present) {
-		this.present = present;
-	}
 }
