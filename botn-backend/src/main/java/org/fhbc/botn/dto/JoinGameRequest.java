@@ -1,22 +1,18 @@
 package org.fhbc.botn.dto;
 
-public class InitGameResponse {
-
-	private int gameId;
+public class JoinGameRequest {
+	private String name;
 	private String roomCode;
-
-	public int getGameId() {
-		return gameId;
+	
+	public String getName() {
+		return name;
 	}
-
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
+	public void setName(String name) {
+		this.name = name;
 	}
-
 	public String getRoomCode() {
 		return roomCode;
 	}
-
 	public void setRoomCode(String roomCode) {
 		this.roomCode = roomCode;
 	}

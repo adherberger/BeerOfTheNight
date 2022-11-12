@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
+import Lobby from './pages/Lobby';
 import { useGameContext } from './utilities/game-context';
 
 function App() {
@@ -21,6 +22,10 @@ function App() {
       path: "/login",
       element: <CreateRoom/>,
     },
+    {
+      path: "/lobby",
+      element: <Lobby/>
+    }
   ]);
 
   return (

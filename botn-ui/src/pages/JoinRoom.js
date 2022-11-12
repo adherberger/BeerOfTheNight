@@ -27,7 +27,7 @@ const JoinRoom = () => {
         ).then((response) => {
             if (response.status === 200) {
                 gameContext.setGame(response.data);
-                navigate.push("/lobby");
+                navigate("/lobby");
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);
             }
