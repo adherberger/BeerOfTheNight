@@ -1,31 +1,44 @@
 package org.fhbc.botn.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "member")
-// Top level table for keeping track of games
+@Table(name = "member")
+// Table for keeping track of members who have joined a game
 public class MemberEntity {
-	
-	@Id
-	@GeneratedValue(generator="member_id_seq")
-	//@SequenceGenerator(name="game_id_seq",sequenceName="GAME_ID_SEQ", allocationSize=1)
 
+	@Id
+	@GeneratedValue(generator = "member_id_seq")
 	@Column(name = "member_id")
 	private int memberId;
 
-	@Column(name = "game_id")
-	private int gameId;
-	
+	@ManyToOne
+	@JoinColumn(name = "game_id", nullable = false)
+	private GameEntity game;
+
 	@Column(name = "member_name")
 	private String memberName;
 
 	@Column(name = "present")
 	private boolean present;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "entry_id")
+	private EntryEntity entry;
+
+	@OneToMany(mappedBy = "member")
+	private List<VoteEntity> votes;
 
 	public int getMemberId() {
 		return memberId;
@@ -35,14 +48,14 @@ public class MemberEntity {
 		this.memberId = memberId;
 	}
 
-	public int getGameId() {
-		return gameId;
+	public GameEntity getGame() {
+		return game;
 	}
 
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
+	public void setGame(GameEntity game) {
+		this.game = game;
 	}
-	
+
 	public String getMemberName() {
 		return memberName;
 	}
@@ -58,4 +71,21 @@ public class MemberEntity {
 	public void setPresent(boolean present) {
 		this.present = present;
 	}
+
+	public EntryEntity getEntry() {
+		return entry;
+	}
+
+	public void setEntry(EntryEntity entry) {
+		this.entry = entry;
+	}
+
+	public List<VoteEntity> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(List<VoteEntity> votes) {
+		this.votes = votes;
+	}
+
 }

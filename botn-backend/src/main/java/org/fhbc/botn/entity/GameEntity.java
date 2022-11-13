@@ -1,11 +1,13 @@
 package org.fhbc.botn.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,8 +22,6 @@ public class GameEntity {
 	
 	@Id
 	@GeneratedValue(generator="game_id_seq")
-	//@SequenceGenerator(name="game_id_seq",sequenceName="GAME_ID_SEQ", allocationSize=1)
-
 	@Column(name = "game_id")
 	private int gameId;
 	
@@ -33,6 +33,9 @@ public class GameEntity {
 	
 	@Column(name = "room_code")
 	private String roomCode;
+	
+	@OneToMany(mappedBy="game")
+	private List<MemberEntity> members;
 	
 	public int getGameId() {
 		return gameId;

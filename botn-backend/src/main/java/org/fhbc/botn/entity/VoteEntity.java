@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,15 +15,16 @@ public class VoteEntity {
 	
 	@Id
 	@GeneratedValue(generator="vote_id_seq")
-
 	@Column(name = "vote_id")
 	private int voteId;
 
-	@Column(name = "member_id")
-	private int memberId;
-
-	@Column(name = "game_id")
-	private int gameId;
+	@ManyToOne
+	@JoinColumn(name = "member_id", nullable = false)
+	private MemberEntity member;
+	
+	@ManyToOne
+	@JoinColumn(name = "entry_id", nullable = false)
+	private EntryEntity entry;
 
 	@Column(name = "place")
 	private int place;
@@ -34,12 +37,12 @@ public class VoteEntity {
 		this.voteId = voteId;
 	}
 
-	public int getMemberId() {
-		return memberId;
+	public MemberEntity getMember() {
+		return member;
 	}
 
-	public void setMemberId(int memberId) {
-		this.memberId = memberId;
+	public void setMember(MemberEntity member) {
+		this.member = member;
 	}
 
 	public int getPlace() {
@@ -49,14 +52,4 @@ public class VoteEntity {
 	public void setPlace(int place) {
 		this.place = place;
 	}
-
-	public int getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
-	
-
 }
