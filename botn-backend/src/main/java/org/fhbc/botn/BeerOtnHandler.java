@@ -1,9 +1,12 @@
 package org.fhbc.botn;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.GetEntriesRequest;
+import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameResponse;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
@@ -12,6 +15,7 @@ import org.fhbc.botn.repo.EntryRepository;
 import org.fhbc.botn.repo.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class BeerOtnHandler {
@@ -61,5 +65,23 @@ public class BeerOtnHandler {
 		} while(gameRepo.findByRoomCode(sb.toString()) != null);
 		
 		return sb.toString();
+	}
+	
+	public GetEntriesResponse getEntries(GetEntriesRequest req) {
+		GetEntriesResponse resp = new GetEntriesResponse();
+		
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGameId(req.getGameId());
+		
+		for (EntryEntity e:entryEntityList) {
+			GetEntriesResponse.Entry entry = resp.new Entry();
+			entry.setBeerName(e.getBeerName());
+			entry.setBeerStyle(e.getBeerStyle());
+			entry.setBrewer(e.getBrewer());
+			entry.setEntryId(e.getEntryId());
+			
+			resp.getEntryList().add(entry);
+		}
+		
+		return resp;
 	}
 }

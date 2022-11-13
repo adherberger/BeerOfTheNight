@@ -1,6 +1,8 @@
 package org.fhbc.botn;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.GetEntriesRequest;
+import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,4 +29,8 @@ public class BotnController {
 		handler.addEntry(req);
 	}
 
+	@PostMapping("/getEntries")
+	public GetEntriesResponse getEntries(@RequestBody GetEntriesRequest req) {
+		return handler.getEntries(req);
+	}
 }
