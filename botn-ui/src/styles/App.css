@@ -1,24 +1,23 @@
 .App {
   text-align: center;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.App-header {
+.main-page {
   background-color: #EEBB44;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  flex-grow: 1;
+  overflow-y: scroll;
 }
 
-.top-bar {
-  position: sticky;
-  top: 0;
+.bar {
   background: #CC9933;
   color: white;
   display: flex;
@@ -49,9 +48,11 @@
   cursor: pointer;
 }
 
-.button-main {
-  background: #CC9933;
+.big-button {
+  background: #EEBB44;
   color: white;
+  font-weight: bold;
+  border: 2px solid black;
   border-radius: 8px;
   width: 200px;
   height: 60px;
@@ -60,6 +61,40 @@
   margin: 18px;
 }
 
-.button-main:hover {
+.big-button:disabled {
+  border-color: gray;
+  background: #B82;
+  color: gray;
+}
+
+.big-button:hover {
   background: #BB8822;
+}
+
+.botn-input {
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  font-family: 'Arial';
+  font-weight: bold;
+}
+
+.botn-input * {
+  margin: 4px;
+}
+
+.text-input-label {
+  text-align: left;
+}
+
+.text-input {
+  height: calc(18px + 2vmin);
+  padding: 0 8px 0 8px;
+  border-radius: 8px;
+  font-size: calc(10px + 2vmin);
+  font-family:'Courier New', Courier, monospace
+}
+
+.text-input:focus {
+  
 }

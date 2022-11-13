@@ -1,5 +1,4 @@
 package org.fhbc.botn.repo;
-
 import java.util.List;
 
 import org.fhbc.botn.entity.MemberEntity;

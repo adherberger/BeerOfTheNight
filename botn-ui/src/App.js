@@ -1,46 +1,51 @@
-import React, { useState } from 'react';
-import './App.css';
-import axios from 'axios';
-import { BOTN_INIT_GAME } from './constants.js'
+import React from 'react';
+import './styles/App.css';
 import { FaBeer, FaBars } from 'react-icons/fa';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+import CreateRoom from './pages/CreateRoom';
+import JoinRoom from './pages/JoinRoom';
+import Lobby from './pages/Lobby';
+import { useGameContext } from './utilities/game-context';
 
 function App() {
-  const [game, setGame] = useState({});
+  const gameContext = useGameContext();
 
-  console.log(process.env);
-
-  const initGame = () => {
-    axios.post(
-      BOTN_INIT_GAME
-    ).then((result) => {
-      setGame(result.data);
-    });
-  }
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <JoinRoom/>,
+    },
+    {
+      path: "/login",
+      element: <CreateRoom/>,
+    },
+    {
+      path: "/lobby",
+      element: <Lobby/>
+    }
+  ]);
 
   return (
-    <div className="App">
-      <div className="top-bar">
-        <div className="logo"><FaBeer/></div>
-        <div className="top-bar-item">Beer Of The Night</div>
-        <div className="flex-spacer"/>
-        <div className="top-bar-menu top-bar-item">
-          <FaBars/>
+      <div className="App">
+        <div className="bar top-bar">
+          <div className="logo"><FaBeer/></div>
+          <div className="top-bar-item">
+            {
+              gameContext.gameId ?
+              "Room Code: " + gameContext.roomCode
+              : "Beer Of The Night"
+            }
+          </div>
+          <div className="flex-spacer"/>
+          <div className="top-bar-menu top-bar-item">
+            <FaBars/>
+          </div>
         </div>
+        <RouterProvider router={router}/>
       </div>
-      <header className="App-header">
-        <div style={{display: "flex", alignItems: "baseline"}}>
-        </div>
-        {
-          game.gameId ? 
-            <>
-              <p>{"Game ID: " + game.gameId}</p>
-              <p>{"Room Code: " + game.roomCode}</p>
-            </>
-          : <></>
-        }
-        <button className="button-main" onClick={() => { initGame() }}>Create Room</button>
-      </header>
-    </div>
   );
 }
 
