@@ -42,7 +42,7 @@ public class MemberEntity {
 	public void setGameId(int gameId) {
 		this.gameId = gameId;
 	}
-
+	
 	public String getMemberName() {
 		return memberName;
 	}
@@ -58,6 +58,4 @@ public class MemberEntity {
 	public void setPresent(boolean present) {
 		this.present = present;
 	}
-
-
 }

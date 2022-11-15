@@ -5,17 +5,21 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
-import org.fhbc.botn.dto.InitGameResponse;
+import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
+import org.fhbc.botn.entity.MemberEntity;
 import org.fhbc.botn.repo.EntryRepository;
 import org.fhbc.botn.repo.GameRepository;
+import org.fhbc.botn.repo.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class BeerOtnHandler {
@@ -24,9 +28,12 @@ public class BeerOtnHandler {
 	GameRepository gameRepo;
 	
 	@Autowired
+	MemberRepository memberRepo;
+	
+	@Autowired
 	EntryRepository entryRepo;
 
-	public InitGameResponse initGame() {
+	public GameDto initGame() {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState(GameState.INIT);
@@ -34,11 +41,23 @@ public class BeerOtnHandler {
 		
 		gameRepo.save(game);
 		
-		InitGameResponse response = new InitGameResponse();
-		response.setGameId(game.getGameId());
-		response.setRoomCode(game.getRoomCode());
+		return new GameDto(game);
+	}
+	
+	public GameDto joinGame(JoinGameRequest req) {
+		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		
-		return response;
+		if(game == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A game with room code " + req.getRoomCode() + " was not found.", null);
+		}
+		
+		MemberEntity member = new MemberEntity();
+		member.setMemberName(req.getName());
+		member.setGameId(game.getGameId());
+		member.setPresent(true);
+		memberRepo.save(member);
+		
+		return new GameDto(game);
 	}
 	
 	public void addEntry(AddEntryRequest req) {
@@ -66,7 +85,7 @@ public class BeerOtnHandler {
 		
 		return sb.toString();
 	}
-	
+
 	public GetEntriesResponse getEntries(GetEntriesRequest req) {
 		GetEntriesResponse resp = new GetEntriesResponse();
 		
@@ -84,4 +103,5 @@ public class BeerOtnHandler {
 		
 		return resp;
 	}
+
 }
