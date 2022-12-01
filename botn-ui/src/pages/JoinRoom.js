@@ -23,7 +23,7 @@ const JoinRoom = () => {
     const joinGame = () => {
         axios.post(
             BOTN_JOIN_GAME,
-            { name: name, roomCode: roomCode }
+            { memberName: name, roomCode: roomCode }
         ).then((response) => {
             if (response.status === 200) {
                 gameContext.setGame(response.data);

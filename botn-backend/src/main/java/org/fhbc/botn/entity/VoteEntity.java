@@ -1,39 +1,38 @@
 package org.fhbc.botn.entity;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "vote")
+@Table(name = "vote")
 // Top level table for keeping track of games
 public class VoteEntity {
-	
-	@Id
-	@GeneratedValue(generator="vote_id_seq")
-	@Column(name = "vote_id")
-	private int voteId;
+	@EmbeddedId
+	VotePK voteId;
 
 	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false)
+	@MapsId("memberId")
+	@JoinColumn(name = "member_id")
 	private MemberEntity member;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "entry_id", nullable = false)
+	@MapsId("entryId")
+	@JoinColumn(name = "entry_id")
 	private EntryEntity entry;
 
 	@Column(name = "place")
 	private int place;
 
-	public int getVoteId() {
+	public VotePK getVoteId() {
 		return voteId;
 	}
 
-	public void setVoteId(int voteId) {
+	public void setVoteId(VotePK voteId) {
 		this.voteId = voteId;
 	}
 
@@ -45,6 +44,14 @@ public class VoteEntity {
 		this.member = member;
 	}
 
+	public EntryEntity getEntry() {
+		return entry;
+	}
+
+	public void setEntry(EntryEntity entry) {
+		this.entry = entry;
+	}
+
 	public int getPlace() {
 		return place;
 	}
@@ -52,4 +59,5 @@ public class VoteEntity {
 	public void setPlace(int place) {
 		this.place = place;
 	}
+
 }

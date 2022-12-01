@@ -1,13 +1,11 @@
 package org.fhbc.botn.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,8 +18,12 @@ public class EntryEntity {
 	@GeneratedValue(generator = "entry_id_seq")
 	@Column(name = "entry_id")
 	private int entryId;
+	
+	@ManyToOne
+	@JoinColumn(name = "game_id", nullable = false)
+	private GameEntity game;
 
-	@OneToOne(mappedBy = "entry")
+	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false)
 	private MemberEntity brewer;
 
@@ -30,9 +32,6 @@ public class EntryEntity {
 
 	@Column(name = "beer_style")
 	private String beerStyle;
-
-	@OneToMany(mappedBy = "entry")
-	private List<VoteEntity> votes;
 
 	public int getEntryId() {
 		return entryId;
@@ -65,13 +64,4 @@ public class EntryEntity {
 	public void setBeerStyle(String beerStyle) {
 		this.beerStyle = beerStyle;
 	}
-
-	public List<VoteEntity> getVotes() {
-		return votes;
-	}
-
-	public void setVotes(List<VoteEntity> votes) {
-		this.votes = votes;
-	}
-
 }

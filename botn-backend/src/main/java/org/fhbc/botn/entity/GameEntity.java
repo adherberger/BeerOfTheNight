@@ -11,32 +11,30 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "game_main")
+@Table(name = "game_main")
 // Top level table for keeping track of games
 public class GameEntity {
 	public enum GameState {
-		INIT,
-		IN_PROGRESS,
-		COMPLETE
+		INIT, IN_PROGRESS, RESULTS_RECEIVED, COMPLETE
 	}
-	
+
 	@Id
-	@GeneratedValue(generator="game_id_seq")
+	@GeneratedValue(generator = "game_id_seq")
 	@Column(name = "game_id")
 	private int gameId;
-	
+
 	@Column(name = "game_state")
 	private GameState gameState;
-	
+
 	@Column(name = "game_date")
 	private Timestamp gameDate;
-	
+
 	@Column(name = "room_code")
 	private String roomCode;
-	
-	@OneToMany(mappedBy="game")
-	private List<MemberEntity> members;
-	
+
+	@OneToMany(mappedBy = "game")
+	private List<EntryEntity> entries;
+
 	public int getGameId() {
 		return gameId;
 	}
@@ -68,4 +66,13 @@ public class GameEntity {
 	public void setRoomCode(String roomCode) {
 		this.roomCode = roomCode;
 	}
+
+	public List<EntryEntity> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<EntryEntity> entries) {
+		this.entries = entries;
+	}
+
 }

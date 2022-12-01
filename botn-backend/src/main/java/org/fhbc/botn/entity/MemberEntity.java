@@ -23,22 +23,11 @@ public class MemberEntity {
 	@Column(name = "member_id")
 	private int memberId;
 
-	@ManyToOne
-	@JoinColumn(name = "game_id", nullable = false)
-	private GameEntity game;
-
 	@Column(name = "member_name")
 	private String memberName;
 
-	@Column(name = "present")
-	private boolean present;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "entry_id")
-	private EntryEntity entry;
-
-	@OneToMany(mappedBy = "member")
-	private List<VoteEntity> votes;
+	@OneToMany(mappedBy = "brewer")
+	private List<EntryEntity> entries;
 
 	public int getMemberId() {
 		return memberId;
@@ -46,14 +35,6 @@ public class MemberEntity {
 
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
-	}
-
-	public GameEntity getGame() {
-		return game;
-	}
-
-	public void setGame(GameEntity game) {
-		this.game = game;
 	}
 
 	public String getMemberName() {
@@ -64,28 +45,11 @@ public class MemberEntity {
 		this.memberName = memberName;
 	}
 
-	public boolean isPresent() {
-		return present;
+	public List<EntryEntity> getEntries() {
+		return entries;
 	}
 
-	public void setPresent(boolean present) {
-		this.present = present;
+	public void setEntries(List<EntryEntity> entries) {
+		this.entries = entries;
 	}
-
-	public EntryEntity getEntry() {
-		return entry;
-	}
-
-	public void setEntry(EntryEntity entry) {
-		this.entry = entry;
-	}
-
-	public List<VoteEntity> getVotes() {
-		return votes;
-	}
-
-	public void setVotes(List<VoteEntity> votes) {
-		this.votes = votes;
-	}
-
 }

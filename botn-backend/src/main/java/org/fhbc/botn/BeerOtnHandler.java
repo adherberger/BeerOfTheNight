@@ -9,8 +9,11 @@ import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
+import org.fhbc.botn.entity.GameMemberEntity;
+import org.fhbc.botn.entity.GameMemberPK;
 import org.fhbc.botn.entity.MemberEntity;
 import org.fhbc.botn.repo.EntryRepository;
+import org.fhbc.botn.repo.GameMemberRepository;
 import org.fhbc.botn.repo.GameRepository;
 import org.fhbc.botn.repo.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class BeerOtnHandler {
 	MemberRepository memberRepo;
 	
 	@Autowired
+	GameMemberRepository gameMemberRepo;
+	
+	@Autowired
 	EntryRepository entryRepo;
 
 	public GameDto initGame() {
@@ -43,24 +49,36 @@ public class BeerOtnHandler {
 	
 	public GameDto joinGame(JoinGameRequest req) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
+		MemberEntity member = null;
 		
 		if(game == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A game with room code " + req.getRoomCode() + " was not found.", null);
 		}
 		
-		MemberEntity member = new MemberEntity();
-		member.setMemberName(req.getName());
-		member.setGame(game);
-		member.setPresent(true);
-		memberRepo.save(member);
+		// Member is joining as guest
+		if(req.getMemberName() != null) {
+			member = new MemberEntity();
+			member.setMemberName(req.getMemberName());
+			memberRepo.save(member);
+		} else {
+			// Do stuff to find existing member
+		}
+		
+		GameMemberEntity gameMember = new GameMemberEntity();
+		gameMember.setGameMemberId(new GameMemberPK(game.getGameId(), member.getMemberId()));
+		gameMember.setGame(game);
+		gameMember.setMember(member);
+		gameMember.setIsPresent(true);
+		gameMemberRepo.save(gameMember);
 		
 		return new GameDto(game);
 	}
 	
 	public void addEntry(AddEntryRequest req) {
 		EntryEntity entry = new EntryEntity();
-		entry.setGameId(req.getGameId());
-		entry.setBrewer(req.getBrewer());
+		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
+		
+		entry.setBrewer(brewer);
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
 		entryRepo.save(entry);
