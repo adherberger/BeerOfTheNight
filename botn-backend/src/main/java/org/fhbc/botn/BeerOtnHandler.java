@@ -1,10 +1,13 @@
 package org.fhbc.botn;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.GameDto;
+import org.fhbc.botn.dto.GetEntriesRequest;
+import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
@@ -100,4 +103,23 @@ public class BeerOtnHandler {
 		
 		return sb.toString();
 	}
+
+	public GetEntriesResponse getEntries(GetEntriesRequest req) {
+		GetEntriesResponse resp = new GetEntriesResponse();
+		
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGameId(req.getGameId());
+		
+		for (EntryEntity e:entryEntityList) {
+			GetEntriesResponse.Entry entry = resp.new Entry();
+			entry.setBeerName(e.getBeerName());
+			entry.setBeerStyle(e.getBeerStyle());
+			entry.setBrewer(e.getBrewer());
+			entry.setEntryId(e.getEntryId());
+			
+			resp.getEntryList().add(entry);
+		}
+		
+		return resp;
+	}
+
 }
