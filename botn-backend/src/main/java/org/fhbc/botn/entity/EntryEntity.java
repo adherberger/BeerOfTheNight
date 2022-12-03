@@ -6,8 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "entry")
@@ -24,12 +24,13 @@ public class EntryEntity {
 	private GameEntity game;
 
 	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false)
+	@JoinColumn(name = "member_id", nullable = true)
 	private MemberEntity brewer;
 
 	@Column(name = "beer_name")
 	private String beerName;
 
+	@NotNull
 	@Column(name = "beer_style")
 	private String beerStyle;
 

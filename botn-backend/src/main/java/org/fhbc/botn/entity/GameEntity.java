@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +36,10 @@ public class GameEntity {
 
 	@OneToMany(mappedBy = "game")
 	private List<EntryEntity> entries;
+	
+	@ManyToOne
+	@JoinColumn(name = "member_id", nullable = true)
+	private MemberEntity creator;
 
 	public int getGameId() {
 		return gameId;
@@ -75,4 +81,11 @@ public class GameEntity {
 		this.entries = entries;
 	}
 
+	public MemberEntity getCreator() {
+		return creator;
+	}
+	
+	public void setCreator(MemberEntity creator) {
+		this.creator = creator;
+	}
 }

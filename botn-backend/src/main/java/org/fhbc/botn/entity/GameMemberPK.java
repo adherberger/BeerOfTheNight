@@ -1,6 +1,7 @@
 package org.fhbc.botn.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,8 +15,9 @@ public class GameMemberPK implements Serializable {
 
 	@Column(name = "member_id")
 	Integer memberId;
-	
-	public GameMemberPK() {}
+
+	public GameMemberPK() {
+	}
 
 	public GameMemberPK(Integer gameId, Integer memberId) {
 		this.gameId = gameId;
@@ -38,4 +40,19 @@ public class GameMemberPK implements Serializable {
 		this.memberId = memberId;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof GameMemberPK)) {
+			return false;
+		}
+
+		GameMemberPK that = (GameMemberPK) o;
+		return Objects.equals(this.getGameId(), that.getGameId())
+				&& Objects.equals(this.getMemberId(), that.getMemberId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(gameId, memberId);
+	}
 }

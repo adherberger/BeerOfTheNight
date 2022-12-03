@@ -28,6 +28,9 @@ public class MemberEntity {
 
 	@OneToMany(mappedBy = "brewer")
 	private List<EntryEntity> entries;
+	
+	@OneToMany(mappedBy = "creator")
+	private List<GameEntity> gamesCreated;
 
 	public int getMemberId() {
 		return memberId;
@@ -51,5 +54,13 @@ public class MemberEntity {
 
 	public void setEntries(List<EntryEntity> entries) {
 		this.entries = entries;
+	}
+	
+	public List<GameEntity> getGamesCreated() {
+		return gamesCreated;
+	}
+	
+	public void setGamesCreated(List<GameEntity> gamesCreated) {
+		this.gamesCreated = gamesCreated;
 	}
 }
