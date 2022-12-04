@@ -1,14 +1,14 @@
 package org.fhbc.botn.dto;
 
 public class JoinGameRequest {
-	private String name;
+	private String memberName;
 	private String roomCode;
 	
-	public String getName() {
-		return name;
+	public String getMemberName() {
+		return memberName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 	public String getRoomCode() {
 		return roomCode;

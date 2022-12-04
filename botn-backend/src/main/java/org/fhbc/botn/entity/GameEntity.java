@@ -1,39 +1,46 @@
 package org.fhbc.botn.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "game_main")
+@Table(name = "game_main")
 // Top level table for keeping track of games
 public class GameEntity {
 	public enum GameState {
-		INIT,
-		IN_PROGRESS,
-		COMPLETE
+		INIT, IN_PROGRESS, RESULTS_RECEIVED, COMPLETE
 	}
-	
-	@Id
-	@GeneratedValue(generator="game_id_seq")
-	//@SequenceGenerator(name="game_id_seq",sequenceName="GAME_ID_SEQ", allocationSize=1)
 
+	@Id
+	@GeneratedValue(generator = "game_id_seq")
 	@Column(name = "game_id")
 	private int gameId;
-	
+
 	@Column(name = "game_state")
 	private GameState gameState;
-	
+
 	@Column(name = "game_date")
 	private Timestamp gameDate;
-	
+
 	@Column(name = "room_code")
 	private String roomCode;
+
+	@OneToMany(mappedBy = "game")
+	private List<EntryEntity> entries;
 	
+	@ManyToOne
+	@JoinColumn(name = "member_id", nullable = true)
+	private MemberEntity creator;
+
 	public int getGameId() {
 		return gameId;
 	}
@@ -64,5 +71,21 @@ public class GameEntity {
 
 	public void setRoomCode(String roomCode) {
 		this.roomCode = roomCode;
+	}
+
+	public List<EntryEntity> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<EntryEntity> entries) {
+		this.entries = entries;
+	}
+
+	public MemberEntity getCreator() {
+		return creator;
+	}
+	
+	public void setCreator(MemberEntity creator) {
+		this.creator = creator;
 	}
 }

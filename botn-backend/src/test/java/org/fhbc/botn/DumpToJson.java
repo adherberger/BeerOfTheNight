@@ -15,7 +15,7 @@ public class DumpToJson {
 		
 		req.setBeerName("My IPA");
 		req.setBeerStyle("IPA");
-		req.setBrewer("Andy");
+		req.setMemberId(1001);
 		req.setGameId(1001);
 		
 		System.out.println(gson.toJson(req));

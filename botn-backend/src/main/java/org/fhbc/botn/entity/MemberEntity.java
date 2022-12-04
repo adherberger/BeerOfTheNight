@@ -1,31 +1,36 @@
 package org.fhbc.botn.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "member")
-// Top level table for keeping track of games
+@Table(name = "member")
+// Table for keeping track of members who have joined a game
 public class MemberEntity {
-	
-	@Id
-	@GeneratedValue(generator="member_id_seq")
-	//@SequenceGenerator(name="game_id_seq",sequenceName="GAME_ID_SEQ", allocationSize=1)
 
+	@Id
+	@GeneratedValue(generator = "member_id_seq")
 	@Column(name = "member_id")
 	private int memberId;
 
-	@Column(name = "game_id")
-	private int gameId;
-	
 	@Column(name = "member_name")
 	private String memberName;
 
-	@Column(name = "present")
-	private boolean present;
+	@OneToMany(mappedBy = "brewer")
+	private List<EntryEntity> entries;
+	
+	@OneToMany(mappedBy = "creator")
+	private List<GameEntity> gamesCreated;
 
 	public int getMemberId() {
 		return memberId;
@@ -35,14 +40,6 @@ public class MemberEntity {
 		this.memberId = memberId;
 	}
 
-	public int getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
-	
 	public String getMemberName() {
 		return memberName;
 	}
@@ -51,11 +48,19 @@ public class MemberEntity {
 		this.memberName = memberName;
 	}
 
-	public boolean isPresent() {
-		return present;
+	public List<EntryEntity> getEntries() {
+		return entries;
 	}
 
-	public void setPresent(boolean present) {
-		this.present = present;
+	public void setEntries(List<EntryEntity> entries) {
+		this.entries = entries;
+	}
+	
+	public List<GameEntity> getGamesCreated() {
+		return gamesCreated;
+	}
+	
+	public void setGamesCreated(List<GameEntity> gamesCreated) {
+		this.gamesCreated = gamesCreated;
 	}
 }
