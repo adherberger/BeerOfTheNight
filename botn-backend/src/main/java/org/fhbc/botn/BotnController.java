@@ -3,6 +3,7 @@ package org.fhbc.botn;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
+import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class BotnController {
 	private BeerOtnHandler handler;
 	
 	@PostMapping("/initGame")
-	public GameDto initGame() {
-		return handler.initGame();
+	public GameDto initGame(@RequestBody InitGameRequest req) {
+		return handler.initGame(req);
 	}
 	
 	@PostMapping("/joinGame")

@@ -10,10 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "game_main")
+@SequenceGenerator(name = "game_gen", sequenceName = "game_id_seq",  initialValue = 1001, allocationSize=1)
 // Top level table for keeping track of games
 public class GameEntity {
 	public enum GameState {
@@ -21,7 +23,7 @@ public class GameEntity {
 	}
 
 	@Id
-	@GeneratedValue(generator = "game_id_seq")
+	@GeneratedValue(generator = "game_gen")
 	@Column(name = "game_id")
 	private int gameId;
 

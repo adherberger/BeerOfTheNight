@@ -12,8 +12,9 @@ const CreateRoom = () => {
 
     const initGame = () => {
         axios.post(
-        BOTN_INIT_GAME
-        ).then((response) => {
+        BOTN_INIT_GAME,
+            { memberName: name }
+	).then((response) => {
             gameContext.setGame(response.data);
             navigate("/lobby");
         });

@@ -8,6 +8,7 @@ import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
+import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
@@ -39,13 +40,18 @@ public class BeerOtnHandler {
 	@Autowired
 	EntryRepository entryRepo;
 
-	public GameDto initGame() {
+	public GameDto initGame(InitGameRequest req) {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState(GameState.INIT);
 		game.setRoomCode(generateRoomCode());
 		
 		gameRepo.save(game);
+		
+		JoinGameRequest j = new JoinGameRequest();
+		j.setMemberName(req.getMemberName());
+		j.setRoomCode(game.getRoomCode());
+		joinGame(j);
 		
 		return new GameDto(game);
 	}
@@ -80,7 +86,9 @@ public class BeerOtnHandler {
 	public void addEntry(AddEntryRequest req) {
 		EntryEntity entry = new EntryEntity();
 		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
+		GameEntity game = gameRepo.findById(req.getGameId()).get();
 		
+		entry.setGame(game);
 		entry.setBrewer(brewer);
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
@@ -107,13 +115,13 @@ public class BeerOtnHandler {
 	public GetEntriesResponse getEntries(GetEntriesRequest req) {
 		GetEntriesResponse resp = new GetEntriesResponse();
 		
-		List<EntryEntity> entryEntityList = entryRepo.findAllByGameId(req.getGameId());
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
 		
 		for (EntryEntity e:entryEntityList) {
 			GetEntriesResponse.Entry entry = resp.new Entry();
 			entry.setBeerName(e.getBeerName());
 			entry.setBeerStyle(e.getBeerStyle());
-			entry.setBrewer(e.getBrewer());
+			entry.setBrewer(e.getBrewer().getMemberName());
 			entry.setEntryId(e.getEntryId());
 			
 			resp.getEntryList().add(entry);
