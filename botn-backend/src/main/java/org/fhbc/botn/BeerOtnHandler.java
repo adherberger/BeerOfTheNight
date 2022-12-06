@@ -10,6 +10,7 @@ import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
+import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
@@ -40,7 +41,7 @@ public class BeerOtnHandler {
 	@Autowired
 	EntryRepository entryRepo;
 
-	public GameDto initGame(InitGameRequest req) {
+	public JoinGameResponse initGame(InitGameRequest req) {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState(GameState.INIT);
@@ -51,12 +52,11 @@ public class BeerOtnHandler {
 		JoinGameRequest j = new JoinGameRequest();
 		j.setMemberName(req.getMemberName());
 		j.setRoomCode(game.getRoomCode());
-		joinGame(j);
 		
-		return new GameDto(game);
+		return joinGame(j);
 	}
 	
-	public GameDto joinGame(JoinGameRequest req) {
+	public JoinGameResponse joinGame(JoinGameRequest req) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		MemberEntity member = null;
 		
@@ -80,7 +80,11 @@ public class BeerOtnHandler {
 		gameMember.setIsPresent(true);
 		gameMemberRepo.save(gameMember);
 		
-		return new GameDto(game);
+		JoinGameResponse resp = new JoinGameResponse();
+		resp.setGameId(game.getGameId());
+		resp.setRoomCode(game.getRoomCode());
+		resp.setMemberId(gameMember.getMember().getMemberId());
+		return resp;
 	}
 	
 	public void addEntry(AddEntryRequest req) {

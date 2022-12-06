@@ -15,6 +15,7 @@ const CreateRoom = () => {
         BOTN_INIT_GAME,
             { memberName: name }
 	).then((response) => {
+            console.log(response.data);
             gameContext.setGame(response.data);
             navigate("/lobby");
         });
