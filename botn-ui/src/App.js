@@ -8,7 +8,7 @@ import {
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
-import Waiting from './pages/Waiting';
+import AddBeer from './pages/AddBeer';
 import { useGameContext } from './utilities/game-context';
 
 function App() {
@@ -28,8 +28,8 @@ function App() {
       element: <Lobby/>
     },
     {
-      path: "/waiting",
-      element: <Waiting/>
+      path: "/addBeer",
+      element: <AddBeer/>
     }
 
   ]);
