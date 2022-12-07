@@ -40,8 +40,8 @@ function App() {
           <div className="logo"><FaBeer/></div>
           <div className="top-bar-item">
             {
-              gameContext.gameId ?
-              "Room Code: " + gameContext.roomCode
+              gameContext.game ?
+              "Room Code: " + gameContext.game.roomCode
               : "Beer Of The Night"
             }
           </div>

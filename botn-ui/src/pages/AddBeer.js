@@ -20,7 +20,7 @@ const AddBeer = () => {
         console.log(gameContext)
         axios.post(
             BOTN_ADD_ENTRY,
-            { gameId:gameContext.gameId,memberId:gameContext.memberId,beerName: beerName, beerStyle: beerStyle }
+            { gameId:gameContext.game.gameId,memberId:gameContext.game.memberId,beerName: beerName, beerStyle: beerStyle }
         ).then((response) => {
             if (response.status === 200) {
                 navigate("/lobby");

@@ -16,7 +16,7 @@ const CreateRoom = () => {
             { memberName: name }
 	).then((response) => {
             console.log(response.data);
-            gameContext.setGame(response.data);
+            gameContext.setValue("game", response.data);
             navigate("/lobby");
         });
     }

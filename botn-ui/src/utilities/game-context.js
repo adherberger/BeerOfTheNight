@@ -7,10 +7,14 @@ export const useGameContext = () => {
 }
 
 export const GameContextProvider = ({children}) => {
-  const [ game, setGame ] = useState({});
+  const [ data, setData ] = useState({});
+
+  const setValue = (key, value) => {
+    setData({...data, [key]: value});
+  }
 
   return (
-    <GameContext.Provider value = {{...game, setGame}}>
+    <GameContext.Provider value={{...data, setValue}}>
       {children}
     </GameContext.Provider>
   );

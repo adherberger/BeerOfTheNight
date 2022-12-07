@@ -17,7 +17,7 @@ insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(103,1
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(104,100,104,'Goal Line Pub Pale Ale','Pale Ale');
 
 
-insert into game_main (game_id,game_date,game_state,room_code,member_id) values(200,CURRENT_DATE(),1,'AAAA',null);
+insert into game_main (game_id,game_date,game_state,room_code,member_id) values(200,CURRENT_DATE(),1,'BBBB',null);
 insert into member (member_id, member_name) values(200,'Andy');
 insert into game_member (game_id,member_id,is_present) values(200,200,true);
 insert into member (member_id, member_name) values(201,'Kevin');
