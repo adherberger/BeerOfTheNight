@@ -1,11 +1,12 @@
 package org.fhbc.botn;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
-import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.JoinGameRequest;
+import org.fhbc.botn.dto.JoinGameResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,18 +23,18 @@ public class BotnController {
 	private BeerOtnHandler handler;
 	
 	@PostMapping("/initGame")
-	public GameDto initGame(@RequestBody InitGameRequest req) {
+	public JoinGameResponse initGame(@RequestBody InitGameRequest req) {
 		return handler.initGame(req);
 	}
 	
 	@PostMapping("/joinGame")
-	public GameDto joinGame(@RequestBody JoinGameRequest req) {
+	public JoinGameResponse joinGame(@RequestBody JoinGameRequest req) {
 		return handler.joinGame(req);
 	}
 
 	@PostMapping("/addEntry")
-	public void addEntry(@RequestBody AddEntryRequest req) {
-		handler.addEntry(req);
+	public AddEntryResponse addEntry(@RequestBody AddEntryRequest req) {
+		return handler.addEntry(req);
 	}
 
 	@PostMapping("/getEntries")

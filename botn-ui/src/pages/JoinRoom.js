@@ -8,6 +8,8 @@ import {
     MainButton
 } from '../components/components';
 
+// Game member enters their name and a room code and fires off a joinGame request.
+// Response is stored in game context and consists of gameId, roomCode and memberId.
 const JoinRoom = () => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
@@ -26,7 +28,7 @@ const JoinRoom = () => {
             { memberName: name, roomCode: roomCode }
         ).then((response) => {
             if (response.status === 200) {
-                gameContext.setGame(response.data);
+                gameContext.setValue("game", response.data);
                 navigate("/lobby");
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);
@@ -42,6 +44,7 @@ const JoinRoom = () => {
                     title="Your Name"
                     stateVar={name}
                     setStateVar={setName}
+                    autoFocus
                 />
                 <StateInput
                     id="room-code-input"

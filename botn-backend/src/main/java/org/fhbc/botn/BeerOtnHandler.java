@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
+import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
@@ -40,23 +42,28 @@ public class BeerOtnHandler {
 	@Autowired
 	EntryRepository entryRepo;
 
-	public GameDto initGame(InitGameRequest req) {
+	// Initializes a brand new game.  Game ID and Room Code are generated.
+	// Since the game creator is also a member, we will call joineGame here and
+	// actually return a JoinGameResponse object to the requester.
+	public JoinGameResponse initGame(InitGameRequest req) {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState(GameState.INIT);
 		game.setRoomCode(generateRoomCode());
 		
+		//save info about the new game
 		gameRepo.save(game);
 		
+		//build a join request so the game creator is treated as a member henceforth
 		JoinGameRequest j = new JoinGameRequest();
 		j.setMemberName(req.getMemberName());
 		j.setRoomCode(game.getRoomCode());
-		joinGame(j);
 		
-		return new GameDto(game);
+		return joinGame(j);
 	}
 	
-	public GameDto joinGame(JoinGameRequest req) {
+	// called for each member that will be joining the game
+	public JoinGameResponse joinGame(JoinGameRequest req) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		MemberEntity member = null;
 		
@@ -73,6 +80,7 @@ public class BeerOtnHandler {
 			// Do stuff to find existing member
 		}
 		
+		//Save the member's info and associate them with the game
 		GameMemberEntity gameMember = new GameMemberEntity();
 		gameMember.setGameMemberId(new GameMemberPK(game.getGameId(), member.getMemberId()));
 		gameMember.setGame(game);
@@ -80,21 +88,33 @@ public class BeerOtnHandler {
 		gameMember.setIsPresent(true);
 		gameMemberRepo.save(gameMember);
 		
-		return new GameDto(game);
+		JoinGameResponse resp = new JoinGameResponse();
+		resp.setGameId(game.getGameId());
+		resp.setRoomCode(game.getRoomCode());
+		resp.setMemberId(gameMember.getMember().getMemberId());
+		resp.setBrewerName(req.getMemberName());
+		return resp;
 	}
 	
-	public void addEntry(AddEntryRequest req) {
+	// This is called when a member has a beer to enter in the game.
+	public AddEntryResponse addEntry(AddEntryRequest req) {
 		EntryEntity entry = new EntryEntity();
 		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
 		GameEntity game = gameRepo.findById(req.getGameId()).get();
 		
+		//save the beer information, associated with the member and game
 		entry.setGame(game);
 		entry.setBrewer(brewer);
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
 		entryRepo.save(entry);
+		
+		AddEntryResponse resp = new AddEntryResponse();
+		resp.setEntryId(entry.getEntryId());
+		return resp;
 	}
 
+	// Generates a random 4-byte room code.
 	public String generateRoomCode() {
 		StringBuilder sb;
 		
@@ -112,6 +132,7 @@ public class BeerOtnHandler {
 		return sb.toString();
 	}
 
+	// Return information about all beers entered for the given gameId
 	public GetEntriesResponse getEntries(GetEntriesRequest req) {
 		GetEntriesResponse resp = new GetEntriesResponse();
 		

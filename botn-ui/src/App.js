@@ -8,6 +8,7 @@ import {
 import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
+import AddBeer from './pages/AddBeer';
 import { useGameContext } from './utilities/game-context';
 
 function App() {
@@ -25,7 +26,12 @@ function App() {
     {
       path: "/lobby",
       element: <Lobby/>
+    },
+    {
+      path: "/addBeer",
+      element: <AddBeer/>
     }
+
   ]);
 
   return (
@@ -34,8 +40,8 @@ function App() {
           <div className="logo"><FaBeer/></div>
           <div className="top-bar-item">
             {
-              gameContext.gameId ?
-              "Room Code: " + gameContext.roomCode
+              gameContext.game ?
+              "Room Code: " + gameContext.game.roomCode
               : "Beer Of The Night"
             }
           </div>
