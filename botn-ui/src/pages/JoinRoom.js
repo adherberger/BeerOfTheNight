@@ -42,6 +42,7 @@ const JoinRoom = () => {
                     title="Your Name"
                     stateVar={name}
                     setStateVar={setName}
+                    autoFocus
                 />
                 <StateInput
                     id="room-code-input"

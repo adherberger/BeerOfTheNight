@@ -11,11 +11,11 @@ const CreateRoom = () => {
     const navigate = useNavigate();
 
     const initGame = () => {
-        axios.post(
+      console.log(name)
+      axios.post(
         BOTN_INIT_GAME,
             { memberName: name }
 	).then((response) => {
-            console.log(response.data);
             gameContext.setValue("game", response.data);
             navigate("/lobby");
         });
@@ -29,6 +29,7 @@ const CreateRoom = () => {
             title="Your Name"
             stateVar={name}
             setStateVar={setName}
+            autoFocus
         />
         </div>
       <MainButton

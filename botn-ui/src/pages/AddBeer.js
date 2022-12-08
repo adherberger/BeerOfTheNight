@@ -17,12 +17,14 @@ const AddBeer = () => {
     const navigate = useNavigate();
 
     const addEntry = () => {
-        console.log(gameContext)
         axios.post(
             BOTN_ADD_ENTRY,
             { gameId:gameContext.game.gameId,memberId:gameContext.game.memberId,beerName: beerName, beerStyle: beerStyle }
         ).then((response) => {
             if (response.status === 200) {
+                console.log(response.data)
+                gameContext.setValue("entry", {entryId:response.data.entryId, beerName:beerName,beerStyle:beerStyle})
+                console.log(gameContext)
                 navigate("/lobby");
             } else if (response.status === 404) {
             }
@@ -39,6 +41,7 @@ const AddBeer = () => {
                     title="Beer Name"
                     stateVar={beerName}
                     setStateVar={setBeerName}
+                    autoFocus
                 />
                 <StateInput
                     id="beer-style-input"
@@ -50,6 +53,7 @@ const AddBeer = () => {
             <MainButton
                 text={"Submit Entry"}
                 onClick={addEntry}
+                disabled={!beerName || !beerStyle}
             />
         </>
 

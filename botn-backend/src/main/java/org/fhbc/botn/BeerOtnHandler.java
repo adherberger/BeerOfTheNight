@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
+import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
@@ -84,10 +85,11 @@ public class BeerOtnHandler {
 		resp.setGameId(game.getGameId());
 		resp.setRoomCode(game.getRoomCode());
 		resp.setMemberId(gameMember.getMember().getMemberId());
+		resp.setBrewerName(req.getMemberName());
 		return resp;
 	}
 	
-	public void addEntry(AddEntryRequest req) {
+	public AddEntryResponse addEntry(AddEntryRequest req) {
 		EntryEntity entry = new EntryEntity();
 		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
 		GameEntity game = gameRepo.findById(req.getGameId()).get();
@@ -97,6 +99,10 @@ public class BeerOtnHandler {
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
 		entryRepo.save(entry);
+		
+		AddEntryResponse resp = new AddEntryResponse();
+		resp.setEntryId(entry.getEntryId());
+		return resp;
 	}
 
 	public String generateRoomCode() {

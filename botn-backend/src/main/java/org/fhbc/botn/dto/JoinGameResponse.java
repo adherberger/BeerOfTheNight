@@ -4,6 +4,7 @@ public class JoinGameResponse {
 	private int gameId;
 	private String roomCode;
 	private int memberId;
+	private String brewerName;
 	
 	public int getGameId() {
 		return gameId;
@@ -22,6 +23,12 @@ public class JoinGameResponse {
 	}
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
+	}
+	public String getBrewerName() {
+		return brewerName;
+	}
+	public void setBrewerName(String brewerName) {
+		this.brewerName = brewerName;
 	}
 	
 	
