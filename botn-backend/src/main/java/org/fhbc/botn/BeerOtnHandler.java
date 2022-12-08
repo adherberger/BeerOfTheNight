@@ -42,14 +42,19 @@ public class BeerOtnHandler {
 	@Autowired
 	EntryRepository entryRepo;
 
+	// Initializes a brand new game.  Game ID and Room Code are generated.
+	// Since the game creator is also a member, we will call joineGame here and
+	// actually return a JoinGameResponse object to the requester.
 	public JoinGameResponse initGame(InitGameRequest req) {
 		GameEntity game = new GameEntity();
 		game.setGameDate(new Timestamp(System.currentTimeMillis()));
 		game.setGameState(GameState.INIT);
 		game.setRoomCode(generateRoomCode());
 		
+		//save info about the new game
 		gameRepo.save(game);
 		
+		//build a join request so the game creator is treated as a member henceforth
 		JoinGameRequest j = new JoinGameRequest();
 		j.setMemberName(req.getMemberName());
 		j.setRoomCode(game.getRoomCode());
@@ -57,6 +62,7 @@ public class BeerOtnHandler {
 		return joinGame(j);
 	}
 	
+	// called for each member that will be joining the game
 	public JoinGameResponse joinGame(JoinGameRequest req) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		MemberEntity member = null;
@@ -74,6 +80,7 @@ public class BeerOtnHandler {
 			// Do stuff to find existing member
 		}
 		
+		//Save the member's info and associate them with the game
 		GameMemberEntity gameMember = new GameMemberEntity();
 		gameMember.setGameMemberId(new GameMemberPK(game.getGameId(), member.getMemberId()));
 		gameMember.setGame(game);
@@ -89,11 +96,13 @@ public class BeerOtnHandler {
 		return resp;
 	}
 	
+	// This is called when a member has a beer to enter in the game.
 	public AddEntryResponse addEntry(AddEntryRequest req) {
 		EntryEntity entry = new EntryEntity();
 		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
 		GameEntity game = gameRepo.findById(req.getGameId()).get();
 		
+		//save the beer information, associated with the member and game
 		entry.setGame(game);
 		entry.setBrewer(brewer);
 		entry.setBeerName(req.getBeerName());
@@ -105,6 +114,7 @@ public class BeerOtnHandler {
 		return resp;
 	}
 
+	// Generates a random 4-byte room code.
 	public String generateRoomCode() {
 		StringBuilder sb;
 		
@@ -122,6 +132,7 @@ public class BeerOtnHandler {
 		return sb.toString();
 	}
 
+	// Return information about all beers entered for the given gameId
 	public GetEntriesResponse getEntries(GetEntriesRequest req) {
 		GetEntriesResponse resp = new GetEntriesResponse();
 		

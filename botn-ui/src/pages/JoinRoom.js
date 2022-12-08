@@ -8,6 +8,8 @@ import {
     MainButton
 } from '../components/components';
 
+// Game member enters their name and a room code and fires off a joinGame request.
+// Response is stored in game context and consists of gameId, roomCode and memberId.
 const JoinRoom = () => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
