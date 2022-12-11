@@ -1,5 +1,7 @@
 package org.fhbc.botn;
 
+import java.util.List;
+
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
@@ -8,6 +10,8 @@ import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,5 +44,11 @@ public class BotnController {
 	@PostMapping("/getEntries")
 	public GetEntriesResponse getEntries(@RequestBody GetEntriesRequest req) {
 		return handler.getEntries(req);
+	}
+	
+	@MessageMapping("/game")
+	@SendTo("/botn/attendees")
+	public List<Attendee> sendAttendees(Message message) {
+		
 	}
 }
