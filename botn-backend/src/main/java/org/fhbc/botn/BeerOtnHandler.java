@@ -62,7 +62,6 @@ public class BeerOtnHandler {
 		return joinGame(j);
 	}
 	
-
 	// called for each member that will be joining the game
 	public JoinGameResponse joinGame(JoinGameRequest req) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
@@ -94,7 +93,6 @@ public class BeerOtnHandler {
 		resp.setRoomCode(game.getRoomCode());
 		resp.setMemberId(gameMember.getMember().getMemberId());
 		resp.setBrewerName(req.getMemberName());
-
 		return resp;
 	}
 	
