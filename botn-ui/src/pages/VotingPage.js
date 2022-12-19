@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_GET_ENTRIES } from '../utilities/constants';
+import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
 import '../styles/voting.css'
 
-import BeerTable from '../components/BeerTable'
 import {
   MainButton
 } from '../components/components';
@@ -13,25 +12,20 @@ import {
 // Response is stored in game context and consists of gameId, roomCode and memberId.
 const VotingPage = () => {
   const gameContext = useGameContext();
+   
+  var votes = [0,0,0];
 
-  const columns = [
-    {
-      Header: "entryId",
-      accessor: "entryId",
-    },
-    {
-      Header: "Brewer",
-      accessor: "brewer",
-    },
-    {
-      Header: "Beer Name",
-      accessor: "beerName",
-    },
-    {
-      Header: "Style",
-      accessor: "beerStyle",
-    },
-  ];
+  const submitVotes = () => {
+    axios.post(
+        BOTN_SUBMIT_VOTES,
+//        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
+          { gameId: 100, memberId: 103, first:votes[0], second:votes[1], third:votes[2] }
+    ).then((response) => {
+        if (response.status === 200) {
+        } else if (response.status === 404) {
+        }
+    })
+}
 
   useEffect(() => {
     console.log("in useEffect")
@@ -45,7 +39,9 @@ const VotingPage = () => {
   }, [])
 
   function handleChange(event) {
-    console.log(event.target)
+    console.log(event)
+    votes[event.target.value - 1] = event.target.getAttribute("entryid");
+    console.log(votes)
   }
 
   function htmlTable() {
@@ -70,12 +66,12 @@ const VotingPage = () => {
                     <td>{entry.brewer}</td>
                     {/*<td>{entry.beerName}</td>*/}
                     <td>{entry.beerStyle}</td>
-                    <td width = "10%"><input type="radio" value="1" className={entry.beerName} 
+                    <td width = "10%"><input type="radio" value="1" entryid={entry.entryId} 
                               name="first" 
                               onChange={handleChange}/>
                               </td>
-                    <td width = "10%"><input type="radio" value="2" className={entry.beerName} name="second" onChange={handleChange}/></td>
-                    <td width = "10%"><input type="radio" value="3" className={entry.beerName} name="third" onChange={handleChange}/></td>
+                    <td width = "10%"><input type="radio" value="2" entryid={entry.entryId} name="second" onChange={handleChange}/></td>
+                    <td width = "10%"><input type="radio" value="3" entryid={entry.entryId} name="third" onChange={handleChange}/></td>
                   </tr>
                 );
               })}
@@ -84,23 +80,12 @@ const VotingPage = () => {
         </div>
         <MainButton
                 text={"Submit Votes"}
-                onClick={null}
+                onClick={submitVotes}
                 disabled={false}
             />
       </>
     )
   }
-
-  function reactTable() {
-    return (
-      <>
-        <div className="main-page">
-          <BeerTable columns={columns} data={gameContext.entries} />
-        </div>
-      </>
-    )
-  }
-
 
   // Determine which html to render based on if entries have been loaded
   if (gameContext.entries) {

@@ -7,3 +7,4 @@ export const BOTN_INIT_GAME = BOTN_BASE_URL + "/initGame";
 export const BOTN_JOIN_GAME = BOTN_BASE_URL + "/joinGame";
 export const BOTN_ADD_ENTRY = BOTN_BASE_URL + "/addEntry";
 export const BOTN_GET_ENTRIES = BOTN_BASE_URL + "/getEntries";
+export const BOTN_SUBMIT_VOTES = BOTN_BASE_URL + "/submitVotes";
