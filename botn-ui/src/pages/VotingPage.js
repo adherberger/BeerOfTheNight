@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
@@ -12,20 +12,20 @@ import {
 // Response is stored in game context and consists of gameId, roomCode and memberId.
 const VotingPage = () => {
   const gameContext = useGameContext();
-   
-  var votes = [0,0,0];
+  const [votes, setVotes] = useState([0, 0, 0]);
 
   const submitVotes = () => {
     axios.post(
-        BOTN_SUBMIT_VOTES,
-//        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
-          { gameId: 100, memberId: 103, first:votes[0], second:votes[1], third:votes[2] }
+      BOTN_SUBMIT_VOTES,
+      //        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
+      { gameId: 100, memberId: 103, first: votes[0], second: votes[1], third: votes[2] }
     ).then((response) => {
-        if (response.status === 200) {
-        } else if (response.status === 404) {
-        }
+      if (response.status === 200) {
+        clearVotes()
+      } else if (response.status === 404) {
+      }
     })
-}
+  }
 
   useEffect(() => {
     console.log("in useEffect")
@@ -39,9 +39,35 @@ const VotingPage = () => {
   }, [])
 
   function handleChange(event) {
-    console.log(event)
-    votes[event.target.value - 1] = event.target.getAttribute("entryid");
-    console.log(votes)
+    let index = event.target.value - 1;
+    let entryid = parseInt(event.target.getAttribute("entryid"));
+    console.log(event.target)
+    let items = [...votes];
+    items[index] = entryid
+
+    if (index === 0) {
+      if (items[1] === entryid) items[1] = 0;
+      if (items[2] === entryid) items[2] = 0;
+    } else if (index === 1) {
+      if (items[0] === entryid) items[0] = 0;
+      if (items[2] === entryid) items[2] = 0;
+    } else {
+      if (items[1] === entryid) items[1] = 0;
+      if (items[0] === entryid) items[0] = 0;
+    }
+
+    console.log(items)
+    setVotes(items);
+    console.log(votes[0] === entryid)
+  }
+
+  function clearVotes() {
+    let items = [...votes]
+    items[0] = 0
+    items[1] = 0
+    items[2] = 0
+
+    setVotes(items)
   }
 
   function htmlTable() {
@@ -66,23 +92,38 @@ const VotingPage = () => {
                     <td>{entry.brewer}</td>
                     {/*<td>{entry.beerName}</td>*/}
                     <td>{entry.beerStyle}</td>
-                    <td width = "10%"><input type="radio" value="1" entryid={entry.entryId} 
-                              name="first" 
-                              onChange={handleChange}/>
-                              </td>
-                    <td width = "10%"><input type="radio" value="2" entryid={entry.entryId} name="second" onChange={handleChange}/></td>
-                    <td width = "10%"><input type="radio" value="3" entryid={entry.entryId} name="third" onChange={handleChange}/></td>
+                    <td width="10%"><input type="radio" value="1" entryid={entry.entryId}
+                      name={entry.brewer}
+                      checked={votes[0] === parseInt(entry.entryId)}
+                      onChange={handleChange}
+                    />
+                    </td>
+                    <td width="10%"><input type="radio" value="2" entryid={entry.entryId}
+                      name={entry.brewer}
+                      checked={votes[1] === parseInt(entry.entryId)}
+                      onChange={handleChange}
+                    />
+                    </td>
+                    <td width="10%"><input type="radio" value="3" entryid={entry.entryId}
+                      name={entry.brewer}
+                      checked={votes[2] === parseInt(entry.entryId)}
+                      onChange={handleChange}
+                    />
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
+          <button className="small-button"
+            disabled={false}
+            onClick={clearVotes}>Clear
+          </button>
+          <button className="big-button"
+            disabled={votes[0]*votes[1]*votes[2] === 0}
+            onClick={submitVotes}>Submit Votes
+          </button>
         </div>
-        <MainButton
-                text={"Submit Votes"}
-                onClick={submitVotes}
-                disabled={false}
-            />
       </>
     )
   }

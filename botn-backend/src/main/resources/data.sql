@@ -15,6 +15,8 @@ insert into member (member_id, member_name) values(106,'J');
 insert into game_member (game_id,member_id,is_present) values(100,106,true);
 insert into member (member_id, member_name) values(107,'New Kevin');
 insert into game_member (game_id,member_id,is_present) values(100,107,true);
+insert into member (member_id, member_name) values(108,'Rob');
+insert into game_member (game_id,member_id,is_present) values(100,108,true);
 
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(100,100,100,'Man with Bandages','Kolsch');
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(101,100,101,'FestBier','Oktoberfest');
@@ -24,6 +26,7 @@ insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(104,1
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(105,100,105,'Pale Ale','Pale Ale');
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(106,100,106,'Table Beer','Table Beer');
 insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(107,100,107,'Make Me Wanna Stout','Milk Stout');
+insert into entry (entry_id,game_id,member_id,beer_name,beer_style) values(108,100,108,'Lager','Amber Lager');
 
 
 insert into game_main (game_id,game_date,game_state,room_code,member_id) values(200,CURRENT_DATE(),1,'BBBB',null);

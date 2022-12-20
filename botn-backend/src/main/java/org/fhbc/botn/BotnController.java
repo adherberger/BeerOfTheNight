@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 @RestController
 @RequestMapping ("/botn")
 @CrossOrigin
 public class BotnController {
 
+	Gson gson = new Gson();
+	
 	@Autowired
 	private BeerOtnHandler handler;
 	
@@ -45,6 +49,7 @@ public class BotnController {
 	
 	@PostMapping("/submitVotes")
 	public boolean submitVotes(@RequestBody SubmitVotesRequest req) {
+		System.out.println(gson.toJson(req));
 		handler.submitVotes(req);
 		return true;
 	}
