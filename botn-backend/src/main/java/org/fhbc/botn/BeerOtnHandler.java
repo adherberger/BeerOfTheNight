@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
-import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
@@ -169,6 +168,8 @@ public class BeerOtnHandler {
 		vote.setSecond(second);
 		vote.setThird(third);
 		
+		vote.setVoteId(new GameMemberPK(req.getGameId(), req.getMemberId()));
+
 		voteRepo.save(vote);
 		return true;
 	}
