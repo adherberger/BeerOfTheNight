@@ -4,9 +4,6 @@ import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
 import '../styles/voting.css'
 
-import {
-  MainButton
-} from '../components/components';
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
@@ -14,11 +11,12 @@ const VotingPage = () => {
   const gameContext = useGameContext();
   const [votes, setVotes] = useState([0, 0, 0]);
 
+  //Called when user shooses to submit their votes
   const submitVotes = () => {
     axios.post(
       BOTN_SUBMIT_VOTES,
-      //        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
-      { gameId: 100, memberId: 103, first: votes[0], second: votes[1], third: votes[2] }
+      //TODO:        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
+      { gameId: 200, memberId: 103, first: votes[0], second: votes[1], third: votes[2] }
     ).then((response) => {
       if (response.status === 200) {
         clearVotes()
@@ -27,24 +25,30 @@ const VotingPage = () => {
     })
   }
 
+  // Calls backend to get entry list upon rendering this page.
   useEffect(() => {
     console.log("in useEffect")
     axios.post(
       BOTN_GET_ENTRIES,
-      { gameId: 100 }
+      { gameId: 200 }  //TODO: hardcoded game ID just so we can work on this page independently.
     ).then((response) => {
       console.log(response.data)
       gameContext.setValue("entries", response.data.entryList);
     });
   }, [])
 
+  // Called when any of the radiobuttons are selected.
   function handleChange(event) {
     let index = event.target.value - 1;
     let entryid = parseInt(event.target.getAttribute("entryid"));
     console.log(event.target)
+    //Make a copy of votes array for modification
     let items = [...votes];
+
+    //update the user's place (1,2,3) choice with the etry ID
     items[index] = entryid
 
+    //Clear that entryId from any of the other spots 
     if (index === 0) {
       if (items[1] === entryid) items[1] = 0;
       if (items[2] === entryid) items[2] = 0;
@@ -58,7 +62,6 @@ const VotingPage = () => {
 
     console.log(items)
     setVotes(items);
-    console.log(votes[0] === entryid)
   }
 
   function clearVotes() {
