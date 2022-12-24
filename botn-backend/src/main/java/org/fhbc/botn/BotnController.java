@@ -1,5 +1,6 @@
 package org.fhbc.botn;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.fhbc.botn.dto.AddEntryRequest;
@@ -48,7 +49,12 @@ public class BotnController {
 	
 	@MessageMapping("/game")
 	@SendTo("/botn/attendees")
-	public List<Attendee> sendAttendees(Message message) {
+	public List<Attendee> sendAttendees(Attendee att) {
+		System.out.println(att.getName());
+		Attendee person = new Attendee("Person Mann", true);
+		List<Attendee> attendees = new ArrayList<>();
+		attendees.add(person);
 		
+		return attendees;
 	}
 }

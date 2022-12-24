@@ -2,7 +2,7 @@ import React from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import { useNavigate } from 'react-router-dom';
-import useWebSocket from 'react-use-websocket';
+import { useWebSocket } from '../utilities/use-websocket';
 
 import {
     MainButton
@@ -12,13 +12,24 @@ const Attendee = ({name, hasEntry}) => {
     return (
         <div className="attendee">
             <div className="attendee-name">{name}</div>
-            <div className="entry-indicator"><FaBeer/></div>
+            {
+                hasEntry ?
+                <div className="entry-indicator"><FaBeer/></div> :
+                <></>
+            }
         </div>
     )
 }
 
 const AttendeeList = () => {
+    const { lastMessage } = useWebSocket("http://localhost:8080/game", "/botn/attendees");
 
+    return (
+        <div>
+            <div>Last message:</div>
+            {lastMessage}
+        </div>
+    )
 }
 
 // Waiting room until voting begins.  
@@ -36,6 +47,7 @@ const Lobby = () => {
         return (
             <>
                 <div className="main-page">
+                    <AttendeeList/>
                     <div className="logo"><FaBeer /></div>
                     <h3>Waiting for voting to begin</h3>
                     <p>Click the button below if you have a beer to enter!</p>
