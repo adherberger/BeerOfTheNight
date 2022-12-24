@@ -9,6 +9,7 @@ import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
+import VotingPage from './pages/VotingPage';
 import { useGameContext } from './utilities/game-context';
 
 function App() {
@@ -30,6 +31,10 @@ function App() {
     {
       path: "/addBeer",
       element: <AddBeer/>
+    },
+    {
+      path: "/voting",
+      element: <VotingPage/>
     }
 
   ]);

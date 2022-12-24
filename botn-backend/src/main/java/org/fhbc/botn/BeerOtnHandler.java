@@ -6,22 +6,24 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
-import org.fhbc.botn.dto.GameDto;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
+import org.fhbc.botn.dto.SubmitVotesRequest;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.fhbc.botn.entity.GameMemberEntity;
 import org.fhbc.botn.entity.GameMemberPK;
 import org.fhbc.botn.entity.MemberEntity;
+import org.fhbc.botn.entity.VoteEntity;
 import org.fhbc.botn.repo.EntryRepository;
 import org.fhbc.botn.repo.GameMemberRepository;
 import org.fhbc.botn.repo.GameRepository;
 import org.fhbc.botn.repo.MemberRepository;
+import org.fhbc.botn.repo.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -41,6 +43,9 @@ public class BeerOtnHandler {
 	
 	@Autowired
 	EntryRepository entryRepo;
+
+	@Autowired
+	VoteRepository voteRepo;
 
 	// Initializes a brand new game.  Game ID and Room Code are generated.
 	// Since the game creator is also a member, we will call joineGame here and
@@ -149,6 +154,24 @@ public class BeerOtnHandler {
 		}
 		
 		return resp;
+	}
+	
+	public boolean submitVotes(SubmitVotesRequest req) {
+		VoteEntity vote = new VoteEntity();
+		vote.setGame(gameRepo.findById(req.getGameId()).get());
+		MemberEntity member = memberRepo.findById(req.getMemberId()).get();
+		vote.setMember(member);
+		EntryEntity first = entryRepo.findById(req.getFirst()).get();
+		EntryEntity second = entryRepo.findById(req.getSecond()).get();
+		EntryEntity third = entryRepo.findById(req.getThird()).get();
+		vote.setFirst(first);
+		vote.setSecond(second);
+		vote.setThird(third);
+		
+		vote.setVoteId(new GameMemberPK(req.getGameId(), req.getMemberId()));
+
+		voteRepo.save(vote);
+		return true;
 	}
 
 }
