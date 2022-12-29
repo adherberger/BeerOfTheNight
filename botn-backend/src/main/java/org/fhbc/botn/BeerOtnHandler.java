@@ -174,4 +174,10 @@ public class BeerOtnHandler {
 		return true;
 	}
 
+	public GameState startVotingForGame(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		game.setGameState(GameState.IN_PROGRESS);
+		gameRepo.save(game);
+		return game.getGameState();
+	}
 }

@@ -1,37 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
-const useWebSocket = (
-    url,
-    topic,
-) => {
-    const [lastMessage, setLastMessage] = useState();
-    let stompClient;
+const useWebSocket = (url) => {
+    const [connected, setConnected] = useState(false);
+    const stompClient = useRef();
 
     const onConnected = () => {
-        console.log("onConnected");
+        console.log("WebSocket connected!");
 
-        stompClient.subscribe(topic, onMessageReceived);
-        stompClient.send("/app/game", {}, JSON.stringify({name: "Second Person", hasEntry: true}))
-    }
-
-    const onMessageReceived = (payload) => {
-        console.log("onMessageReceived");
-        setLastMessage(payload.body);
+        setTimeout(() => {
+            setConnected(true);
+        }, 1000);
+        // stompClient.current.subscribe(topic, onMessageReceived);
     }
 
     const onError = (error) => {
         console.error(error);
     }
 
+    const sendMessage = (destination, message) => {
+        stompClient.current.send(destination, {}, JSON.stringify(message));
+    }
+
+    const useSubscription = (topic) => {
+        const [lastMessage, setLastMessage] = useState();
+
+        const onMessageReceived = (payload) => {
+            setLastMessage(JSON.parse(payload.body));
+        }
+
+        useEffect(() => {
+            if(connected) {
+                console.log(stompClient.current);
+                stompClient.current.subscribe(topic, onMessageReceived);
+                console.log("Subscribed to topic " + topic);
+
+                return () => {
+                    stompClient.current.unsubscribe(topic);
+                }
+            }
+        }, [connected]);
+
+        return lastMessage;
+    }
+
     useEffect(() => {
         var socket = new SockJS(url);
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, onConnected, onError);
-    }, []);
+        console.log(socket);
+        stompClient.current = Stomp.over(socket);
+        stompClient.current.connect({}, onConnected, onError);
+    }, [url]);
 
-    return { lastMessage };
+    return { sendMessage, useSubscription };
 }
 
 export { useWebSocket }

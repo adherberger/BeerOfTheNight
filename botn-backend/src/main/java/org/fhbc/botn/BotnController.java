@@ -11,6 +11,7 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.SubmitVotesRequest;
+import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping ("/botn")
+@RequestMapping("/botn")
 @CrossOrigin
 public class BotnController {
 
@@ -52,15 +53,11 @@ public class BotnController {
 		return handler.getEntries(req);
 	}
 	
-	@MessageMapping("/game")
-	@SendTo("/botn/attendees")
-	public List<Attendee> sendAttendees(Attendee att) {
-		System.out.println(att.getName());
-		Attendee person = new Attendee("Person Mann", true);
-		List<Attendee> attendees = new ArrayList<>();
-		attendees.add(person);
-		
-		return attendees;
+	@MessageMapping("/startVoting")
+	@SendTo("/botn/game-state")
+	public GameState startVoting(Integer gameId) {
+		System.out.println("MADE IT TO START VOTING");
+		return handler.startVotingForGame(gameId);
 	}
 
 	@PostMapping("/submitVotes")

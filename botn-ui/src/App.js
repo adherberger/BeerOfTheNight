@@ -11,9 +11,11 @@ import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
 import VotingPage from './pages/VotingPage';
 import { useGameContext } from './utilities/game-context';
+import { useWebSocket } from './utilities/use-websocket';
 
 function App() {
   const gameContext = useGameContext();
+  const { sendMessage, useSubscription } = useWebSocket("http://localhost:8080/game");
 
   const router = createBrowserRouter([
     {
@@ -26,7 +28,7 @@ function App() {
     },
     {
       path: "/lobby",
-      element: <Lobby/>
+      element: <Lobby sendMessage={sendMessage} useSubscription={useSubscription}/>
     },
     {
       path: "/addBeer",
