@@ -27,8 +27,19 @@
   flex-direction: row;
 }
 
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+}
+
+.top-bar {
+  position: sticky; 
+  top: 0;
+}
+
 .flex-spacer {
   flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .top-bar > .top-bar-item {
@@ -95,6 +106,29 @@
   font-family:'Courier New', Courier, monospace
 }
 
-.text-input:focus {
-  
+.attendee-list {
+  width: 80vw;
+  background: white;
+  color: black;
+  border: 2px solid gray;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.attendee {
+  display: flex;
+  padding: 4px 8px 4px 8px;
+  font-size: calc(16px + 1em);
+}
+
+.attendee.even {
+  background: #EEE;
+}
+
+.attendee .attendee-name {
+  float: left;
+}
+
+.attendee .entry-indicator {
+  float: right;
 }

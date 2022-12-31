@@ -56,8 +56,13 @@ public class BotnController {
 	@MessageMapping("/startVoting")
 	@SendTo("/botn/game-state")
 	public GameState startVoting(Integer gameId) {
-		System.out.println("MADE IT TO START VOTING");
 		return handler.startVotingForGame(gameId);
+	}
+	
+	@MessageMapping("/updateAttendees")
+	@SendTo("/botn/attendees")
+	public List<Attendee> getAttendees(Integer gameId) {
+		return handler.getAttendeesForGame(gameId);
 	}
 
 	@PostMapping("/submitVotes")

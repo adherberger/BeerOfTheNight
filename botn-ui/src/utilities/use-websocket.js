@@ -23,7 +23,7 @@ const useWebSocket = (url) => {
         stompClient.current.send(destination, {}, JSON.stringify(message));
     }
 
-    const useSubscription = (topic) => {
+    const useSubscription = (topic, callback = () => {}) => {
         const [lastMessage, setLastMessage] = useState();
 
         const onMessageReceived = (payload) => {
@@ -32,9 +32,9 @@ const useWebSocket = (url) => {
 
         useEffect(() => {
             if(connected) {
-                console.log(stompClient.current);
                 stompClient.current.subscribe(topic, onMessageReceived);
                 console.log("Subscribed to topic " + topic);
+                callback();
 
                 return () => {
                     stompClient.current.unsubscribe(topic);

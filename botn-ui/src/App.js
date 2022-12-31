@@ -12,10 +12,11 @@ import AddBeer from './pages/AddBeer';
 import VotingPage from './pages/VotingPage';
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
+import { BOTN_WEBSOCKET_BASE } from './utilities/constants';
 
 function App() {
   const gameContext = useGameContext();
-  const { sendMessage, useSubscription } = useWebSocket("http://localhost:8080/game");
+  const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
 
   const router = createBrowserRouter([
     {

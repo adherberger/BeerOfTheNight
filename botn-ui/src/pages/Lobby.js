@@ -3,15 +3,19 @@ import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '../utilities/use-websocket';
-
+import {
+    BOTN_GAME_STATE_TOPIC,
+    BOTN_ATTENDEES_TOPIC,
+} from '../utilities/constants';
 import {
     MainButton
 } from '../components/components';
 
-const Attendee = ({name, hasEntry}) => {
+const Attendee = ({name, hasEntry, idx}) => {
     return (
-        <div className="attendee">
+        <div className={"attendee" + (idx % 2 === 0 ? " even" : " odd")}>
             <div className="attendee-name">{name}</div>
+            <div className="flex-spacer"/>
             {
                 hasEntry ?
                 <div className="entry-indicator"><FaBeer/></div> :
@@ -21,21 +25,36 @@ const Attendee = ({name, hasEntry}) => {
     )
 }
 
+const AttendeeList = ({attendees}) => {
+    return (
+        <div className="attendee-list-wrapper">
+            <div className="attendee-list-title">{"Attendees (" + attendees?.length + "):"}</div>
+            <div className="attendee-list">
+            {
+                attendees ? attendees.map((att, index) => (
+                    <Attendee idx={index} name={att.name} hasEntry={att.hasEntry}/>
+                )) : <></>
+            }
+            </div>
+        </div>
+    )
+}
+
 // Waiting room until voting begins.  
 // Member may click to add their beer entry.
 const Lobby = ({sendMessage, useSubscription}) => {
-    //const { useSubscription } = useWebSocket("http://localhost:8080/game", "/botn/game-state");
-    // const { sendMessage, lastMessage } = useSubscription("/botn/game-state");
-
-    const lastMessage = useSubscription("/botn/game-state");
+    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC);
+    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC, () => {
+        sendMessage("/updateAttendees", gameContext.game?.gameId);
+    });
     const gameContext = useGameContext();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(lastMessage === "IN_PROGRESS") {
+        if(gameState === "IN_PROGRESS") {
             navigate("/voting");
         }
-    }, [lastMessage]);
+    }, [gameState]);
 
     function handleClick() {
         navigate("/addBeer");
@@ -50,6 +69,7 @@ const Lobby = ({sendMessage, useSubscription}) => {
             <div className="main-page">
                 <div className="logo"><FaBeer /></div>
                 <h3>Waiting for voting to begin</h3>
+                <AttendeeList attendees={attendees}/>
                 {
                 gameContext.entry ?
                     <>

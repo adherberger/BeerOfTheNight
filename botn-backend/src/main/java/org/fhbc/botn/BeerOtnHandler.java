@@ -1,6 +1,7 @@
 package org.fhbc.botn;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -179,5 +180,25 @@ public class BeerOtnHandler {
 		game.setGameState(GameState.IN_PROGRESS);
 		gameRepo.save(game);
 		return game.getGameState();
+	}
+
+	public List<Attendee> getAttendeesForGame(Integer gameId) {
+		List<Attendee> attendees = new ArrayList<>();
+		List<GameMemberEntity> gameMembers = gameMemberRepo.findByGameGameId(gameId);
+		
+		for(GameMemberEntity gameMember : gameMembers) {
+			Attendee att = new Attendee();
+			att.setName(gameMember.getMember().getMemberName());
+
+			EntryEntity entry = entryRepo.findByGameAndBrewer(gameMember.getGame(), gameMember.getMember());
+			att.setHasEntry(entry != null);
+			
+			attendees.add(att);
+		}
+		
+		attendees.sort((att1, att2) -> {
+			return att1.getName().compareTo(att2.getName());
+		});
+		return attendees;
 	}
 }
