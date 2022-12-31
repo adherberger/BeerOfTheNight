@@ -45,7 +45,7 @@ const AttendeeList = ({attendees}) => {
 const Lobby = ({sendMessage, useSubscription}) => {
     const gameState = useSubscription(BOTN_GAME_STATE_TOPIC);
     const attendees = useSubscription(BOTN_ATTENDEES_TOPIC, () => {
-        sendMessage("/updateAttendees", gameContext.game?.gameId);
+        sendMessage("/updateAttendees", gameContext.game.gameId);
     });
     const gameContext = useGameContext();
     const navigate = useNavigate();
