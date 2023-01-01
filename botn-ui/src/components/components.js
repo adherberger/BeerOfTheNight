@@ -11,7 +11,7 @@ export const StateInput = ({
         <div className="botn-input">
             {
                 title ?
-                    <label for={id} className="text-input-label">{title}</label>
+                    <label htmlFor={id} className="text-input-label">{title}</label>
                     : <></>
             }
             <input
