@@ -3,6 +3,7 @@ package org.fhbc.botn;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -181,6 +182,33 @@ public class BeerOtnHandler {
 		return true;
 	}
 
+	public GameState startVotingForGame(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		game.setGameState(GameState.IN_PROGRESS);
+		gameRepo.save(game);
+		return game.getGameState();
+	}
+
+	public List<Attendee> getAttendeesForGame(Integer gameId) {
+		List<Attendee> attendees = new ArrayList<>();
+		List<GameMemberEntity> gameMembers = gameMemberRepo.findByGameGameId(gameId);
+		
+		for(GameMemberEntity gameMember : gameMembers) {
+			Attendee att = new Attendee();
+			att.setName(gameMember.getMember().getMemberName());
+
+			EntryEntity entry = entryRepo.findByGameAndBrewer(gameMember.getGame(), gameMember.getMember());
+			att.setHasEntry(entry != null);
+			
+			attendees.add(att);
+		}
+		
+		attendees.sort((att1, att2) -> {
+			return att1.getName().compareTo(att2.getName());
+		});
+		return attendees;
+	}
+
 	public GetResultsResponse getResults(GetEntriesRequest req) {
 		GetResultsResponse resp = new GetResultsResponse();
 		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
@@ -215,5 +243,4 @@ public class BeerOtnHandler {
 		return resp;
 	}
 	
-
 }

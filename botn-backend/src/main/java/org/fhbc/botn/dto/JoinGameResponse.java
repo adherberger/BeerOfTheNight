@@ -24,12 +24,11 @@ public class JoinGameResponse {
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}
+
 	public String getBrewerName() {
 		return brewerName;
 	}
 	public void setBrewerName(String brewerName) {
 		this.brewerName = brewerName;
 	}
-	
-	
 }
