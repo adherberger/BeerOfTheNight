@@ -1,13 +1,17 @@
 package org.fhbc.botn;
 
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
+import org.fhbc.botn.dto.GetResultsResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
@@ -24,6 +28,8 @@ import org.fhbc.botn.repo.GameMemberRepository;
 import org.fhbc.botn.repo.GameRepository;
 import org.fhbc.botn.repo.MemberRepository;
 import org.fhbc.botn.repo.VoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -31,7 +37,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class BeerOtnHandler {
-
+	public static Logger log = LoggerFactory.getLogger(BeerOtnHandler.class);
+	
 	@Autowired
 	GameRepository gameRepo;
 	
@@ -173,5 +180,40 @@ public class BeerOtnHandler {
 		voteRepo.save(vote);
 		return true;
 	}
+
+	public GetResultsResponse getResults(GetEntriesRequest req) {
+		GetResultsResponse resp = new GetResultsResponse();
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
+		Map<Integer,GetResultsResponse.Entry> resultsMap = new HashMap<Integer,GetResultsResponse.Entry>();
+		for (EntryEntity e:entryEntityList) {
+			GetResultsResponse.Entry entry = resp.new Entry();
+			entry.setBeerName(e.getBeerName());
+			entry.setBeerStyle(e.getBeerStyle());
+			entry.setBrewer(e.getBrewer().getMemberName());
+			entry.setEntryId(e.getEntryId());
+			
+			resultsMap.put(e.getEntryId(),entry);
+		}
+		
+		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(req.getGameId());
+		for (VoteEntity v:voteList) {
+			resultsMap.get(v.getFirst().getEntryId()).setScore(resultsMap.get(v.getFirst().getEntryId()).getScore()+5);
+			resultsMap.get(v.getFirst().getEntryId()).votes[0] +=1; 
+
+			resultsMap.get(v.getSecond().getEntryId()).setScore(resultsMap.get(v.getSecond().getEntryId()).getScore()+3);
+			resultsMap.get(v.getSecond().getEntryId()).votes[1] +=1; 
+
+			resultsMap.get(v.getThird().getEntryId()).setScore(resultsMap.get(v.getThird().getEntryId()).getScore()+1);
+			resultsMap.get(v.getThird().getEntryId()).votes[2] +=1;
+		}
+		
+		for (Integer i:resultsMap.keySet()) {
+			resp.getResultsList().add(resultsMap.get(i));
+		}
+		
+		Collections.sort(resp.getResultsList(),Collections.reverseOrder()); 
+		return resp;
+	}
+	
 
 }
