@@ -7,6 +7,7 @@ import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
+import org.fhbc.botn.dto.GetResultsResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
@@ -71,4 +72,10 @@ public class BotnController {
 		handler.submitVotes(req);
 		return true;
 	}
+	
+	@PostMapping("/getResults")
+	public GetResultsResponse getResults(@RequestBody GetEntriesRequest req) {
+		return handler.getResults(req);
+	}
+	
 }
