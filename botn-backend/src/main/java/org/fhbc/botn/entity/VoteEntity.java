@@ -16,11 +16,6 @@ public class VoteEntity {
 	@EmbeddedId
 	private GameMemberPK voteId;
 
-//	@Id
-//	@GeneratedValue(generator = "vote_gen")
-//	@Column(name = "vote_id")
-//	private int voteId;
-
 	@ManyToOne
 	@MapsId("gameId")
 	@JoinColumn(name = "game_id")

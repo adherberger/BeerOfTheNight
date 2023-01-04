@@ -111,13 +111,16 @@ public class BeerOtnHandler {
 	
 	// This is called when a member has a beer to enter in the game.
 	public AddEntryResponse addEntry(AddEntryRequest req) {
-		EntryEntity entry = new EntryEntity();
-		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
-		GameEntity game = gameRepo.findById(req.getGameId()).get();
+		EntryEntity entry = entryRepo.findByGame_GameIdAndMember_MemberId(req.getGameId(),req.getMemberId());
+		if (entry == null) {
+			entry = new EntryEntity();
+			MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
+			GameEntity game = gameRepo.findById(req.getGameId()).get();
+			entry.setGame(game);
+			entry.setMember(brewer);
+		}
 		
 		//save the beer information, associated with the member and game
-		entry.setGame(game);
-		entry.setBrewer(brewer);
 		entry.setBeerName(req.getBeerName());
 		entry.setBeerStyle(req.getBeerStyle());
 		entryRepo.save(entry);
@@ -155,7 +158,7 @@ public class BeerOtnHandler {
 			GetEntriesResponse.Entry entry = resp.new Entry();
 			entry.setBeerName(e.getBeerName());
 			entry.setBeerStyle(e.getBeerStyle());
-			entry.setBrewer(e.getBrewer().getMemberName());
+			entry.setBrewer(e.getMember().getMemberName());
 			entry.setEntryId(e.getEntryId());
 			
 			resp.getEntryList().add(entry);
@@ -197,7 +200,7 @@ public class BeerOtnHandler {
 			Attendee att = new Attendee();
 			att.setName(gameMember.getMember().getMemberName());
 
-			EntryEntity entry = entryRepo.findByGameAndBrewer(gameMember.getGame(), gameMember.getMember());
+			EntryEntity entry = entryRepo.findByGameAndMember(gameMember.getGame(), gameMember.getMember());
 			att.setHasEntry(entry != null);
 			
 			attendees.add(att);
@@ -217,7 +220,7 @@ public class BeerOtnHandler {
 			GetResultsResponse.Entry entry = resp.new Entry();
 			entry.setBeerName(e.getBeerName());
 			entry.setBeerStyle(e.getBeerStyle());
-			entry.setBrewer(e.getBrewer().getMemberName());
+			entry.setBrewer(e.getMember().getMemberName());
 			entry.setEntryId(e.getEntryId());
 			
 			resultsMap.put(e.getEntryId(),entry);
