@@ -27,7 +27,7 @@ public class EntryEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = true)
-	private MemberEntity brewer;
+	private MemberEntity member;
 
 	@Column(name = "beer_name")
 	private String beerName;
@@ -52,12 +52,12 @@ public class EntryEntity {
 		this.game = game;
 	}
 
-	public MemberEntity getBrewer() {
-		return brewer;
+	public MemberEntity getMember() {
+		return member;
 	}
 
-	public void setBrewer(MemberEntity brewer) {
-		this.brewer = brewer;
+	public void setMember(MemberEntity member) {
+		this.member = member;
 	}
 
 	public String getBeerName() {

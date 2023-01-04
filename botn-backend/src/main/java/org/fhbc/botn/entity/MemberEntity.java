@@ -24,7 +24,7 @@ public class MemberEntity {
 	@Column(name = "member_name")
 	private String memberName;
 
-	@OneToMany(mappedBy = "brewer")
+	@OneToMany(mappedBy = "member")
 	private List<EntryEntity> entries;
 	
 	@OneToMany(mappedBy = "creator")

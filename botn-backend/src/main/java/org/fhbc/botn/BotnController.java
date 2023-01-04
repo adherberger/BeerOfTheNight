@@ -46,6 +46,7 @@ public class BotnController {
 
 	@PostMapping("/addEntry")
 	public AddEntryResponse addEntry(@RequestBody AddEntryRequest req) {
+		System.out.println(gson.toJson(req));
 		return handler.addEntry(req);
 	}
 
@@ -68,7 +69,6 @@ public class BotnController {
 
 	@PostMapping("/submitVotes")
 	public boolean submitVotes(@RequestBody SubmitVotesRequest req) {
-		System.out.println(gson.toJson(req));
 		handler.submitVotes(req);
 		return true;
 	}

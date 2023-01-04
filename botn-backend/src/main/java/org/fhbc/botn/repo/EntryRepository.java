@@ -11,8 +11,8 @@ public interface EntryRepository extends CrudRepository<EntryEntity, Integer> {
 	List<EntryEntity> findAllByGame_GameId(int gameId);
 	
 	
-	EntryEntity findByGameAndBrewer(GameEntity game, MemberEntity brewer);
+	EntryEntity findByGameAndMember(GameEntity game, MemberEntity member);
 
 
-	EntryEntity findByGame_GameIdAndBrewer(Integer gameId, MemberEntity brewer);
+	EntryEntity findByGame_GameIdAndMember_MemberId(Integer gameId, Integer memberId);
 }
