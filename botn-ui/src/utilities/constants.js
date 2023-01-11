@@ -11,3 +11,4 @@ export const BOTN_SUBMIT_VOTES = BOTN_BASE_URL + "/submitVotes";
 export const BOTN_WEBSOCKET_BASE = BOTN_API_ROOT + "/game";
 export const BOTN_GAME_STATE_TOPIC = "/botn/game-state";
 export const BOTN_ATTENDEES_TOPIC = "/botn/attendees";
+export const BOTN_VOTES_TOPIC = "/botn/votes";

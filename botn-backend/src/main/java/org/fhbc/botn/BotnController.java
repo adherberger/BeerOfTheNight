@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
+import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.GetResultsResponse;
@@ -12,6 +13,7 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.SubmitVotesRequest;
+import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -65,6 +67,14 @@ public class BotnController {
 	@SendTo("/botn/attendees")
 	public List<Attendee> getAttendees(Integer gameId) {
 		return handler.getAttendeesForGame(gameId);
+	}
+
+	@MessageMapping("/updateVotes")
+	@SendTo("/botn/votes")
+	public List<Vote> getVotes(Integer gameId) {
+		List<Vote> votes = handler.getVotesForGame(gameId);
+		System.out.println(gson.toJson(votes));
+		return votes;
 	}
 
 	@PostMapping("/submitVotes")

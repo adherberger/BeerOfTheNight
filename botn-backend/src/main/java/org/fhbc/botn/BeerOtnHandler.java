@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
+import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.GetResultsResponse;
@@ -17,6 +18,7 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.SubmitVotesRequest;
+import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
@@ -210,6 +212,26 @@ public class BeerOtnHandler {
 			return att1.getName().compareTo(att2.getName());
 		});
 		return attendees;
+	}
+
+	public List<Vote> getVotesForGame(Integer gameId) {
+		List<Vote> votes = new ArrayList<>();
+		List<GameMemberEntity> gameMembers = gameMemberRepo.findByGameGameId(gameId);
+		
+		for(GameMemberEntity gameMember : gameMembers) {
+			if (gameMember.getIsPresent()) {
+				Vote vote = new Vote();
+				vote.setName(gameMember.getMember().getMemberName());
+				VoteEntity v = voteRepo.findByGame_GameIdAndMember_MemberId(gameId,gameMember.getMember().getMemberId());
+				vote.setDidVote(v != null);
+				votes.add(vote);
+			}
+		}
+		
+		votes.sort((vote1, vote2) -> {
+			return vote1.getName().compareTo(vote2.getName());
+		});
+		return votes;
 	}
 
 	public GetResultsResponse getResults(GetEntriesRequest req) {
