@@ -10,7 +10,9 @@ import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
 import VotingPage from './pages/VotingPage';
+import Waiting from './pages/Waiting';
 import Results from './pages/Results';
+import ResultsAdmin from './pages/ResultsAdmin';
 
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
@@ -42,8 +44,16 @@ function App() {
       element: <VotingPage sendMessage={sendMessage}/>
     },
     {
+      path: "/waiting",
+      element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription}/>
+    },
+    {
       path: "/results",
       element: <Results sendMessage={sendMessage} useSubscription={useSubscription}/>
+    },
+    {
+      path: "/results-admin",
+      element: <ResultsAdmin sendMessage={sendMessage} useSubscription={useSubscription}/>
     }
 
   ]);

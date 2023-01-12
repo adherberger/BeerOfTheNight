@@ -23,9 +23,9 @@ const VotingPage = ({sendMessage}) => {
         clearVotes()
         console.log(gameContext)
         if (gameContext.game.isAdmin) {
-            navigate("/results")
+            navigate("/waiting")
         } else {
-          navigate("/results")
+          navigate("/waiting")
         }
       } else if (response.status === 404) {
       }

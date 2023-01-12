@@ -19,7 +19,7 @@ public class Vote {
 		this.name = name;
 	}
 
-	public Boolean getDdidVote() {
+	public Boolean getDidVote() {
 		return didVote;
 	}
 
