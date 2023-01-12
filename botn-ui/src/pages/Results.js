@@ -16,7 +16,7 @@ const Vote = ({name, didVote, idx}) => {
             <div className="attendee-name">{name}</div>
             <div className="flex-spacer"/>
             {
-                {didVote} ?
+                didVote ?
                 <div className="entry-indicator"><FaBeer/></div> :
                 <>foo</>
             }
