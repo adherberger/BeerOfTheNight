@@ -246,9 +246,9 @@ public class BeerOtnHandler {
 		return resp;
 	}
 
-	public GetResultsResponse getResults(GetEntriesRequest req) {
+	public GetResultsResponse getResultsForGame(Integer gameId) {
 		GetResultsResponse resp = new GetResultsResponse();
-		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(gameId);
 		Map<Integer,GetResultsResponse.Entry> resultsMap = new HashMap<Integer,GetResultsResponse.Entry>();
 		for (EntryEntity e:entryEntityList) {
 			GetResultsResponse.Entry entry = resp.new Entry();
@@ -260,7 +260,7 @@ public class BeerOtnHandler {
 			resultsMap.put(e.getEntryId(),entry);
 		}
 		
-		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(req.getGameId());
+		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(gameId);
 		for (VoteEntity v:voteList) {
 			resultsMap.get(v.getFirst().getEntryId()).setScore(resultsMap.get(v.getFirst().getEntryId()).getScore()+5);
 			resultsMap.get(v.getFirst().getEntryId()).votes[0] +=1; 

@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,9 +92,9 @@ public class BotnController {
 		return true;
 	}
 	
-	@PostMapping("/getResults")
-	public GetResultsResponse getResults(@RequestBody GetEntriesRequest req) {
-		return handler.getResults(req);
+	@GetMapping("/results/{gameId}")
+	public GetResultsResponse getResults(@PathVariable Integer gameId) {
+		return handler.getResultsForGame(gameId);
 	}
 	
 }

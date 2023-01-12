@@ -58,7 +58,7 @@ const Waiting = ({ sendMessage, useSubscription }) => {
 
     function goToResults() {
         sendMessage("/votingComplete", gameContext.game.gameId);
-        navigate("/results-admin")
+        navigate("/results")
     }
 
     return (
