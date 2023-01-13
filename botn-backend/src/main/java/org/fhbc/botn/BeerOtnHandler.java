@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GetEntriesRequest;
@@ -128,6 +129,29 @@ public class BeerOtnHandler {
 		AddEntryResponse resp = new AddEntryResponse();
 		resp.setEntryId(entry.getEntryId());
 		return resp;
+	}
+
+	// This is called when a member has a beer to enter in the game.
+	public AddEntryResponse addEntryFor(AddEntryForRequest req) {
+		GameEntity game = gameRepo.findById(req.getGameId()).get();
+		//Join the game using the submitted member name
+		JoinGameRequest joinGameRequest = new JoinGameRequest();
+		joinGameRequest.setMemberName(req.getBrewerName());
+		joinGameRequest.setRoomCode(game.getRoomCode());
+
+		JoinGameResponse joinGameResponse = joinGame(joinGameRequest);
+		
+		//Now add the entry for this new member
+		AddEntryRequest addEntryRequest = new AddEntryRequest();
+		addEntryRequest.setGameId(req.getGameId());
+		addEntryRequest.setMemberId(joinGameResponse.getMemberId());
+		addEntryRequest.setBeerName(req.getBeerName());
+		addEntryRequest.setBeerStyle(req.getBeerStyle());
+		
+		addEntry(addEntryRequest);
+		
+		//Don't think we need to return anything.
+		return null;
 	}
 
 	// Generates a random 4-byte room code.

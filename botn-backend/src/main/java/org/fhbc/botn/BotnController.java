@@ -3,6 +3,7 @@ package org.fhbc.botn;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.GetEntriesRequest;
@@ -49,6 +50,13 @@ public class BotnController {
 		System.out.println(gson.toJson(req));
 		return handler.addEntry(req);
 	}
+
+	@PostMapping("/addEntryFor")
+	public AddEntryResponse addEntryFor(@RequestBody AddEntryForRequest req) {
+		System.out.println(gson.toJson(req));
+		return handler.addEntryFor(req);
+	}
+
 
 	@PostMapping("/getEntries")
 	public GetEntriesResponse getEntries(@RequestBody GetEntriesRequest req) {
