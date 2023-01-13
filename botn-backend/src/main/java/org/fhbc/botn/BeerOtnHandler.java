@@ -167,6 +167,10 @@ public class BeerOtnHandler {
 			resp.getEntryList().add(entry);
 		}
 		
+		resp.getEntryList().sort((e1, e2) -> {
+			return e1.getBrewer().compareTo(e2.getBrewer());
+		});
+
 		return resp;
 	}
 	
