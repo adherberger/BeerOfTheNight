@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
 import '../styles/voting.css'
 
-
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const VotingPage = () => {
+const VotingPage = ({sendMessage}) => {
+  const navigate = useNavigate();
   const gameContext = useGameContext();
   const [votes, setVotes] = useState([0, 0, 0]);
 
@@ -15,11 +16,17 @@ const VotingPage = () => {
   const submitVotes = () => {
     axios.post(
       BOTN_SUBMIT_VOTES,
-      //TODO:        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
-      { gameId: 200, memberId: 103, first: votes[0], second: votes[1], third: votes[2] }
+        { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
     ).then((response) => {
       if (response.status === 200) {
+        sendMessage("/updateVotes", gameContext.game.gameId);
         clearVotes()
+        console.log(gameContext)
+        if (gameContext.game.isAdmin) {
+            navigate("/waiting")
+        } else {
+          navigate("/waiting")
+        }
       } else if (response.status === 404) {
       }
     })
@@ -30,7 +37,7 @@ const VotingPage = () => {
     console.log("in useEffect")
     axios.post(
       BOTN_GET_ENTRIES,
-      { gameId: 200 }  //TODO: hardcoded game ID just so we can work on this page independently.
+      { gameId: gameContext.game.gameId } 
     ).then((response) => {
       console.log(response.data)
       gameContext.setValue("entries", response.data.entryList);

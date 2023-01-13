@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
+import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.GetResultsResponse;
@@ -18,6 +19,8 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.SubmitVotesRequest;
+import org.fhbc.botn.dto.UpdateVotesResponse;
+import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.EntryEntity;
 import org.fhbc.botn.entity.GameEntity;
 import org.fhbc.botn.entity.GameEntity.GameState;
@@ -188,6 +191,10 @@ public class BeerOtnHandler {
 			resp.getEntryList().add(entry);
 		}
 		
+		resp.getEntryList().sort((e1, e2) -> {
+			return e1.getBrewer().compareTo(e2.getBrewer());
+		});
+
 		return resp;
 	}
 	
@@ -216,6 +223,13 @@ public class BeerOtnHandler {
 		return game.getGameState();
 	}
 
+	public GameState allVotesReceived(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		game.setGameState(GameState.RESULTS_RECEIVED);
+		gameRepo.save(game);
+		return game.getGameState();
+	}
+
 	public List<Attendee> getAttendeesForGame(Integer gameId) {
 		List<Attendee> attendees = new ArrayList<>();
 		List<GameMemberEntity> gameMembers = gameMemberRepo.findByGameGameId(gameId);
@@ -236,9 +250,33 @@ public class BeerOtnHandler {
 		return attendees;
 	}
 
-	public GetResultsResponse getResults(GetEntriesRequest req) {
+	public UpdateVotesResponse getVotesForGame(Integer gameId) {
+		UpdateVotesResponse resp = new UpdateVotesResponse();
+		List<GameMemberEntity> gameMembers = gameMemberRepo.findByGameGameId(gameId);
+		
+		boolean allVoted = true;
+		for(GameMemberEntity gameMember : gameMembers) {
+			if (gameMember.getIsPresent()) {
+				Vote vote = new Vote();
+				vote.setName(gameMember.getMember().getMemberName());
+				VoteEntity v = voteRepo.findByGame_GameIdAndMember_MemberId(gameId,gameMember.getMember().getMemberId());
+				vote.setDidVote(v != null);
+				allVoted = allVoted && ( v != null);
+				resp.getVoteList().add(vote);
+			}
+		}
+		
+		resp.getVoteList().sort((vote1, vote2) -> {
+			return vote1.getName().compareTo(vote2.getName());
+		});
+		
+		resp.setAllVotesIn(allVoted);
+		return resp;
+	}
+
+	public GetResultsResponse getResultsForGame(Integer gameId) {
 		GetResultsResponse resp = new GetResultsResponse();
-		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(gameId);
 		Map<Integer,GetResultsResponse.Entry> resultsMap = new HashMap<Integer,GetResultsResponse.Entry>();
 		for (EntryEntity e:entryEntityList) {
 			GetResultsResponse.Entry entry = resp.new Entry();
@@ -250,7 +288,7 @@ public class BeerOtnHandler {
 			resultsMap.put(e.getEntryId(),entry);
 		}
 		
-		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(req.getGameId());
+		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(gameId);
 		for (VoteEntity v:voteList) {
 			resultsMap.get(v.getFirst().getEntryId()).setScore(resultsMap.get(v.getFirst().getEntryId()).getScore()+5);
 			resultsMap.get(v.getFirst().getEntryId()).votes[0] +=1; 

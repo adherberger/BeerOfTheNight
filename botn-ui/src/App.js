@@ -11,6 +11,9 @@ import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
 import AddBeerFor from './pages/AddBeerFor';
 import VotingPage from './pages/VotingPage';
+import Waiting from './pages/Waiting';
+import ResultsPage from './pages/ResultsPage';
+
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
 import { BOTN_WEBSOCKET_BASE } from './utilities/constants';
@@ -42,7 +45,15 @@ function App() {
     },
     {
       path: "/voting",
-      element: <VotingPage/>
+      element: <VotingPage sendMessage={sendMessage}/>
+    },
+    {
+      path: "/waiting",
+      element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription}/>
+    },
+    {
+      path: "/results",
+      element: <ResultsPage sendMessage={sendMessage} useSubscription={useSubscription}/>
     }
 
   ]);
