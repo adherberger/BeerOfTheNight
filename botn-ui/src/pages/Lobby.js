@@ -50,6 +50,12 @@ const Lobby = ({sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
     const navigate = useNavigate();
 
+    //Quick hack to allow Admin role for seeded game data
+    //Join one of the static games with name Admin!
+    if (gameContext.game?.brewerName === "Admin") {
+        gameContext.game.isAdmin = true;
+    }
+
     useEffect(() => {
         if(gameState === "IN_PROGRESS") {
             navigate("/voting");

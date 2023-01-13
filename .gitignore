@@ -24,3 +24,4 @@ botn-backend/.sts4-cache
 ### Local project config files ###
 botn-ui/.env
 botn-backend/bin/
+botn-ui/dot-env

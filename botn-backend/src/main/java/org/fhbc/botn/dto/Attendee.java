@@ -1,4 +1,4 @@
-package org.fhbc.botn;
+package org.fhbc.botn.dto;
 
 public class Attendee {
 	private String name;

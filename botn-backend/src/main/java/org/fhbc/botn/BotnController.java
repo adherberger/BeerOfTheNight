@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
+import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.GetResultsResponse;
@@ -12,11 +13,15 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.SubmitVotesRequest;
+import org.fhbc.botn.dto.UpdateVotesResponse;
+import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,11 +65,25 @@ public class BotnController {
 	public GameState startVoting(Integer gameId) {
 		return handler.startVotingForGame(gameId);
 	}
-	
+
+	@MessageMapping("/votingComplete")
+	@SendTo("/botn/game-state")
+	public GameState endVoting(Integer gameId) {
+		return handler.allVotesReceived(gameId);
+	}
+
 	@MessageMapping("/updateAttendees")
 	@SendTo("/botn/attendees")
 	public List<Attendee> getAttendees(Integer gameId) {
 		return handler.getAttendeesForGame(gameId);
+	}
+
+	@MessageMapping("/updateVotes")
+	@SendTo("/botn/votes")
+	public UpdateVotesResponse getVotes(Integer gameId) {
+		UpdateVotesResponse resp = handler.getVotesForGame(gameId);
+		System.out.println(gson.toJson(resp));
+		return resp;
 	}
 
 	@PostMapping("/submitVotes")
@@ -73,9 +92,9 @@ public class BotnController {
 		return true;
 	}
 	
-	@PostMapping("/getResults")
-	public GetResultsResponse getResults(@RequestBody GetEntriesRequest req) {
-		return handler.getResults(req);
+	@GetMapping("/results/{gameId}")
+	public GetResultsResponse getResults(@PathVariable Integer gameId) {
+		return handler.getResultsForGame(gameId);
 	}
 	
 }
