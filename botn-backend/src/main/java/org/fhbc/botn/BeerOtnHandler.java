@@ -76,11 +76,11 @@ public class BeerOtnHandler {
 		j.setMemberName(req.getMemberName());
 		j.setRoomCode(game.getRoomCode());
 		
-		return joinGame(j);
+		return joinGame(j,true);
 	}
 	
 	// called for each member that will be joining the game
-	public JoinGameResponse joinGame(JoinGameRequest req) {
+	public JoinGameResponse joinGame(JoinGameRequest req, boolean isPresent) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		MemberEntity member = null;
 		
@@ -102,7 +102,7 @@ public class BeerOtnHandler {
 		gameMember.setGameMemberId(new GameMemberPK(game.getGameId(), member.getMemberId()));
 		gameMember.setGame(game);
 		gameMember.setMember(member);
-		gameMember.setIsPresent(true);
+		gameMember.setIsPresent(isPresent);
 		gameMemberRepo.save(gameMember);
 		
 		JoinGameResponse resp = new JoinGameResponse();
@@ -135,14 +135,15 @@ public class BeerOtnHandler {
 	}
 
 	// This is called when a member has a beer to enter in the game.
-	public AddEntryResponse addEntryFor(AddEntryForRequest req) {
+	public void addEntryFor(AddEntryForRequest req) {
 		GameEntity game = gameRepo.findById(req.getGameId()).get();
 		//Join the game using the submitted member name
 		JoinGameRequest joinGameRequest = new JoinGameRequest();
 		joinGameRequest.setMemberName(req.getBrewerName());
 		joinGameRequest.setRoomCode(game.getRoomCode());
+	
 
-		JoinGameResponse joinGameResponse = joinGame(joinGameRequest);
+		JoinGameResponse joinGameResponse = joinGame(joinGameRequest,false);
 		
 		//Now add the entry for this new member
 		AddEntryRequest addEntryRequest = new AddEntryRequest();
@@ -153,8 +154,6 @@ public class BeerOtnHandler {
 		
 		addEntry(addEntryRequest);
 		
-		//Don't think we need to return anything.
-		return null;
 	}
 
 	// Generates a random 4-byte room code.

@@ -26,8 +26,6 @@ const AddBeerFor = () => {
         ).then((response) => {
             if (response.status === 200) {
                 console.log(response.data)
-                gameContext.setValue("entry", { entryId: response.data.entryId, beerName: beerName, beerStyle: beerStyle })
-                console.log(gameContext)
                 navigate("/lobby");
             } else if (response.status === 404) {
             }
@@ -38,10 +36,10 @@ const AddBeerFor = () => {
         <>
             <div className="main-page">
                 <div className="logo"><FaBeer /></div>
-                <p>Please tell us about your beer:</p>
+                <p>Enter member and beer info:</p>
                 <StateInput
                     id="brewer-name-input"
-                    title="Brewerr Name"
+                    title="Brewer Name"
                     stateVar={brewerName}
                     setStateVar={setBrewerName}
                     autoFocus
@@ -51,7 +49,6 @@ const AddBeerFor = () => {
                     title="Beer Name"
                     stateVar={beerName}
                     setStateVar={setBeerName}
-                    autoFocus
                 />
                 <StateInput
                     id="beer-style-input"

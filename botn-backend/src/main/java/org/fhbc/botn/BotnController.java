@@ -47,7 +47,7 @@ public class BotnController {
 	
 	@PostMapping("/joinGame")
 	public JoinGameResponse joinGame(@RequestBody JoinGameRequest req) {
-		return handler.joinGame(req);
+		return handler.joinGame(req,true);
 	}
 
 	@PostMapping("/addEntry")
@@ -57,9 +57,9 @@ public class BotnController {
 	}
 
 	@PostMapping("/addEntryFor")
-	public AddEntryResponse addEntryFor(@RequestBody AddEntryForRequest req) {
+	public void addEntryFor(@RequestBody AddEntryForRequest req) {
 		System.out.println(gson.toJson(req));
-		return handler.addEntryFor(req);
+		handler.addEntryFor(req);
 	}
 
 

@@ -83,7 +83,7 @@ const Lobby = ({sendMessage, useSubscription}) => {
                 gameContext.game?.isAdmin ?
 
                                     <>
-                                        <button onClick={addOtherEntry}>
+                                        <button className="big-button" onClick={addOtherEntry}>
                                             Missing Member Entry
                                         </button>
                                     </>
@@ -101,7 +101,7 @@ const Lobby = ({sendMessage, useSubscription}) => {
                     :
                     <>
                         <p>Click the button below if you have a beer to enter!</p>
-                        <button
+                        <button className="big-button"
                             onClick={addMyBeer}
                             disabled={!!gameContext.entry}
                         >
