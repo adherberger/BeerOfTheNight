@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.Attendee;
@@ -75,11 +76,11 @@ public class BeerOtnHandler {
 		j.setMemberName(req.getMemberName());
 		j.setRoomCode(game.getRoomCode());
 		
-		return joinGame(j);
+		return joinGame(j,true);
 	}
 	
 	// called for each member that will be joining the game
-	public JoinGameResponse joinGame(JoinGameRequest req) {
+	public JoinGameResponse joinGame(JoinGameRequest req, boolean isPresent) {
 		GameEntity game = gameRepo.findByRoomCode(req.getRoomCode());
 		MemberEntity member = null;
 		
@@ -101,7 +102,7 @@ public class BeerOtnHandler {
 		gameMember.setGameMemberId(new GameMemberPK(game.getGameId(), member.getMemberId()));
 		gameMember.setGame(game);
 		gameMember.setMember(member);
-		gameMember.setIsPresent(true);
+		gameMember.setIsPresent(isPresent);
 		gameMemberRepo.save(gameMember);
 		
 		JoinGameResponse resp = new JoinGameResponse();
@@ -131,6 +132,28 @@ public class BeerOtnHandler {
 		AddEntryResponse resp = new AddEntryResponse();
 		resp.setEntryId(entry.getEntryId());
 		return resp;
+	}
+
+	// This is called when a member has a beer to enter in the game.
+	public void addEntryFor(AddEntryForRequest req) {
+		GameEntity game = gameRepo.findById(req.getGameId()).get();
+		//Join the game using the submitted member name
+		JoinGameRequest joinGameRequest = new JoinGameRequest();
+		joinGameRequest.setMemberName(req.getBrewerName());
+		joinGameRequest.setRoomCode(game.getRoomCode());
+	
+
+		JoinGameResponse joinGameResponse = joinGame(joinGameRequest,false);
+		
+		//Now add the entry for this new member
+		AddEntryRequest addEntryRequest = new AddEntryRequest();
+		addEntryRequest.setGameId(req.getGameId());
+		addEntryRequest.setMemberId(joinGameResponse.getMemberId());
+		addEntryRequest.setBeerName(req.getBeerName());
+		addEntryRequest.setBeerStyle(req.getBeerStyle());
+		
+		addEntry(addEntryRequest);
+		
 	}
 
 	// Generates a random 4-byte room code.

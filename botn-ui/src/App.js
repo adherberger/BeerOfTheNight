@@ -9,6 +9,7 @@ import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
+import AddBeerFor from './pages/AddBeerFor';
 import VotingPage from './pages/VotingPage';
 import Waiting from './pages/Waiting';
 import ResultsPage from './pages/ResultsPage';
@@ -37,6 +38,10 @@ function App() {
     {
       path: "/addBeer",
       element: <AddBeer/>
+    },
+    {
+      path: "/addBeerFor",
+      element: <AddBeerFor/>
     },
     {
       path: "/voting",

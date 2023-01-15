@@ -62,8 +62,12 @@ const Lobby = ({sendMessage, useSubscription}) => {
         }
     }, [gameState]);
 
-    function handleClick() {
+    function addMyBeer() {
         navigate("/addBeer");
+    }
+
+    function addOtherEntry() {
+        navigate("/addBeerFor");
     }
 
     function beginVoting() {
@@ -75,6 +79,18 @@ const Lobby = ({sendMessage, useSubscription}) => {
             <div className="main-page">
                 <div className="logo"><FaBeer /></div>
                 <h3>Waiting for voting to begin</h3>
+                {                 
+                gameContext.game?.isAdmin ?
+
+                                    <>
+                                        <button className="big-button" onClick={addOtherEntry}>
+                                            Missing Member Entry
+                                        </button>
+                                    </>
+                                    :
+                                    <></>
+                
+                }
                 <AttendeeList attendees={attendees}/>
                 {
                 gameContext.entry ?
@@ -85,8 +101,8 @@ const Lobby = ({sendMessage, useSubscription}) => {
                     :
                     <>
                         <p>Click the button below if you have a beer to enter!</p>
-                        <button
-                            onClick={handleClick}
+                        <button className="big-button"
+                            onClick={addMyBeer}
                             disabled={!!gameContext.entry}
                         >
                             Add Your Entry

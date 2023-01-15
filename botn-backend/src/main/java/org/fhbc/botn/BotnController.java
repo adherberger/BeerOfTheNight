@@ -3,6 +3,7 @@ package org.fhbc.botn;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.Attendee;
@@ -46,7 +47,7 @@ public class BotnController {
 	
 	@PostMapping("/joinGame")
 	public JoinGameResponse joinGame(@RequestBody JoinGameRequest req) {
-		return handler.joinGame(req);
+		return handler.joinGame(req,true);
 	}
 
 	@PostMapping("/addEntry")
@@ -54,6 +55,13 @@ public class BotnController {
 		System.out.println(gson.toJson(req));
 		return handler.addEntry(req);
 	}
+
+	@PostMapping("/addEntryFor")
+	public void addEntryFor(@RequestBody AddEntryForRequest req) {
+		System.out.println(gson.toJson(req));
+		handler.addEntryFor(req);
+	}
+
 
 	@PostMapping("/getEntries")
 	public GetEntriesResponse getEntries(@RequestBody GetEntriesRequest req) {
