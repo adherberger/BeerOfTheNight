@@ -40,6 +40,11 @@ public class BotnController {
 	@Autowired
 	private BeerOtnHandler handler;
 	
+    @GetMapping("/restart")
+    public void restart() {
+    	BeerOfTheNightApplication.restart();
+    } 
+    
 	@PostMapping("/initGame")
 	public JoinGameResponse initGame(@RequestBody InitGameRequest req) {
 		return handler.initGame(req);
