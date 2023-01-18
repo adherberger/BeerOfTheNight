@@ -13,15 +13,22 @@ const Result = (result) => {
 
 const ResultsList = (results) => {
     return (
-        results.map(result =>
-            <Result data={result}/>
-        )
+        <div className="results-list">
+        {
+            results.length > 0 ?
+            results.map(result =>
+                <Result data={result}/>
+            ) :
+            <></>
+        }
+        </div>
     )
 }
 
-const ResultsPage = () => {
+const Results = () => {
     const gameContext = useGameContext();
     const [ results, setResults ] = useState([]);
+    const [ resultsShown, setResultsShown ] = useState(gameContext?.game?.isAdmin);
     
     useEffect(() => {
         axios.get(BOTN_GET_RESULTS_FOR_GAME(gameContext.game.gameId)).then(response => {
@@ -36,4 +43,4 @@ const ResultsPage = () => {
     )
 }
 
-export default ResultsPage
+export default Results;

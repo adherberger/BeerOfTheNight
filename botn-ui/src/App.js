@@ -12,7 +12,7 @@ import AddBeer from './pages/AddBeer';
 import AddBeerFor from './pages/AddBeerFor';
 import VotingPage from './pages/VotingPage';
 import Waiting from './pages/Waiting';
-import ResultsPage from './pages/ResultsPage';
+import Results from './pages/Results';
 
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
@@ -53,7 +53,7 @@ function App() {
     },
     {
       path: "/results",
-      element: <ResultsPage sendMessage={sendMessage} useSubscription={useSubscription}/>
+      element: <Results sendMessage={sendMessage} useSubscription={useSubscription}/>
     }
 
   ]);
