@@ -1,20 +1,31 @@
+* {
+  --primary-background-color: #EB4;
+  --secondary-background-color: #C93;
+  --button-background-color: #B82;
+}
+
 .App {
   text-align: center;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: Arial;
 }
 
 .main-page {
   background-color: #EEBB44;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  display: block;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
   overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+}
+
+.main-page > div {
+  margin: auto;
+  padding: 32px;
 }
 
 .bar {
@@ -131,4 +142,67 @@
 
 .attendee .entry-indicator {
   float: right;
+}
+
+.result {
+  display: block;
+  border-radius: 12px;
+  border: 3px solid var(--button-background-color);
+  background: var(--secondary-background-color);
+  margin: 16px;
+  text-align: left;
+  font-weight: bold;
+  padding: 18px 24px;
+}
+
+.result.first {
+  background: #ffc600;
+  border-color: #c59e16;
+}
+
+.result.second {
+  background: silver;
+  border-color: gray;
+}
+
+.result.third {
+  background: #c1740e;
+  border-color: #8d550c;
+}
+
+.result.own-entry {
+  border: 4px solid black;
+}
+
+.result .medal-icon {
+  display: inline-block;
+  position: relative;
+  bottom: 6px;
+  margin-right: 14px;
+  color: rgba(0, 0, 0, 0.4);
+  height: 1em;
+}
+
+.result > .result-text {
+  display: inline-block;
+  width: 90%;
+  vertical-align: middle;
+}
+
+.result-name {
+  display: inline-block;
+}
+
+.result-given-name {
+  font-style: italic;
+  font-size: calc(6px + 1.5vmin);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.result > .result-score {
+  display: inline-block;
+  width: 10%;
+  text-align: right;
+  font-size: calc(18px + 2vmin);
+  vertical-align: middle;
 }
