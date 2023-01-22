@@ -16,7 +16,7 @@ public class GetResultsResponse {
 		private String brewer;
 		private String beerName;
 		private String beerStyle;
-		public int[] votes = new int[3];
+		//public int[] votes = new int[3];
 		private int score=0;
 		
 		public int getEntryId() {

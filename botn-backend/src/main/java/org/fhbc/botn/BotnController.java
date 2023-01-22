@@ -84,6 +84,12 @@ public class BotnController {
 	public GameState endVoting(Integer gameId) {
 		return handler.allVotesReceived(gameId);
 	}
+	
+	@MessageMapping("/revealResults")
+	@SendTo("/botn/game-state")
+	public GameState revealResults(Integer gameId) {
+		return handler.completeGame(gameId);
+	}
 
 	@MessageMapping("/updateAttendees")
 	@SendTo("/botn/attendees")

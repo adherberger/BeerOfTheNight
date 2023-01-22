@@ -13,6 +13,12 @@ export const BOTN_WEBSOCKET_BASE = BOTN_API_ROOT + "/game";
 export const BOTN_GAME_STATE_TOPIC = "/botn/game-state";
 export const BOTN_ATTENDEES_TOPIC = "/botn/attendees";
 export const BOTN_VOTES_TOPIC = "/botn/votes";
+export const GAME_STATE = {
+    INIT: "INIT",
+    IN_PROGRESS: "IN_PROGRESS",
+    RESULTS_RECEIVED: "RESULTS_RECEIVED",
+    COMPLETE: "COMPLETE",
+}
 
 export const BOTN_GET_RESULTS_FOR_GAME = (gameId) => (
     BOTN_BASE_URL + `/results/${gameId}`

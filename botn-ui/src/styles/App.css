@@ -34,7 +34,30 @@
   display: block;
 }
 
-.join-game-form, .create-game-form {
+.main-page > .big-icon-with-message {
+  position: relative;
+  top: 30%;
+}
+
+.big-icon-with-message > .big-icon {
+  font-size: 2em;
+}
+
+.big-icon-with-message > * {
+  padding: 8px;
+}
+
+.title {
+  font-size: calc(32px + 2vw);
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: calc(16px + 1vw);
+  color: var(--disabled-text-color);
+}
+
+.join-game-form, .create-room-form {
   width: 50%;
 }
 
@@ -104,12 +127,13 @@
 }
 
 .secondary-button {
-  width: 100px;
+  min-width: 100px;
   height: 40px;
   border-radius: 5px;
   background: var(--secondary-background-color);
   color: var(--primary-text-color);
   cursor: pointer;
+  padding: 0 1em;
 }
 
 .secondary-button:disabled {
@@ -174,40 +198,49 @@
 }
 
 .result {
+  margin: 16px;
+}
+
+.result-item {
   border-radius: 12px;
   border: 3px solid var(--button-background-color);
   background: var(--secondary-background-color);
-  margin: 16px;
   text-align: left;
   font-weight: bold;
   padding: 18px 24px;
 }
 
-.result.first {
+.result-item.admin {
+  cursor: pointer;
+}
+
+.result-item.first {
   background: #ffc600;
   border-color: #c59e16;
 }
 
-.result.second {
+.result-item.second {
   background: silver;
   border-color: gray;
 }
 
-.result.third {
+.result-item.third {
   background: #c1740e;
   border-color: #8d550c;
 }
 
-.result .medal-icon {
-  display: inline-block;
-  position: relative;
-  bottom: 6px;
-  margin-right: 14px;
-  color: rgba(0, 0, 0, 0.4);
-  height: 1em;
+.result-item.votes-shown {
+  border-radius: 12px 12px 0px 0px;
 }
 
-.result > .result-text {
+.result-item .medal-icon {
+  display: inline-block;
+  margin-right: 14px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 1.5em;
+}
+
+.result-item > .result-text {
   display: inline-block;
   width: 90%;
   vertical-align: middle;
@@ -220,13 +253,20 @@
 .result-given-name {
   font-style: italic;
   font-size: calc(6px + 1.5vmin);
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--disabled-text-color);
 }
 
-.result > .result-score {
+.result-item > .result-score {
   display: inline-block;
   width: 10%;
   text-align: right;
   font-size: calc(18px + 2vmin);
   vertical-align: middle;
+}
+
+.result-votes {
+  background: white;
+  border-radius: 0px 0px 12px 12px;
+  border: 2px solid var(--disabled-text-color);
+  border-top-style: none;
 }

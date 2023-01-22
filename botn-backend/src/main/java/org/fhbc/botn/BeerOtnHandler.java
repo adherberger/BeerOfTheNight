@@ -306,5 +306,12 @@ public class BeerOtnHandler {
 		Collections.sort(resp.getResultsList(),Collections.reverseOrder()); 
 		return resp;
 	}
+
+	public GameState completeGame(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		game.setGameState(GameState.COMPLETE);
+		gameRepo.save(game);
+		return GameState.COMPLETE;
+	}
 	
 }

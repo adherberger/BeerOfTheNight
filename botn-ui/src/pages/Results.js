@@ -1,10 +1,22 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
-import { BOTN_GET_RESULTS_FOR_GAME } from '../utilities/constants';
-import { FaMedal } from 'react-icons/fa';
+import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '../utilities/constants';
+import { FaMedal, FaBeer } from 'react-icons/fa';
+import { BigIconWithMessage, MainButton } from '../components/components';
 
-const Result = ({result, index, isOwnEntry}) => {
+const Vote = ({vote}) => {
+
+}
+
+const VoteList = ({votes}) => {
+    return (
+        <div className="result-votes">Hello</div>
+    )
+}
+
+const Result = ({result, index, isOwnEntry, isAdmin}) => {
+    const [ showVotes, setShowVotes ] = useState(false);
     let place;
 
     switch(index) {
@@ -16,32 +28,49 @@ const Result = ({result, index, isOwnEntry}) => {
         break;
     }
 
+    const onClick = isAdmin ? () => {
+        setShowVotes(!showVotes);
+    } : () => {}
+
+    if(isOwnEntry && place === 'first') {
+        // show confetti
+    }
+
     return (
         <div
             id={"result-" + result.entryId}
-            className={"result" + (place ? ` ${place}` : "") + (isOwnEntry ? " own-entry" : "")}
+            className="result"
+            onClick={onClick}
         >
-            <div className="result-text">
-                {
-                    place ?
-                    <FaMedal className="medal-icon"/> : <></>
-                }
-                <div className="result-name">
-                    <div className="result-description">
-                        {`${result.brewer}'s ${result.beerStyle}`}
-                    </div>
+            <div className={"result-item" + (place ? ` ${place}` : "") + (isOwnEntry ? " own-entry" : "") + (isAdmin ? " admin" : "") + (showVotes ? " votes-shown" : "")}>
+                <div className="result-text">
                     {
-                        result.beerName ?
-                        <div className="result-given-name">
-                            {`"${result.beerName}"`}
-                        </div> :
-                        <></>
+                        place ?
+                        <FaMedal className="medal-icon"/>
+                        : <></>
                     }
+                    <div className="result-name">
+                        <div className="result-description">
+                            {`${result.brewer}'s ${result.beerStyle}`}
+                        </div>
+                        {
+                            result.beerName ?
+                            <div className="result-given-name">
+                                {`"${result.beerName}"`}
+                            </div> :
+                            <></>
+                        }
+                    </div>
+                </div>
+                <div className="result-score">
+                    {`${result.score}`}
                 </div>
             </div>
-            <div className="result-score">
-                {`${result.score}`}
-            </div>
+            {
+                showVotes ?
+                <VoteList/> :
+                <></>
+            }
         </div>
     );
 }
@@ -54,7 +83,7 @@ const ResultsList = ({results}) => {
         {
             results.length > 0 ?
             results.map((result, index) =>
-                <Result index={index} result={result} isOwnEntry={gameContext.game?.gameId === result.entryId}/>
+                <Result index={index} result={result} isOwnEntry={gameContext.game?.gameId === result.entryId} isAdmin={gameContext.game?.isAdmin}/>
             ) :
             <></>
         }
@@ -62,10 +91,18 @@ const ResultsList = ({results}) => {
     )
 }
 
-const Results = () => {
+const Results = ({sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
     const [ results, setResults ] = useState([]);
-    const [ resultsShown, setResultsShown ] = useState(gameContext?.game?.isAdmin);
+    const [ resultsShown, setResultsShown ] = useState(false);
+
+    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC);
+
+    useEffect(() => {
+        if(gameState === GAME_STATE.COMPLETE) {
+            setResultsShown(true);
+        }
+    }, [gameState]);
     
     useEffect(() => {
         axios.get(BOTN_GET_RESULTS_FOR_GAME(gameContext?.game?.gameId ? gameContext.game.gameId : 100)).then(response => {
@@ -74,10 +111,34 @@ const Results = () => {
         });
     }, []);
 
+    const revealResults = () => {
+        sendMessage("/revealResults", gameContext.game.gameId);
+    }
+
     return (
-        <div className="main-page">
-            <ResultsList results={results}/>
-        </div>
+        <>
+            <div className="main-page">
+                {
+                    resultsShown || gameContext.game?.isAdmin ?
+                    <ResultsList results={results}/> :
+                    <BigIconWithMessage
+                        title="The results are in!"
+                        subtitle="Waiting for admin to share results."
+                        icon={<FaBeer/>}
+                    />
+                }
+                
+            </div>
+            {
+                gameContext.game?.isAdmin && !resultsShown ?
+                    <MainButton
+                    text={"Reveal Results"}
+                    onClick={revealResults}
+                    disabled={false}
+                /> :
+                <></>
+            }
+        </>
     )
 }
 

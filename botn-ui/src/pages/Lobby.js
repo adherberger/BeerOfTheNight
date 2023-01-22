@@ -8,7 +8,8 @@ import {
     BOTN_ATTENDEES_TOPIC,
 } from '../utilities/constants';
 import {
-    MainButton
+    MainButton,
+    SecondaryButton,
 } from '../components/components';
 
 const Attendee = ({name, hasEntry, idx}) => {
@@ -77,38 +78,36 @@ const Lobby = ({sendMessage, useSubscription}) => {
     return (
         <>
             <div className="main-page">
-                <div className="logo"><FaBeer /></div>
-                <h3>Waiting for voting to begin</h3>
-                {                 
-                gameContext.game?.isAdmin ?
-
-                                    <>
-                                        <button className="big-button" onClick={addOtherEntry}>
-                                            Missing Member Entry
-                                        </button>
-                                    </>
-                                    :
-                                    <></>
-                
-                }
-                <AttendeeList attendees={attendees}/>
-                {
-                gameContext.entry ?
-                    <>
-                        <p>Hey now, we have recorded your entry!</p>
-                        <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
-                    </>
-                    :
-                    <>
-                        <p>Click the button below if you have a beer to enter!</p>
-                        <button className="big-button"
-                            onClick={addMyBeer}
-                            disabled={!!gameContext.entry}
-                        >
-                            Add Your Entry
-                        </button>
-                    </>
-                }
+                <div>
+                    <div className="logo"><FaBeer /></div>
+                    <h3>Waiting for voting to begin</h3>
+                    {                 
+                    gameContext.game?.isAdmin ?
+                        <SecondaryButton
+                            text="Missing Member Entry"
+                            onClick={addOtherEntry}
+                        />
+                        :
+                        <></>
+                    }
+                    <AttendeeList attendees={attendees}/>
+                    {
+                    gameContext.entry ?
+                        <>
+                            <p>Hey now, we have recorded your entry!</p>
+                            <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
+                        </>
+                        :
+                        <>
+                            <p>Click the button below if you have a beer to enter!</p>
+                            <SecondaryButton
+                                text="Add Your Entry"
+                                onClick={addMyBeer}
+                                disabled={!!gameContext.entry}
+                            />
+                        </>
+                    }
+                </div>
             </div>
             {
                 gameContext.game?.isAdmin ?
