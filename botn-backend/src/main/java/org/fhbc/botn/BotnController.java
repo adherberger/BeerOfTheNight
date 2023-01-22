@@ -9,10 +9,10 @@ import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
-import org.fhbc.botn.dto.GetResultsResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
+import org.fhbc.botn.dto.Result;
 import org.fhbc.botn.dto.SubmitVotesRequest;
 import org.fhbc.botn.dto.UpdateVotesResponse;
 import org.fhbc.botn.dto.Vote;
@@ -112,7 +112,7 @@ public class BotnController {
 	}
 	
 	@GetMapping("/results/{gameId}")
-	public GetResultsResponse getResults(@PathVariable Integer gameId) {
+	public List<Result> getResults(@PathVariable Integer gameId) {
 		return handler.getResultsForGame(gameId);
 	}
 	

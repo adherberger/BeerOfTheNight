@@ -39,7 +39,7 @@ const JoinRoom = () => {
     return (
         <>
             <div className="main-page">
-                <div className="join-game-form">
+                <div className="form join-game-form">
                     <StateInput
                         id="room-code-input"
                         title="Room Code"

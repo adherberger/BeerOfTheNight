@@ -3,6 +3,7 @@
   --secondary-background-color: #C93;
   --button-background-color: #B82;
   --list-background-color: white;
+  --list-secondary-background-color: #EEE;
   --list-border-color: gray;
   --primary-text-color: white;
   --secondary-text-color: black;
@@ -58,7 +59,7 @@
 }
 
 .join-game-form, .create-room-form {
-  width: 50%;
+  width: calc(70% - 10vw);
 }
 
 .bar {
@@ -153,7 +154,6 @@
 }
 
 .botn-input * {
-  margin: 6px;
 }
 
 .text-input-label {
@@ -168,6 +168,11 @@
   display: block;
   font-size: calc(12px + 2vmin);
   font-weight: bold;
+}
+
+.form .text-input, .form .text-input-label {
+  margin: 6px auto;
+  width: 100%;
 }
 
 .attendee-list {
@@ -186,7 +191,7 @@
 }
 
 .attendee.even {
-  background: #EEE;
+  background: var(--list-secondary-background-color);
 }
 
 .attendee .attendee-name {
@@ -265,8 +270,34 @@
 }
 
 .result-votes {
+  color: var(--secondary-text-color);
   background: white;
   border-radius: 0px 0px 12px 12px;
   border: 2px solid var(--disabled-text-color);
   border-top-style: none;
+}
+
+.voter {
+  display: block;
+  padding: 6px 16px;
+}
+
+.voter.odd {
+  background: var(--list-secondary-background-color);
+}
+
+.voter.last {
+  border-radius: 0px 0px 12px 12px;
+}
+
+.voter > .voter-name {
+  display: inline-block;
+  width: 90%;
+  text-align: left;
+}
+
+.voter > .voter-points {
+  display: inline-block;
+  width: 10%;
+  text-align: right;
 }

@@ -25,7 +25,7 @@ const CreateRoom = () => {
 
   return (
     <div className="main-page">
-      <div className="create-room-form">
+      <div className="form create-room-form">
         <StateInput
           id="name-input"
           title="Your Name"

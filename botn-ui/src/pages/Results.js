@@ -5,13 +5,28 @@ import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '..
 import { FaMedal, FaBeer } from 'react-icons/fa';
 import { BigIconWithMessage, MainButton } from '../components/components';
 
-const Vote = ({vote}) => {
-
+const Voter = ({name, points, index, last}) => {
+    return (
+        <div key={index} className={"voter" + (index % 2 === 0 ? " even" : " odd") + (last ? " last" : "")}>
+            <div className="voter-name">
+                {name}
+            </div>
+            <div className="voter-points">
+                {points}
+            </div>
+        </div>
+    );
 }
 
-const VoteList = ({votes}) => {
+const VoterList = ({voters}) => {
     return (
-        <div className="result-votes">Hello</div>
+        <div className="result-votes">
+        {
+            voters.map((voter, index) => (
+                <Voter name={voter.name} points={voter.points} index={index} last={index === voters.length - 1}/>
+            ))
+        }
+        </div>
     )
 }
 
@@ -68,7 +83,7 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
             </div>
             {
                 showVotes ?
-                <VoteList/> :
+                <VoterList voters={result.voters}/> :
                 <></>
             }
         </div>
@@ -107,7 +122,7 @@ const Results = ({sendMessage, useSubscription}) => {
     useEffect(() => {
         axios.get(BOTN_GET_RESULTS_FOR_GAME(gameContext?.game?.gameId ? gameContext.game.gameId : 100)).then(response => {
             console.log(response);
-            setResults(response.data.resultsList);
+            setResults(response.data);
         });
     }, []);
 

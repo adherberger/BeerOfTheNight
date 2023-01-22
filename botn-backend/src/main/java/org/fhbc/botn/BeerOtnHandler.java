@@ -14,10 +14,11 @@ import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.Attendee;
 import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
-import org.fhbc.botn.dto.GetResultsResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
+import org.fhbc.botn.dto.Result;
+import org.fhbc.botn.dto.ResultVoter;
 import org.fhbc.botn.dto.SubmitVotesRequest;
 import org.fhbc.botn.dto.UpdateVotesResponse;
 import org.fhbc.botn.dto.Vote;
@@ -43,6 +44,9 @@ import org.springframework.web.server.ResponseStatusException;
 @Component
 public class BeerOtnHandler {
 	public static Logger log = LoggerFactory.getLogger(BeerOtnHandler.class);
+	private static final int FIRST_PLACE_POINTS = 5;
+	private static final int SECOND_PLACE_POINTS = 3;
+	private static final int THIRD_PLACE_POINTS = 1;
 	
 	@Autowired
 	GameRepository gameRepo;
@@ -273,38 +277,52 @@ public class BeerOtnHandler {
 		return resp;
 	}
 
-	public GetResultsResponse getResultsForGame(Integer gameId) {
-		GetResultsResponse resp = new GetResultsResponse();
+	public List<Result> getResultsForGame(Integer gameId) {
+		Map<Integer, Result> resultsMap = new HashMap<>();
+		List<Result> results = new ArrayList<>();
 		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(gameId);
-		Map<Integer,GetResultsResponse.Entry> resultsMap = new HashMap<Integer,GetResultsResponse.Entry>();
+		
 		for (EntryEntity e:entryEntityList) {
-			GetResultsResponse.Entry entry = resp.new Entry();
-			entry.setBeerName(e.getBeerName());
-			entry.setBeerStyle(e.getBeerStyle());
-			entry.setBrewer(e.getMember().getMemberName());
-			entry.setEntryId(e.getEntryId());
+			Result result = new Result();
+			result.setBeerName(e.getBeerName());
+			result.setBeerStyle(e.getBeerStyle());
+			result.setBrewer(e.getMember().getMemberName());
+			result.setEntryId(e.getEntryId());
 			
-			resultsMap.put(e.getEntryId(),entry);
+			resultsMap.put(e.getEntryId(),result);
 		}
 		
 		List<VoteEntity> voteList = voteRepo.findAllByGame_GameId(gameId);
+		
 		for (VoteEntity v:voteList) {
-			resultsMap.get(v.getFirst().getEntryId()).setScore(resultsMap.get(v.getFirst().getEntryId()).getScore()+5);
-			resultsMap.get(v.getFirst().getEntryId()).votes[0] +=1; 
-
-			resultsMap.get(v.getSecond().getEntryId()).setScore(resultsMap.get(v.getSecond().getEntryId()).getScore()+3);
-			resultsMap.get(v.getSecond().getEntryId()).votes[1] +=1; 
-
-			resultsMap.get(v.getThird().getEntryId()).setScore(resultsMap.get(v.getThird().getEntryId()).getScore()+1);
-			resultsMap.get(v.getThird().getEntryId()).votes[2] +=1;
+			EntryEntity[] entries = new EntryEntity[] {v.getFirst(), v.getSecond(), v.getThird()};
+			for(int place = 1; place <= entries.length; place++) {
+				EntryEntity currentEntry = entries[place - 1];
+				int points = 0;
+				
+				switch(place) {
+					case 1: points = FIRST_PLACE_POINTS;
+					break;
+					case 2: points = SECOND_PLACE_POINTS;
+					break;
+					case 3: points = THIRD_PLACE_POINTS;
+					break;
+				}
+				
+				ResultVoter voter = new ResultVoter(v.getMember().getMemberName(), points);
+				Result result = resultsMap.get(currentEntry.getEntryId());
+				result.incrementScoreBy(points);
+				result.addVoter(voter);
+			}
 		}
 		
-		for (Integer i:resultsMap.keySet()) {
-			resp.getResultsList().add(resultsMap.get(i));
+		for (Result result : resultsMap.values()) {
+			Collections.sort(result.getVoters(), Collections.reverseOrder());
+			results.add(result);
 		}
 		
-		Collections.sort(resp.getResultsList(),Collections.reverseOrder()); 
-		return resp;
+		Collections.sort(results, Collections.reverseOrder()); 
+		return results;
 	}
 
 	public GameState completeGame(Integer gameId) {
