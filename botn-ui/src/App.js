@@ -1,6 +1,8 @@
-import React from 'react';
+import { React, useState } from 'react';
 import './styles/App.css';
 import { FaBeer, FaBars } from 'react-icons/fa';
+import { MdClose } from "react-icons/md"
+import { FiMenu } from "react-icons/fi"
 import {
   createBrowserRouter,
   RouterProvider,
@@ -25,57 +27,74 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <JoinRoom/>,
+      element: <JoinRoom />,
     },
     {
       path: "/login",
-      element: <CreateRoom/>,
+      element: <CreateRoom />,
     },
     {
       path: "/lobby",
-      element: <Lobby sendMessage={sendMessage} useSubscription={useSubscription}/>
+      element: <Lobby sendMessage={sendMessage} useSubscription={useSubscription} />
     },
     {
       path: "/addBeer",
-      element: <AddBeer/>
+      element: <AddBeer />
     },
     {
       path: "/addBeerFor",
-      element: <AddBeerFor/>
+      element: <AddBeerFor />
     },
     {
       path: "/voting",
-      element: <VotingPage sendMessage={sendMessage}/>
+      element: <VotingPage sendMessage={sendMessage} />
     },
     {
       path: "/waiting",
-      element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription}/>
+      element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription} />
     },
     {
       path: "/results",
-      element: <ResultsPage sendMessage={sendMessage} useSubscription={useSubscription}/>
+      element: <ResultsPage sendMessage={sendMessage} useSubscription={useSubscription} />
     }
 
   ]);
 
+  const [navbarOpen, setNavbarOpen] = useState(false)
+
+  function handleToggle() {
+    setNavbarOpen(prev => !prev)
+  }
+
   return (
-      <div className="App">
-        <div className="bar top-bar">
-          <div className="logo"><FaBeer/></div>
-          <div className="top-bar-item">
-            {
-              gameContext.game ?
+    <div className="App">
+
+      <div className="bar top-bar">
+        <div className="logo"><FaBeer /></div>
+
+        <div className="top-bar-item">
+          {
+            gameContext.game ?
               "Room Code: " + gameContext.game.roomCode
               : "Beer Of The Night"
-            }
-          </div>
-          <div className="flex-spacer"/>
-          <div className="top-bar-menu top-bar-item">
-            <FaBars/>
-          </div>
+          }
         </div>
-        <RouterProvider router={router}/>
+        <div className="flex-spacer" />
+
+        <nav className="navBar">
+          <button className="burger-menu" onClick={handleToggle} >
+            {navbarOpen ? (
+              <MdClose style={{ color:"#fff", background: "#CC9933", width: "30px", height: "30px" }} />
+            ) : (
+              <FiMenu style={{ color:"#fff",background: "#CC9933", width: "30px", height: "30px" }} />
+            )}
+          </button>          <ul className={`menuNav ${navbarOpen ? "showMenu" : ""}`}></ul>
+        </nav>
+
       </div>
+
+      <RouterProvider router={router} />
+    </div>
   );
 }
 

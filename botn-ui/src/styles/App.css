@@ -43,7 +43,12 @@
 }
 
 .top-bar > .top-bar-item {
+  background: #CC9933;
   padding: 10px 12px 6px 12px;
+}
+
+.top-bar > .top-bar-item:hover {
+  background: #BB8822;
 }
 
 .top-bar > .logo {
@@ -51,10 +56,22 @@
 }
 
 .top-bar-menu {
+  background: #CC9933;
   float: right;
 }
 
 .top-bar-menu:hover {
+  background: #BB8822;
+  cursor: pointer;
+}
+
+.burger-menu {
+  padding: 10px 10px 6px 10px;
+  background: #CC9933;
+  border: none;
+}
+
+.burger-menu:hover {
   background: #BB8822;
   cursor: pointer;
 }
@@ -132,3 +149,6 @@
 .attendee .entry-indicator {
   float: right;
 }
+
+/* sidebar Nav */
+
