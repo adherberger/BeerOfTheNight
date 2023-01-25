@@ -81,7 +81,6 @@ function App() {
         </div>
         <div className="flex-spacer" />
 
-        <nav className="navBar">
           <button className="burger-menu" onClick={handleToggle} >
             {navbarOpen ? (
               <MdClose style={{ color:"#fff", background: "#CC9933", width: "30px", height: "30px" }} />
@@ -89,7 +88,6 @@ function App() {
               <FiMenu style={{ color:"#fff",background: "#CC9933", width: "30px", height: "30px" }} />
             )}
           </button>          <ul className={`menuNav ${navbarOpen ? "showMenu" : ""}`}></ul>
-        </nav>
 
       </div>
 
