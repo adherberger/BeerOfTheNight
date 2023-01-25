@@ -80,14 +80,27 @@ function App() {
           }
         </div>
         <div className="flex-spacer" />
-
-          <button className="burger-menu" onClick={handleToggle} >
+        <div className="top-bar-menu">
+          <div className="burger-menu" onClick={handleToggle} >
             {navbarOpen ? (
               <MdClose style={{ color:"#fff", background: "#CC9933", width: "30px", height: "30px" }} />
             ) : (
               <FiMenu style={{ color:"#fff",background: "#CC9933", width: "30px", height: "30px" }} />
             )}
-          </button>          <ul className={`menuNav ${navbarOpen ? "showMenu" : ""}`}></ul>
+          </div>
+          <div className={`menuNav ${navbarOpen ? "showMenu" : ""}`}>
+            <div className="menuNav-item">
+              Choice 1
+            </div>
+            <div className="menuNav-item">
+              Choice 2
+            </div>
+            <div className="menuNav-item">
+              Choice 3
+            </div>
+          </div>
+        </div>
+          
 
       </div>
 
