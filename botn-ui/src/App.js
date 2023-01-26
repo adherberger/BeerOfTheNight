@@ -14,7 +14,7 @@ import AddBeer from './pages/AddBeer';
 import AddBeerFor from './pages/AddBeerFor';
 import VotingPage from './pages/VotingPage';
 import Waiting from './pages/Waiting';
-import ResultsPage from './pages/ResultsPage';
+import Results from './pages/Results';
 
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
@@ -57,7 +57,7 @@ function App() {
     },
     {
       path: "/results",
-      element: <ResultsPage sendMessage={sendMessage} useSubscription={useSubscription} />
+      element: <Results sendMessage={sendMessage} useSubscription={useSubscription} />
     }
 
   ]);
@@ -71,13 +71,13 @@ function App() {
   const restartBackend = () => {
     console.log(BOTN_RESTART_API)
     axios.get(
-        BOTN_RESTART_API,
+      BOTN_RESTART_API,
     ).then((response) => {
-        if (response.status === 200) {
-        } else if (response.status === 404) {
-        }
+      if (response.status === 200) {
+      } else if (response.status === 404) {
+      }
     })
-}
+  }
 
   return (
     <div className="App">
@@ -94,32 +94,32 @@ function App() {
         </div>
         <div className="flex-spacer" />
         <div className="top-bar-menu">
-        {                 
-                gameContext.game?.isAdmin ?
-           <>
-          <div className="burger-menu" onClick={handleToggle} >
-            {navbarOpen ? (
-              <MdClose style={{ color:"#fff", background: "#CC9933", width: "30px", height: "30px" }} />
-            ) : (
-              <FiMenu style={{ color:"#fff",background: "#CC9933", width: "30px", height: "30px" }} />
-            )}
-          </div>
-          <div className={`menuNav ${navbarOpen ? "showMenu" : ""}`}>
-            <div className="menuNav-item"onClick={restartBackend}>
-              Restart Backend 
-            </div>
-            <div className="menuNav-item">
-              Add Missing Member
-            </div>
-            <div className="menuNav-item">
-              Choice 3
-            </div>
-          </div>
-          </> 
-          : <></> 
+          {
+            gameContext.game?.isAdmin ?
+              <>
+                <div className="burger-menu" onClick={handleToggle} >
+                  {navbarOpen ? (
+                    <MdClose style={{ color: "#fff", background: "#CC9933", width: "30px", height: "30px" }} />
+                  ) : (
+                    <FiMenu style={{ color: "#fff", background: "#CC9933", width: "30px", height: "30px" }} />
+                  )}
+                </div>
+                <div className={`menuNav ${navbarOpen ? "showMenu" : ""}`}>
+                  <div className="menuNav-item" onClick={restartBackend}>
+                    Restart Backend
+                  </div>
+                  <div className="menuNav-item">
+                    Add Missing Member
+                  </div>
+                  <div className="menuNav-item">
+                    Choice 3
+                  </div>
+                </div>
+              </>
+              : <></>
           }
         </div>
-          
+
 
       </div>
 
