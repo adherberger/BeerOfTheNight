@@ -1,5 +1,6 @@
 package org.fhbc.botn;
 
+import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,10 @@ public class SwaggerConfig {
 	.info(new Info().title("Beer of the Night REST API")
 			        .description("This is the backsend service for our Beer of the Night application.")
 			        .version("0.0.1"));
-}
+	}
 
+	@Bean
+	public RestartEndpoint restartEndpoint() {
+		return new RestartEndpoint();
+	}
 }

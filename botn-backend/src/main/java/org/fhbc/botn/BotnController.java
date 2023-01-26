@@ -18,6 +18,7 @@ import org.fhbc.botn.dto.UpdateVotesResponse;
 import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,9 +41,16 @@ public class BotnController {
 	@Autowired
 	private BeerOtnHandler handler;
 	
+	@Autowired
+	private RestartEndpoint restartEndpoint;
+	
     @GetMapping("/restart")
     public void restart() {
-    	BeerOfTheNightApplication.restart();
+    	//BeerOfTheNightApplication.restart();
+    	
+    	Thread restartThread = new Thread(() -> restartEndpoint.restart());
+    	restartThread.setDaemon(false);
+    	restartThread.start();
     } 
     
 	@PostMapping("/initGame")
