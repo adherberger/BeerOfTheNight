@@ -29,6 +29,10 @@ const JoinRoom = () => {
         ).then((response) => {
             if (response.status === 200) {
                 gameContext.setValue("game", response.data);
+                if (gameContext.game?.brewerName === "Admin") {
+                    gameContext.game.isAdmin = true;
+                }
+            
                 navigate("/lobby");
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);

@@ -18,7 +18,9 @@ import ResultsPage from './pages/ResultsPage';
 
 import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
-import { BOTN_WEBSOCKET_BASE } from './utilities/constants';
+import axios from 'axios';
+
+import { BOTN_WEBSOCKET_BASE, BOTN_RESTART_API } from './utilities/constants';
 
 function App() {
   const gameContext = useGameContext();
@@ -66,6 +68,17 @@ function App() {
     setNavbarOpen(prev => !prev)
   }
 
+  const restartBackend = () => {
+    console.log(BOTN_RESTART_API)
+    axios.get(
+        BOTN_RESTART_API,
+    ).then((response) => {
+        if (response.status === 200) {
+        } else if (response.status === 404) {
+        }
+    })
+}
+
   return (
     <div className="App">
 
@@ -81,6 +94,9 @@ function App() {
         </div>
         <div className="flex-spacer" />
         <div className="top-bar-menu">
+        {                 
+                gameContext.game?.isAdmin ?
+           <>
           <div className="burger-menu" onClick={handleToggle} >
             {navbarOpen ? (
               <MdClose style={{ color:"#fff", background: "#CC9933", width: "30px", height: "30px" }} />
@@ -89,16 +105,19 @@ function App() {
             )}
           </div>
           <div className={`menuNav ${navbarOpen ? "showMenu" : ""}`}>
-            <div className="menuNav-item">
-              Choice 1
+            <div className="menuNav-item"onClick={restartBackend}>
+              Restart Backend 
             </div>
             <div className="menuNav-item">
-              Choice 2
+              Add Missing Member
             </div>
             <div className="menuNav-item">
               Choice 3
             </div>
           </div>
+          </> 
+          : <></> 
+          }
         </div>
           
 
