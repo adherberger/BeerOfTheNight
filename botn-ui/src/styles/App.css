@@ -215,6 +215,10 @@
   padding: 18px 24px;
 }
 
+.result.own-entry .result-item {
+  border-color: black;
+}
+
 .result-item.admin {
   cursor: pointer;
 }
@@ -255,6 +259,12 @@
   display: inline-block;
 }
 
+.own-entry-indicator {
+  display: inline-block;
+  font-size: 0.6em;
+  margin-left: 20px;
+}
+
 .result-given-name {
   font-style: italic;
   font-size: calc(6px + 1.5vmin);
@@ -286,6 +296,7 @@
   background: var(--list-secondary-background-color);
 }
 
+/* Makes it so the last voter in the list has curved bottom edges! */
 .voter.last {
   border-radius: 0px 0px 12px 12px;
 }
@@ -296,8 +307,10 @@
   text-align: left;
 }
 
-.voter > .voter-points {
+.voter > .voter-place {
   display: inline-block;
   width: 10%;
   text-align: right;
+  font-weight: bold;
+  font-size: 0.8em;
 }

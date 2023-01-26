@@ -5,14 +5,14 @@ import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '..
 import { FaMedal, FaBeer } from 'react-icons/fa';
 import { BigIconWithMessage, MainButton } from '../components/components';
 
-const Voter = ({name, points, index, last}) => {
+const Voter = ({name, place, index, last}) => {
     return (
         <div key={index} className={"voter" + (index % 2 === 0 ? " even" : " odd") + (last ? " last" : "")}>
             <div className="voter-name">
                 {name}
             </div>
-            <div className="voter-points">
-                {points}
+            <div className="voter-place">
+                {place}
             </div>
         </div>
     );
@@ -23,7 +23,7 @@ const VoterList = ({voters}) => {
         <div className="result-votes">
         {
             voters.map((voter, index) => (
-                <Voter name={voter.name} points={voter.points} index={index} last={index === voters.length - 1}/>
+                <Voter name={voter.name} place={voter.place} index={index} last={index === voters.length - 1}/>
             ))
         }
         </div>
@@ -54,10 +54,10 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
     return (
         <div
             id={"result-" + result.entryId}
-            className="result"
+            className={"result" + (isOwnEntry ? " own-entry" : "")}
             onClick={onClick}
         >
-            <div className={"result-item" + (place ? ` ${place}` : "") + (isOwnEntry ? " own-entry" : "") + (isAdmin ? " admin" : "") + (showVotes ? " votes-shown" : "")}>
+            <div className={"result-item" + (place ? ` ${place}` : "") + (isAdmin ? " admin" : "") + (showVotes ? " votes-shown" : "")}>
                 <div className="result-text">
                     {
                         place ?
@@ -67,7 +67,15 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
                     <div className="result-name">
                         <div className="result-description">
                             {`${result.brewer}'s ${result.beerStyle}`}
+                            {
+                                isOwnEntry ?
+                                <div className="own-entry-indicator">
+                                    &#40;Your Entry&#41;
+                                </div> :
+                                <></>
+                            }
                         </div>
+                        
                         {
                             result.beerName ?
                             <div className="result-given-name">
@@ -98,7 +106,7 @@ const ResultsList = ({results}) => {
         {
             results.length > 0 ?
             results.map((result, index) =>
-                <Result index={index} result={result} isOwnEntry={gameContext.game?.gameId === result.entryId} isAdmin={gameContext.game?.isAdmin}/>
+                <Result index={index} result={result} isOwnEntry={gameContext.entry?.entryId === result.entryId} isAdmin={true}/>
             ) :
             <></>
         }
@@ -107,7 +115,7 @@ const ResultsList = ({results}) => {
 }
 
 const Results = ({sendMessage, useSubscription}) => {
-    const gameContext = useGameContext();
+    const gameContext = {game: {gameId: 100, isAdmin: true}};
     const [ results, setResults ] = useState([]);
     const [ resultsShown, setResultsShown ] = useState(false);
 

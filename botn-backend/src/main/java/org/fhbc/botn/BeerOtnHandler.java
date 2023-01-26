@@ -299,17 +299,24 @@ public class BeerOtnHandler {
 			for(int place = 1; place <= entries.length; place++) {
 				EntryEntity currentEntry = entries[place - 1];
 				int points = 0;
+				String placeStr = "";
 				
 				switch(place) {
-					case 1: points = FIRST_PLACE_POINTS;
-					break;
-					case 2: points = SECOND_PLACE_POINTS;
-					break;
-					case 3: points = THIRD_PLACE_POINTS;
-					break;
+					case 1:
+						points = FIRST_PLACE_POINTS;
+						placeStr = "1st";
+						break;
+					case 2:
+						points = SECOND_PLACE_POINTS;
+						placeStr = "2nd";
+						break;
+					case 3:
+						points = THIRD_PLACE_POINTS;
+						placeStr = "3rd";
+						break;
 				}
 				
-				ResultVoter voter = new ResultVoter(v.getMember().getMemberName(), points);
+				ResultVoter voter = new ResultVoter(v.getMember().getMemberName(), placeStr, points);
 				Result result = resultsMap.get(currentEntry.getEntryId());
 				result.incrementScoreBy(points);
 				result.addVoter(voter);

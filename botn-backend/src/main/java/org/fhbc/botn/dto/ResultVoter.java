@@ -2,12 +2,14 @@ package org.fhbc.botn.dto;
 
 public class ResultVoter implements Comparable<ResultVoter> {
 	private String name;
+	private String place;
 	private int points;
 	
 	public ResultVoter() {}
 	
-	public ResultVoter(String name, int points) {
+	public ResultVoter(String name, String place, int points) {
 		this.name = name;
+		this.place = place;
 		this.points = points;
 	}
 	
@@ -17,6 +19,14 @@ public class ResultVoter implements Comparable<ResultVoter> {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getPlace() {
+		return place;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
 	public int getPoints() {
 		return points;
 	}
