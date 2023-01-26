@@ -106,7 +106,7 @@ const ResultsList = ({results}) => {
         {
             results.length > 0 ?
             results.map((result, index) =>
-                <Result index={index} result={result} isOwnEntry={gameContext.entry?.entryId === result.entryId} isAdmin={true}/>
+                <Result index={index} result={result} isOwnEntry={gameContext.entry?.entryId === result.entryId} isAdmin={gameContext.game?.isAdmin}/>
             ) :
             <></>
         }
@@ -115,7 +115,7 @@ const ResultsList = ({results}) => {
 }
 
 const Results = ({sendMessage, useSubscription}) => {
-    const gameContext = {game: {gameId: 100, isAdmin: true}};
+    const gameContext = useGameContext();
     const [ results, setResults ] = useState([]);
     const [ resultsShown, setResultsShown ] = useState(false);
 
