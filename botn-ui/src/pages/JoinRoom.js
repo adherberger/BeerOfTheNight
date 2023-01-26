@@ -5,7 +5,7 @@ import axios from 'axios';
 import { BOTN_JOIN_GAME } from '../utilities/constants';
 import {
     StateInput,
-    MainButton
+    SecondaryButton,
 } from '../components/components';
 
 // Game member enters their name and a room code and fires off a joinGame request.
@@ -39,26 +39,28 @@ const JoinRoom = () => {
     return (
         <>
             <div className="main-page">
-                <StateInput
-                    id="name-input"
-                    title="Your Name"
-                    stateVar={name}
-                    setStateVar={setName}
-                    autoFocus
-                />
-                <StateInput
-                    id="room-code-input"
-                    title="Room Code"
-                    stateVar={roomCode}
-                    setStateVar={updateRoomCode}
-                    maxLength={4}
-                />
+                <div className="form join-game-form">
+                    <StateInput
+                        id="room-code-input"
+                        title="Room Code"
+                        stateVar={roomCode}
+                        setStateVar={updateRoomCode}
+                        maxLength={4}
+                    />
+                    <StateInput
+                        id="name-input"
+                        title="Your Name"
+                        stateVar={name}
+                        setStateVar={setName}
+                        autoFocus
+                    />
+                    <SecondaryButton
+                        text={"Join Game"}
+                        onClick={joinGame}
+                        disabled={roomCode.length < 4 || !name}
+                    />
+                </div>
             </div>
-            <MainButton
-                text={"Join Game"}
-                onClick={joinGame}
-                disabled={roomCode.length < 4 || !name}
-            />
         </>
     );
 }

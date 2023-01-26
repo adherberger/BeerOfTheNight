@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
 import { BOTN_INIT_GAME } from '../utilities/constants';
-import { MainButton, StateInput } from '../components/components';
+import { SecondaryButton, StateInput } from '../components/components';
 import { useNavigate } from 'react-router-dom';
 
 // Game creator enters their name and fires off an initGame request to backend.
@@ -24,8 +24,8 @@ const CreateRoom = () => {
   }
 
   return (
-    <>
-      <div className="main-page">
+    <div className="main-page">
+      <div className="form create-room-form">
         <StateInput
           id="name-input"
           title="Your Name"
@@ -33,13 +33,13 @@ const CreateRoom = () => {
           setStateVar={setName}
           autoFocus
         />
+        <SecondaryButton
+          text={"Create Room"}
+          onClick={initGame}
+          disabled={!name}
+        />
       </div>
-      <MainButton
-        text={"Create Room"}
-        onClick={initGame}
-        disabled={!name}
-      />
-    </>
+    </div>
   )
 }
 

@@ -55,7 +55,7 @@ const AddBeer = () => {
             <MainButton
                 text={"Submit Entry"}
                 onClick={addEntry}
-                disabled={!beerName || !beerStyle}
+                disabled={!beerStyle}
             />
         </>
 
