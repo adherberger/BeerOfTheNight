@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import './styles/App.css';
-import { FaBeer, FaBars } from 'react-icons/fa';
+import { FaBeer} from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
 import {

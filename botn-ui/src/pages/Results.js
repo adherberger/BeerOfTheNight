@@ -41,6 +41,7 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
         break;
         case 2: place = 'third';
         break;
+        default:
     }
 
     const onClick = isAdmin ? () => {
@@ -119,7 +120,7 @@ const Results = ({sendMessage, useSubscription}) => {
     const [ results, setResults ] = useState([]);
     const [ resultsShown, setResultsShown ] = useState(false);
 
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC);
+    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
 
     useEffect(() => {
         if(gameState === GAME_STATE.COMPLETE) {
@@ -135,7 +136,7 @@ const Results = ({sendMessage, useSubscription}) => {
     }, []);
 
     const revealResults = () => {
-        sendMessage("/revealResults", gameContext.game.gameId);
+        sendMessage("/revealResults/"+gameContext.game.gameId);
     }
 
     return (

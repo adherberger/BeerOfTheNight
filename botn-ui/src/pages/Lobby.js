@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import { useNavigate } from 'react-router-dom';
-import { useWebSocket } from '../utilities/use-websocket';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_ATTENDEES_TOPIC,
@@ -44,11 +43,12 @@ const AttendeeList = ({attendees}) => {
 // Waiting room until voting begins.  
 // Member may click to add their beer entry.
 const Lobby = ({sendMessage, useSubscription}) => {
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC);
-    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC, () => {
-        sendMessage("/updateAttendees", gameContext.game.gameId);
-    });
     const gameContext = useGameContext();
+
+    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
+    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC+gameContext.game.gameId, () => {
+        sendMessage("/updateAttendees/"+gameContext.game.gameId);
+    });
     const navigate = useNavigate();
 
     //Quick hack to allow Admin role for seeded game data
@@ -72,7 +72,7 @@ const Lobby = ({sendMessage, useSubscription}) => {
     }
 
     function beginVoting() {
-        sendMessage("/startVoting", gameContext.game.gameId);
+        sendMessage("/startVoting/"+gameContext.game.gameId);
     }
 
     return (
