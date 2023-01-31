@@ -19,6 +19,7 @@ import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -81,33 +82,33 @@ public class BotnController {
 		return handler.getEntries(req);
 	}
 	
-	@MessageMapping("/startVoting")
-	@SendTo("/botn/game-state")
-	public GameState startVoting(Integer gameId) {
+	@MessageMapping("/startVoting/{gameId}")
+	@SendTo("/botn/game-state/{gameId}")
+	public GameState startVoting(@DestinationVariable Integer gameId) {
 		return handler.startVotingForGame(gameId);
 	}
 
-	@MessageMapping("/votingComplete")
-	@SendTo("/botn/game-state")
-	public GameState endVoting(Integer gameId) {
+	@MessageMapping("/votingComplete/{gameId}")
+	@SendTo("/botn/game-state/{gameId}")
+	public GameState endVoting(@DestinationVariable Integer gameId) {
 		return handler.allVotesReceived(gameId);
 	}
 	
-	@MessageMapping("/revealResults")
-	@SendTo("/botn/game-state")
-	public GameState revealResults(Integer gameId) {
+	@MessageMapping("/revealResults/{gameId}")
+	@SendTo("/botn/game-state/{gameId}")
+	public GameState revealResults(@DestinationVariable Integer gameId) {
 		return handler.completeGame(gameId);
 	}
 
-	@MessageMapping("/updateAttendees")
-	@SendTo("/botn/attendees")
-	public List<Attendee> getAttendees(Integer gameId) {
+	@MessageMapping("/updateAttendees/{gameId}")
+	@SendTo("/botn/attendees/{gameId}")
+	public List<Attendee> getAttendees(@DestinationVariable Integer gameId) {
 		return handler.getAttendeesForGame(gameId);
 	}
 
-	@MessageMapping("/updateVotes")
-	@SendTo("/botn/votes")
-	public UpdateVotesResponse getVotes(Integer gameId) {
+	@MessageMapping("/updateVotes/{gameId}")
+	@SendTo("/botn/votes/{gameId}")
+	public UpdateVotesResponse getVotes(@DestinationVariable Integer gameId) {
 		UpdateVotesResponse resp = handler.getVotesForGame(gameId);
 		System.out.println(gson.toJson(resp));
 		return resp;

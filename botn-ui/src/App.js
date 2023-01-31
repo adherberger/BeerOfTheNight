@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import './styles/App.css';
-import { FaBeer, FaBars } from 'react-icons/fa';
+import { FaBeer} from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
 import {
@@ -76,8 +76,14 @@ function App() {
       if (response.status === 200) {
       } else if (response.status === 404) {
       }
+      setNavbarOpen(prev => !prev)
     })
   }
+
+  function addEntryFor() {
+    setNavbarOpen(prev => !prev)
+  }
+
 
   return (
     <div className="App">
@@ -108,11 +114,8 @@ function App() {
                   <div className="menuNav-item" onClick={restartBackend}>
                     Restart Backend
                   </div>
-                  <div className="menuNav-item">
-                    Add Missing Member
-                  </div>
-                  <div className="menuNav-item">
-                    Choice 3
+                  <div className="menuNav-item" onClick={addEntryFor}>
+                    Add Entry For...
                   </div>
                 </div>
               </>

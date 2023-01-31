@@ -19,7 +19,7 @@ const VotingPage = ({sendMessage}) => {
         { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
     ).then((response) => {
       if (response.status === 200) {
-        sendMessage("/updateVotes", gameContext.game.gameId);
+        sendMessage("/updateVotes"+gameContext.game.gameId);
         clearVotes()
         console.log(gameContext)
         if (gameContext.game.isAdmin) {
