@@ -25,3 +25,6 @@ botn-backend/.sts4-cache
 botn-ui/.env
 botn-backend/bin/
 botn-ui/dot-env
+botn-ui/build
+botn-ui/build/
+botn-ui/dotenv
