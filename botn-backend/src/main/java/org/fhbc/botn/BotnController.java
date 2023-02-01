@@ -107,7 +107,9 @@ public class BotnController {
 	@MessageMapping("/updateAttendees/{gameId}")
 	@SendTo("/botn/attendees/{gameId}")
 	public List<Attendee> getAttendees(@DestinationVariable Integer gameId) {
-		return handler.getAttendeesForGame(gameId);
+		List<Attendee> resp = handler.getAttendeesForGame(gameId);
+		System.out.println(gson.toJson(resp));
+		return resp;
 	}
 
 	@MessageMapping("/updateVotes/{gameId}")
