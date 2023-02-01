@@ -7,12 +7,15 @@ import '../styles/voting.css'
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const VotingPage = ({sendMessage}) => {
+const VotingPage = ({sendMessage, useSubscription})  => {
   const navigate = useNavigate();
   const gameContext = useGameContext();
   const [votes, setVotes] = useState([0, 0, 0]);
+  const entries = useSubscription("/botn/entries/"+gameContext.game.gameId, () => {
+    sendMessage("/updateEntries/"+gameContext.game.gameId);
+  });
 
-  //Called when user shooses to submit their votes
+  //Called when user chooses to submit their votes
   const submitVotes = () => {
     axios.post(
       BOTN_SUBMIT_VOTES,
@@ -21,28 +24,12 @@ const VotingPage = ({sendMessage}) => {
       if (response.status === 200) {
         sendMessage("/updateVotes"+gameContext.game.gameId);
         clearVotes()
-        console.log(gameContext)
-        if (gameContext.game.isAdmin) {
-            navigate("/waiting")
-        } else {
-          navigate("/waiting")
-        }
+        gameContext.setValue("votingComplete", {complete:true})
+        navigate("/waiting")
       } else if (response.status === 404) {
       }
     })
   }
-
-  // Calls backend to get entry list upon rendering this page.
-  useEffect(() => {
-    console.log("in useEffect")
-    axios.post(
-      BOTN_GET_ENTRIES,
-      { gameId: gameContext.game.gameId } 
-    ).then((response) => {
-      console.log(response.data)
-      gameContext.setValue("entries", response.data.entryList);
-    });
-  }, [])
 
   // Called when any of the radiobuttons are selected.
   function handleChange(event) {
@@ -96,7 +83,7 @@ const VotingPage = ({sendMessage}) => {
               </tr>
             </thead>
             <tbody>
-              {gameContext.entries.map(entry => {
+              {entries.map(entry => {
                 return (
                   <tr key={entry.entryId}>
                     <td>{entry.brewer}</td>
@@ -139,7 +126,7 @@ const VotingPage = ({sendMessage}) => {
   }
 
   // Determine which html to render based on if entries have been loaded
-  if (gameContext.entries) {
+  if (entries) {
     return htmlTable()
   } else {
     return (

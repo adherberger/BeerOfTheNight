@@ -28,9 +28,14 @@ const JoinRoom = () => {
             { memberName: name, roomCode: roomCode }
         ).then((response) => {
             if (response.status === 200) {
-                gameContext.setValue("game", response.data);
-                if (gameContext.game?.brewerName === "Admin") {
-                    gameContext.game.isAdmin = true;
+                //gameContext.setValue("game", response.data);
+                //Quick hack to allow Admin role for seeded game data
+                //Join one of the static games with name Admin!
+                if (response.data.brewerName === "Admin") {
+                    gameContext.setValue("game", {isAdmin: true, ...response.data});
+                } else {
+                    gameContext.setValue("game", {isAdmin: false, ...response.data});
+
                 }
             
                 navigate("/lobby");

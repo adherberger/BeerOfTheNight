@@ -61,6 +61,7 @@ public class BotnController {
 	
 	@PostMapping("/joinGame")
 	public JoinGameResponse joinGame(@RequestBody JoinGameRequest req) {
+		System.out.println("JoinGame");
 		return handler.joinGame(req,true);
 	}
 
@@ -77,9 +78,12 @@ public class BotnController {
 	}
 
 
-	@PostMapping("/getEntries")
-	public GetEntriesResponse getEntries(@RequestBody GetEntriesRequest req) {
-		return handler.getEntries(req);
+	@MessageMapping("/updateEntries/{gameId}")
+	@SendTo("/botn/entries/{gameId}")
+	public List<GetEntriesResponse.Entry> getEntries(@RequestBody @DestinationVariable Integer gameId) {
+		GetEntriesResponse resp=  handler.getEntries(gameId);
+		System.out.println(gson.toJson(resp));
+		return resp.getEntryList();
 	}
 	
 	@MessageMapping("/startVoting/{gameId}")

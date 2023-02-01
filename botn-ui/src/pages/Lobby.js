@@ -67,10 +67,6 @@ const Lobby = ({sendMessage, useSubscription}) => {
         navigate("/addBeer");
     }
 
-    function addOtherEntry() {
-        navigate("/addBeerFor");
-    }
-
     function beginVoting() {
         sendMessage("/startVoting/"+gameContext.game.gameId);
     }
@@ -81,16 +77,8 @@ const Lobby = ({sendMessage, useSubscription}) => {
                 <div>
                     <div className="logo"><FaBeer /></div>
                     <h3>Waiting for voting to begin</h3>
-                    {                 
-                    gameContext.game?.isAdmin ?
-                        <SecondaryButton
-                            text="Missing Member Entry"
-                            onClick={addOtherEntry}
-                        />
-                        :
-                        <></>
-                    }
                     <AttendeeList attendees={attendees}/>
+
                     {
                     gameContext.entry ?
                         <>

@@ -26,7 +26,7 @@ const AddBeerFor = () => {
         ).then((response) => {
             if (response.status === 200) {
                 console.log(response.data)
-                navigate("/lobby");
+                navigate(-1);
             } else if (response.status === 404) {
             }
         })
@@ -60,7 +60,7 @@ const AddBeerFor = () => {
             <MainButton
                 text={"Submit Entry"}
                 onClick={addEntry}
-                disabled={!beerName || !beerStyle}
+                disabled={!beerName || !beerStyle || !brewerName}
             />
         </>
 
