@@ -1,10 +1,11 @@
 import { React, useState } from 'react';
 import './styles/App.css';
-import { FaBeer} from 'react-icons/fa';
+import { FaBeer } from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
 import {
   createBrowserRouter,
+  useNavigate,
   RouterProvider,
 } from 'react-router-dom';
 import CreateRoom from './pages/CreateRoom';
@@ -25,7 +26,7 @@ import { BOTN_WEBSOCKET_BASE, BOTN_RESTART_API } from './utilities/constants';
 function App() {
   const gameContext = useGameContext();
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
-
+ 
   const router = createBrowserRouter([
     {
       path: "/",
@@ -49,7 +50,7 @@ function App() {
     },
     {
       path: "/voting",
-      element: <VotingPage sendMessage={sendMessage} />
+      element: <VotingPage sendMessage={sendMessage} useSubscription={useSubscription}/>
     },
     {
       path: "/waiting",
@@ -81,6 +82,7 @@ function App() {
   }
 
   function addEntryFor() {
+    router.navigate("/addBeerFor")
     setNavbarOpen(prev => !prev)
   }
 
@@ -114,9 +116,15 @@ function App() {
                   <div className="menuNav-item" onClick={restartBackend}>
                     Restart Backend
                   </div>
-                  <div className="menuNav-item" onClick={addEntryFor}>
-                    Add Entry For...
-                  </div>
+                  {
+                    !gameContext.votingComplete ?
+                      <>
+                        <div className="menuNav-item" onClick={addEntryFor}>
+                          Add Entry For...
+                        </div>
+                      </>
+                      : <></>
+                  }
                 </div>
               </>
               : <></>

@@ -59,6 +59,7 @@ const Waiting = ({ sendMessage, useSubscription }) => {
         navigate("/results")
     }
 
+
     return (
         <>
             <div className="main-page">

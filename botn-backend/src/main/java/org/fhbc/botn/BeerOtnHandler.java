@@ -179,10 +179,10 @@ public class BeerOtnHandler {
 	}
 
 	// Return information about all beers entered for the given gameId
-	public GetEntriesResponse getEntries(GetEntriesRequest req) {
+	public GetEntriesResponse getEntries(Integer gameId) {
 		GetEntriesResponse resp = new GetEntriesResponse();
 		
-		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(req.getGameId());
+		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(gameId);
 		
 		for (EntryEntity e:entryEntityList) {
 			GetEntriesResponse.Entry entry = resp.new Entry();
