@@ -7,7 +7,6 @@ import org.fhbc.botn.dto.AddEntryForRequest;
 import org.fhbc.botn.dto.AddEntryRequest;
 import org.fhbc.botn.dto.AddEntryResponse;
 import org.fhbc.botn.dto.Attendee;
-import org.fhbc.botn.dto.GetEntriesRequest;
 import org.fhbc.botn.dto.GetEntriesResponse;
 import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
@@ -15,7 +14,6 @@ import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.Result;
 import org.fhbc.botn.dto.SubmitVotesRequest;
 import org.fhbc.botn.dto.UpdateVotesResponse;
-import org.fhbc.botn.dto.Vote;
 import org.fhbc.botn.entity.GameEntity.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
@@ -32,11 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/botn")
 @CrossOrigin
 public class BotnController {
-
+    private static final Logger log = LoggerFactory.getLogger(BotnController.class);
 	Gson gson = new Gson();
 	
 	@Autowired
@@ -56,6 +57,7 @@ public class BotnController {
     
 	@PostMapping("/initGame")
 	public JoinGameResponse initGame(@RequestBody InitGameRequest req) {
+		log.info(gson.toJson(req));
 		return handler.initGame(req);
 	}
 	
@@ -111,7 +113,7 @@ public class BotnController {
 	@SendTo("/botn/votes/{gameId}")
 	public UpdateVotesResponse getVotes(@DestinationVariable Integer gameId) {
 		UpdateVotesResponse resp = handler.getVotesForGame(gameId);
-		System.out.println(gson.toJson(resp));
+		log.info(gson.toJson(resp));
 		return resp;
 	}
 
