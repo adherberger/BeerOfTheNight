@@ -90,6 +90,8 @@ public class BeerOtnHandler {
 		
 		if(game == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A game with room code " + req.getRoomCode() + " was not found.", null);
+		} else if (game.getGameState() != GameState.INIT) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "That game cannot be joined now", null);			
 		}
 		
 		// Member is joining as guest
