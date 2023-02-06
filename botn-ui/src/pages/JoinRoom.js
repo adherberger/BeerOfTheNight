@@ -1,25 +1,35 @@
 import React, { useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BOTN_JOIN_GAME } from '../utilities/constants';
+import { BOTN_JOIN_GAME, BOTN_INIT_GAME } from '../utilities/constants';
 import {
     StateInput,
     SecondaryButton,
 } from '../components/components';
+import { MdSettingsApplications } from 'react-icons/md';
 
 // Game member enters their name and a room code and fires off a joinGame request.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const JoinRoom = () => {
+const JoinRoom = ({onJoin}) => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
     const [roomCodeNotFound, setRoomCodeNotFound] = useState(false);
-    const navigate = useNavigate();
+    const [action, setAction] = useState();
 
     const updateRoomCode = (val) => {
         val = val.toUpperCase();
         setRoomCode(val);
+    }
+
+    const initGame = () => {
+        axios.post(
+          BOTN_INIT_GAME,
+          { memberName: name }
+        ).then((response) => {
+          gameContext.setValue("game", {isAdmin: true, ...response.data});
+          onJoin({isAdmin: true, ...response.data});
+        });
     }
 
     const joinGame = () => {
@@ -38,7 +48,7 @@ const JoinRoom = () => {
 
                 }
             
-                navigate("/lobby");
+                onJoin(response.data);
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);
             }
@@ -67,6 +77,11 @@ const JoinRoom = () => {
                         text={"Join Game"}
                         onClick={joinGame}
                         disabled={roomCode.length < 4 || !name}
+                    />
+                    <SecondaryButton
+                        text={"Create Game"}
+                        onClick={initGame}
+                        disabled={!name}
                     />
                 </div>
             </div>

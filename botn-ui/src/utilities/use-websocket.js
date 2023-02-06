@@ -3,16 +3,11 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
 const useWebSocket = (url) => {
-    const [connected, setConnected] = useState(false);
+    const connected = useRef(false);
     const stompClient = useRef();
 
     const onConnected = () => {
-        console.log("WebSocket connected!");
-
-        setTimeout(() => {
-            setConnected(true);
-        }, 1000);
-        // stompClient.current.subscribe(topic, onMessageReceived);
+       connected.current = true;
     }
 
     const onError = (error) => {
@@ -20,10 +15,13 @@ const useWebSocket = (url) => {
     }
 
     const sendMessage = (destination, message) => {
+        console.log("Sending message to " + destination);
+        console.log("Message: ");
+        console.log(message);
         stompClient.current.send(destination, {}, JSON.stringify(message));
     }
 
-    const useSubscription = (topic, callback = () => {}) => {
+    const useSubscription = (topic, callback = () => {}, ...deps) => {
         const [lastMessage, setLastMessage] = useState();
 
         const onMessageReceived = (payload) => {
@@ -31,16 +29,24 @@ const useWebSocket = (url) => {
         }
 
         useEffect(() => {
-            if(connected) {
+            let depsPass = true;
+
+            for(let i of deps) {
+                if(!i) {
+                    depsPass = false;
+                    break;
+                }
+            }
+
+            if(connected && depsPass) {
                 stompClient.current.subscribe(topic, onMessageReceived);
-                console.log("Subscribed to topic " + topic);
                 callback();
 
                 return () => {
                     stompClient.current.unsubscribe(topic);
                 }
             }
-        }, [connected]);
+        }, [...deps]);
 
         return lastMessage;
     }

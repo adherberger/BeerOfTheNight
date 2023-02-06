@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import './styles/App.css';
 import { FaBeer } from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
@@ -21,49 +21,65 @@ import { useGameContext } from './utilities/game-context';
 import { useWebSocket } from './utilities/use-websocket';
 import axios from 'axios';
 
-import { BOTN_WEBSOCKET_BASE, BOTN_RESTART_API } from './utilities/constants';
+import { BOTN_WEBSOCKET_BASE, BOTN_RESTART_API, BOTN_GAME_STATE_TOPIC } from './utilities/constants';
 
 function App() {
+  const [game, setGame] = useState();
   const gameContext = useGameContext();
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
- 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <JoinRoom />,
-    },
-    {
-      path: "/login",
-      element: <CreateRoom />,
-    },
-    {
-      path: "/lobby",
-      element: <Lobby sendMessage={sendMessage} useSubscription={useSubscription} />
-    },
-    {
-      path: "/addBeer",
-      element: <AddBeer />
-    },
-    {
-      path: "/addBeerFor",
-      element: <AddBeerFor />
-    },
-    {
-      path: "/voting",
-      element: <VotingPage sendMessage={sendMessage} useSubscription={useSubscription}/>
-    },
-    {
-      path: "/waiting",
-      element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription} />
-    },
-    {
-      path: "/results",
-      element: <Results sendMessage={sendMessage} useSubscription={useSubscription} />
-    }
+  const [navbarOpen, setNavbarOpen] = useState(false);
+  const gameState = useSubscription(BOTN_GAME_STATE_TOPIC(game), () => {}, game);
 
-  ]);
+  const landingPage = (
+    <JoinRoom
+      onJoin={(game) => {
+        setGame(game);
+        setCurrentPage(<Lobby game={game} sendMessage={sendMessage} useSubscription={useSubscription}/>)
+      }}
+    />
+  );
 
-  const [navbarOpen, setNavbarOpen] = useState(false)
+  useEffect(() => {
+
+  }, [gameState])
+
+  const [currentPage, setCurrentPage] = useState(landingPage);
+
+  // const router = createBrowserRouter([
+  //   {
+  //     path: "/",
+  //     element: <JoinRoom />,
+  //   },
+  //   {
+  //     path: "/login",
+  //     element: <CreateRoom />,
+  //   },
+  //   {
+  //     path: "/lobby",
+  //     element: <Lobby sendMessage={sendMessage} useSubscription={useSubscription} />
+  //   },
+  //   {
+  //     path: "/addBeer",
+  //     element: <AddBeer />
+  //   },
+  //   {
+  //     path: "/addBeerFor",
+  //     element: <AddBeerFor />
+  //   },
+  //   {
+  //     path: "/voting",
+  //     element: <VotingPage sendMessage={sendMessage} useSubscription={useSubscription}/>
+  //   },
+  //   {
+  //     path: "/waiting",
+  //     element: <Waiting sendMessage={sendMessage} useSubscription={useSubscription} />
+  //   },
+  //   {
+  //     path: "/results",
+  //     element: <Results sendMessage={sendMessage} useSubscription={useSubscription} />
+  //   }
+
+  // ]);
 
   function handleToggle() {
     setNavbarOpen(prev => !prev)
@@ -81,10 +97,10 @@ function App() {
     })
   }
 
-  function addEntryFor() {
-    router.navigate("/addBeerFor")
-    setNavbarOpen(prev => !prev)
-  }
+  // function addEntryFor() {
+  //   router.navigate("/addBeerFor")
+  //   setNavbarOpen(prev => !prev)
+  // }
 
 
   return (
@@ -119,7 +135,7 @@ function App() {
                   {
                     !gameContext.votingComplete ?
                       <>
-                        <div className="menuNav-item" onClick={addEntryFor}>
+                        <div className="menuNav-item" onClick={() => {}}>
                           Add Entry For...
                         </div>
                       </>
@@ -130,11 +146,8 @@ function App() {
               : <></>
           }
         </div>
-
-
       </div>
-
-      <RouterProvider router={router} />
+      {currentPage}
     </div>
   );
 }

@@ -152,6 +152,7 @@
   color: var(--primary-text-color);
   cursor: pointer;
   padding: 0 1em;
+  margin: 1em;
 }
 
 .secondary-button:disabled {

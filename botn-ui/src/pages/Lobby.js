@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_ATTENDEES_TOPIC,
@@ -42,29 +41,19 @@ const AttendeeList = ({attendees}) => {
 
 // Waiting room until voting begins.  
 // Member may click to add their beer entry.
-const Lobby = ({sendMessage, useSubscription}) => {
+const Lobby = ({game, sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
 
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
-    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC+gameContext.game.gameId, () => {
-        sendMessage("/updateAttendees/"+gameContext.game.gameId);
-    });
-    const navigate = useNavigate();
-
-    //Quick hack to allow Admin role for seeded game data
-    //Join one of the static games with name Admin!
-    if (gameContext.game?.brewerName === "Admin") {
-        gameContext.game.isAdmin = true;
-    }
+    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC + gameContext.game.gameId, () => {
+        sendMessage("/updateAttendees/" + gameContext.game.gameId);
+    }, game);
 
     useEffect(() => {
-        if(gameState === "IN_PROGRESS") {
-            navigate("/voting");
-        }
-    }, [gameState]);
+        console.log(attendees);
+    }, [attendees])
 
     function addMyBeer() {
-        navigate("/addBeer");
+        //navigate("/addBeer");
     }
 
     function beginVoting() {
