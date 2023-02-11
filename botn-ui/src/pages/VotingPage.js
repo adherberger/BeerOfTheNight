@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
+import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const VotingPage = ({sendMessage, useSubscription})  => {
-  const navigate = useNavigate();
+const VotingPage = ({navigate, sendMessage, useSubscription})  => {
   const gameContext = useGameContext();
   const [votes, setVotes] = useState([0, 0, 0]);
   const entries = useSubscription("/botn/entries/"+gameContext.game.gameId, () => {
@@ -25,7 +23,7 @@ const VotingPage = ({sendMessage, useSubscription})  => {
         sendMessage("/updateVotes"+gameContext.game.gameId);
         clearVotes()
         gameContext.setValue("votingComplete", {complete:true})
-        navigate("/waiting")
+        navigate(PAGES.WAITING);
       } else if (response.status === 404) {
       }
     })
@@ -36,10 +34,10 @@ const VotingPage = ({sendMessage, useSubscription})  => {
     let index = event.target.value - 1;
     let entryid = parseInt(event.target.getAttribute("entryid"));
     console.log(event.target)
-    //Make a copy of votes array for modification
+    //Make a copy of votecs array for modification
     let items = [...votes];
 
-    //update the user's place (1,2,3) choice with the etry ID
+    //update the user's plae (1,2,3) choice with the etry ID
     items[index] = entryid
 
     //Clear that entryId from any of the other spots 

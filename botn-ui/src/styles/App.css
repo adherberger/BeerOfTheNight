@@ -35,6 +35,10 @@
   display: block;
 }
 
+.lobby {
+  width: 80vw;
+}
+
 .main-page > .big-icon-with-message {
   position: relative;
   top: 30%;
@@ -58,13 +62,19 @@
   color: var(--disabled-text-color);
 }
 
-.join-game-form, .create-room-form {
+.form {
   width: calc(70% - 10vw);
+  max-width: 800px;
+}
+
+.lobby {
+  width: 80vw;
+  max-width: 800px;
 }
 
 .bar {
   background: var(--secondary-background-color);
-  color: white;
+  color: var(--primary-text-color);
   display: flex;
   font-family: 'Arial';
   font-weight: bold;
@@ -194,12 +204,15 @@
 }
 
 .attendee-list {
-  width: 80vw;
   background: var(--list-background-color);
   color: var(--secondary-text-color);
   border: 2px solid var(--list-border-color);
-  max-height: 50vh;
+  max-height: 40vh;
   overflow-y: scroll;
+}
+
+.attendee-list-title {
+  padding: 6px;
 }
 
 .attendee {
@@ -227,16 +240,13 @@
 }
 
 .navBar button {
-  position: fixed;
-  left: 40px;
-  top: 40px;
   cursor: pointer;
 }
 
 .menuNav {
   position: absolute;
   background: darkcyan;
-  top: 50px;
+  top: 100%;
   right: 0;
   width: 200px;
   z-index: 2;

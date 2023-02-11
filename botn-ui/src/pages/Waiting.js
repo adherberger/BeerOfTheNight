@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { FaCheck, FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_VOTES_TOPIC,
+    PAGES,
 } from '../utilities/constants';
 import {
     MainButton
@@ -39,26 +39,17 @@ const VoteList = ({ votes }) => {
     )
 }
 
-const Waiting = ({ sendMessage, useSubscription }) => {
+const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     const gameContext = useGameContext();
     const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
     const votes = useSubscription(BOTN_VOTES_TOPIC+gameContext.game.gameId, () => {
         sendMessage("/updateVotes/"+gameContext.game.gameId);
     });
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(gameState === "RESULTS_RECEIVED") {
-            navigate("/results");
-        }
-    }, [gameState]);
-
 
     function goToResults() {
         sendMessage("/votingComplete/"+gameContext.game.gameId);
-        navigate("/results")
+        navigate(PAGES.RESULTS);
     }
-
 
     return (
         <>

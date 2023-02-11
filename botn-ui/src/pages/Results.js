@@ -100,6 +100,7 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
 }
 
 const ResultsList = ({results}) => {
+    const [ resultsShown, setResultsShown ] = useState(false);
     const gameContext = useGameContext();
 
     return (
@@ -119,14 +120,6 @@ const Results = ({sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
     const [ results, setResults ] = useState([]);
     const [ resultsShown, setResultsShown ] = useState(false);
-
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
-
-    useEffect(() => {
-        if(gameState === GAME_STATE.COMPLETE) {
-            setResultsShown(true);
-        }
-    }, [gameState]);
     
     useEffect(() => {
         axios.get(BOTN_GET_RESULTS_FOR_GAME(gameContext?.game?.gameId ? gameContext.game.gameId : 100)).then(response => {
@@ -135,23 +128,16 @@ const Results = ({sendMessage, useSubscription}) => {
         });
     }, []);
 
+    // updates game state so that everyone in the game gets brought to results page
     const revealResults = () => {
+        setResultsShown(true);
         sendMessage("/revealResults/"+gameContext.game.gameId);
     }
 
     return (
         <>
             <div className="main-page">
-                {
-                    resultsShown || gameContext.game?.isAdmin ?
-                    <ResultsList results={results}/> :
-                    <BigIconWithMessage
-                        title="The results are in!"
-                        subtitle="Waiting for admin to share results."
-                        icon={<FaBeer/>}
-                    />
-                }
-                
+                <ResultsList results={results}/>
             </div>
             {
                 gameContext.game?.isAdmin && !resultsShown ?

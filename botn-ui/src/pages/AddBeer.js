@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BOTN_ADD_ENTRY } from '../utilities/constants';
+import { BOTN_ADD_ENTRY, PAGES } from '../utilities/constants';
 
 import {
     StateInput,
@@ -12,11 +11,10 @@ import {
 
 // Member enters their beer name and style.  Then addEntry is called on backened.
 // The entryId along with beerName and beerStyle stored in game context.
-const AddBeer = () => {
+const AddBeer = ({navigate}) => {
     const [beerName, setBeerName] = useState("");
     const [beerStyle, setBeerStyle] = useState("");
     const gameContext = useGameContext();
-    const navigate = useNavigate();
 
     const addEntry = () => {
         axios.post(
@@ -27,7 +25,7 @@ const AddBeer = () => {
                 console.log(response.data)
                 gameContext.setValue("entry", { entryId: response.data.entryId, beerName: beerName, beerStyle: beerStyle })
                 console.log(gameContext)
-                navigate("/lobby");
+                navigate(PAGES.LOBBY);
             } else if (response.status === 404) {
             }
         })

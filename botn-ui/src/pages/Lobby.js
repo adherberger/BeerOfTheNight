@@ -4,6 +4,7 @@ import { useGameContext } from '../utilities/game-context';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_ATTENDEES_TOPIC,
+    PAGES,
 } from '../utilities/constants';
 import {
     MainButton,
@@ -41,19 +42,19 @@ const AttendeeList = ({attendees}) => {
 
 // Waiting room until voting begins.  
 // Member may click to add their beer entry.
-const Lobby = ({game, sendMessage, useSubscription}) => {
+const Lobby = ({navigate, sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
 
     const attendees = useSubscription(BOTN_ATTENDEES_TOPIC + gameContext.game.gameId, () => {
         sendMessage("/updateAttendees/" + gameContext.game.gameId);
-    }, game);
+    });
 
     useEffect(() => {
         console.log(attendees);
     }, [attendees])
 
     function addMyBeer() {
-        //navigate("/addBeer");
+        navigate(PAGES.ADD_BEER);
     }
 
     function beginVoting() {
@@ -63,7 +64,7 @@ const Lobby = ({game, sendMessage, useSubscription}) => {
     return (
         <>
             <div className="main-page">
-                <div>
+                <div className="lobby">
                     <div className="logo"><FaBeer /></div>
                     <h3>Waiting for voting to begin</h3>
                     <AttendeeList attendees={attendees}/>

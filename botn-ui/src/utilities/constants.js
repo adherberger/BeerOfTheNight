@@ -27,3 +27,14 @@ export const GAME_STATE = {
 export const BOTN_GET_RESULTS_FOR_GAME = (gameId) => (
     BOTN_BASE_URL + `/results/${gameId}`
 )
+
+// UI Pages
+export const PAGES = {
+    LOBBY: "LOBBY",
+    ADD_BEER: "ADD_BEER",
+    ADD_BEER_FOR: "ADD_BEER_FOR",
+    VOTING: "VOTING",
+    WAITING: "WAITING",
+    WAITING_FOR_RESULTS: "WAITING_FOR_RESULTS",
+    RESULTS: "RESULTS",
+}
