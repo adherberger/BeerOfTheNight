@@ -1,4 +1,4 @@
-insert into game_main (game_id,game_date,game_state,room_code,member_id) values(100,CURRENT_DATE(),1,'AAAA',null);
+insert into game_main (game_id,game_date,game_state,room_code,member_id) values(100,CURRENT_DATE(),0,'AAAA',null);
 insert into member (member_id, member_name) values(100,'Andy');
 insert into game_member (game_id,member_id,is_present) values(100,100,true);
 insert into member (member_id, member_name) values(101,'Kevin');
@@ -51,7 +51,7 @@ insert into vote (game_id, member_id, first_id, second_id, third_id) values (100
 insert into vote (game_id, member_id, first_id, second_id, third_id) values (100, 109, 102, 106, 101);
 
 
-insert into game_main (game_id,game_date,game_state,room_code,member_id) values(200,CURRENT_DATE(),1,'BBBB',null);
+insert into game_main (game_id,game_date,game_state,room_code,member_id) values(200,CURRENT_DATE(),0,'BBBB',null);
 insert into member (member_id, member_name) values(200,'Andy');
 insert into game_member (game_id,member_id,is_present) values(200,200,true);
 insert into member (member_id, member_name) values(201,'Kevin');
