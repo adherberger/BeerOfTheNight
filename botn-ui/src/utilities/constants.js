@@ -19,7 +19,7 @@ export const BOTN_ATTENDEES_TOPIC = "/botn/attendees/";
 export const BOTN_VOTES_TOPIC = "/botn/votes/";
 export const GAME_STATE = {
     INIT: "INIT",
-    IN_PROGRESS: "IN_PROGRESS",
+    VOTING: "VOTING",
     RESULTS_RECEIVED: "RESULTS_RECEIVED",
     COMPLETE: "COMPLETE",
 }

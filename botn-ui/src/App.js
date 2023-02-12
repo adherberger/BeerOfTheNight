@@ -44,7 +44,7 @@ function App() {
 
   useEffect(() => {
     switch(gameState) {
-      case GAME_STATE.IN_PROGRESS:
+      case GAME_STATE.VOTING:
         navigate(PAGES.VOTING);
         break;
       case GAME_STATE.RESULTS_RECEIVED:

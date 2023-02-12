@@ -221,7 +221,7 @@ public class BeerOtnHandler {
 
 	public GameState startVotingForGame(Integer gameId) {
 		GameEntity game = gameRepo.findById(gameId).get();
-		game.setGameState(GameState.IN_PROGRESS);
+		game.setGameState(GameState.VOTING);
 		gameRepo.save(game);
 		return game.getGameState();
 	}

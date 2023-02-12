@@ -19,7 +19,7 @@ import javax.persistence.Table;
 // Top level table for keeping track of games
 public class GameEntity {
 	public enum GameState {
-		INIT, IN_PROGRESS, RESULTS_RECEIVED, COMPLETE
+		INIT, VOTING, RESULTS_RECEIVED, COMPLETE,
 	}
 
 	@Id
