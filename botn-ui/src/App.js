@@ -52,7 +52,12 @@ function App() {
   );
 
   useEffect(() => {
+    console.log("GAME STATE:");
+      console.log(gameState);
+      
     switch(gameState) {
+      case GAME_STATE.INIT:
+        navigate(PAGES.LOBBY);
       case GAME_STATE.VOTING:
         navigate(PAGES.VOTING);
         break;
@@ -123,7 +128,7 @@ function App() {
 
   const SetGameState = ({sendMessage, setShow}) => {
     const gameContext = useGameContext();
-    const [gameState, setGameState] = useState(gameContext.game?.gameState);
+    const [gameState, setGameState] = useState(GAME_STATE.INIT);
 
     const options = Object.entries(GAME_STATE).map(([key, value]) => (
       <option key={key} value={key}>{key}</option>
@@ -139,6 +144,7 @@ function App() {
     return (
       <div className="set-game-state">
         <select
+          value={gameState}
           onChange={(e) => {setGameState(e.target.value)}}
         >
           {options}

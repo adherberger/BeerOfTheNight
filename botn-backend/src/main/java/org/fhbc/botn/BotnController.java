@@ -126,7 +126,6 @@ public class BotnController {
 	@MessageMapping("/set-game-state/{gameId}")
 	@SendTo("/botn/game-state/{gameId}")
 	public GameState setGameState(@DestinationVariable Integer gameId, SetGameStateMessage gameStateMessage) {
-		System.out.println("GOT HERE");
 		return handler.setGameStateForGame(gameId, gameStateMessage.getGameState());
 	}
 
