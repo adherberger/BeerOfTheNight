@@ -21,8 +21,20 @@ const useWebSocket = (url) => {
         stompClient.current.send(destination, {}, JSON.stringify(message));
     }
 
-    const useSubscription = (topic, callback = () => {}, ...deps) => {
+    /**
+     * Sets up subscription on connection obtained from useWebSocket.
+     * @param {String} topic Topic to subscribe to, e.g. "/game-state"
+     * @param {Function} callback Action to take as soon as you are subscribed, e.g. you might want to then send a message that drives a result sent to the subscription topic 
+     * @param {Array.<*>} deps Any state vars for which the subscription should be retried on change. Will only subscribe when all deps are defined.
+     * @returns 
+     */
+    const useSubscription = ({
+        topic,
+        callback = () => {},
+        deps = []
+    }) => {
         const [lastMessage, setLastMessage] = useState();
+        const [subscribed, setSubscribed] = useState(false);
 
         const onMessageReceived = (payload) => {
             setLastMessage(JSON.parse(payload.body));
@@ -38,10 +50,12 @@ const useWebSocket = (url) => {
                 }
             }
 
-            if(connected && depsPass) {
+            if(connected && depsPass && !subscribed) {
                 stompClient.current.subscribe(topic, onMessageReceived);
+                setSubscribed(true);
                 callback();
 
+                // On component unmount, we then unsubscribe from the topic, thanks to this useEffect trick
                 return () => {
                     stompClient.current.unsubscribe(topic);
                 }

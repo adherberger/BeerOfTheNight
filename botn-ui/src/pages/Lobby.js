@@ -45,8 +45,11 @@ const AttendeeList = ({attendees}) => {
 const Lobby = ({navigate, sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
 
-    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC + gameContext.game.gameId, () => {
-        sendMessage("/updateAttendees/" + gameContext.game.gameId);
+    const attendees = useSubscription({
+        topic: BOTN_ATTENDEES_TOPIC + gameContext.game.gameId,
+        callback: () => {
+            sendMessage("/updateAttendees/" + gameContext.game.gameId);
+        }
     });
 
     useEffect(() => {

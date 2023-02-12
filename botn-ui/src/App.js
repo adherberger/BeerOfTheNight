@@ -27,11 +27,13 @@ import {
 
 function App() {
   const [game, setGame] = useState();
-  const [isAdmin, setIsAdmin] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
-  const gameState = useSubscription(BOTN_GAME_STATE_TOPIC(game), () => {}, game);
+  const gameState = useSubscription({
+    topic: BOTN_GAME_STATE_TOPIC(game),
+    deps: [game]
+  });
 
   const landingPage = (
     <JoinRoom

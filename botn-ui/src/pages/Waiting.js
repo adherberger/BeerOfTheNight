@@ -41,9 +41,11 @@ const VoteList = ({ votes }) => {
 
 const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     const gameContext = useGameContext();
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
-    const votes = useSubscription(BOTN_VOTES_TOPIC+gameContext.game.gameId, () => {
-        sendMessage("/updateVotes/"+gameContext.game.gameId);
+    const votes = useSubscription({
+        topic: BOTN_VOTES_TOPIC+gameContext.game.gameId,
+        callback: () => {
+            sendMessage("/updateVotes/"+gameContext.game.gameId);
+        }
     });
 
     function goToResults() {
