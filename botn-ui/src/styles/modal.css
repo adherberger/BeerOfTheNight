@@ -1,0 +1,48 @@
+.modal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--primary-text-color)
+}
+
+.modal > .modal-content {
+    position: relative;
+    top: 200px;
+    background: var(--primary-background-color);
+    display: block;
+    margin: auto;
+    max-width: 40vw;
+    max-height: 40vh;
+    border-radius: 12px;
+}
+
+.modal-title-bar {
+    background: var(--secondary-background-color);
+    padding: var(--medium-padding);
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title-bar > * {
+    display: inline-block;
+}
+
+.modal-title {
+    width: 80%;
+    text-align: left;
+    font-weight: bold;
+}
+
+.modal-close {
+    width: 20%;
+    text-align: right;
+}
+
+.close-button {
+    cursor: pointer;
+}
+
+.modal-children {
+    padding: var(--medium-padding);
+}

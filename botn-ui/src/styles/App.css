@@ -8,6 +8,11 @@
   --primary-text-color: white;
   --secondary-text-color: black;
   --disabled-text-color: rgba(0, 0, 0, 0.3);
+
+  /* Spacing */
+  --small-padding: 6px;
+  --medium-padding: 12px;
+  --large-padding: 18px;
 }
 
 .App {
@@ -100,10 +105,6 @@
 .top-bar > .top-bar-item {
   background: #CC9933;
   padding: 10px 12px 6px 12px;
-}
-
-.top-bar > .top-bar-item:hover {
-  background: #BB8822;
 }
 
 .top-bar > .logo {

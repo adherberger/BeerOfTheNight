@@ -20,9 +20,9 @@ const useWebSocket = (url) => {
 
     /**
      * Sets up subscription on connection obtained from useWebSocket.
-     * @param {String} topic Topic to subscribe to, e.g. "/game-state"
+     * @param {String} topic Topic to subscribe to, e.g. "/botn/game-state"
      * @param {Function} callback Action to take as soon as you are subscribed, e.g. you might want to then send a message that drives a result sent to the subscription topic 
-     * @param {Array.<*>} deps Any state vars for which the subscription should be retried on change. Will only subscribe when all deps are defined.
+     * @param {Array.<*>} deps Any state vars for which the subscription should be retried on change. Will only subscribe when all deps are truthy.
      * @returns A lastMessage state variable that updates whenever a new message is received.
      */
     const useSubscription = ({
@@ -63,10 +63,11 @@ const useWebSocket = (url) => {
     }
 
     useEffect(() => {
-        var socket = new SockJS(url);
-        console.log(socket);
-        stompClient.current = Stomp.over(socket);
-        stompClient.current.connect({}, onConnected, onError);
+        if(!connected.current) {
+            var socket = new SockJS(url);
+            stompClient.current = Stomp.over(socket);
+            stompClient.current.connect({}, onConnected, onError);
+        }
     }, [url]);
 
     return { sendMessage, useSubscription };

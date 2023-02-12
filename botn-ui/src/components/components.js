@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IconContext } from 'react-icons';
+import { FaTimes } from 'react-icons/fa';
+import '../styles/modal.css';
 
 export const StateInput = ({
     id,
@@ -59,6 +61,39 @@ export const BigIconWithMessage = ({title, subtitle, icon}) => {
             </div>
             <div className="subtitle">
                 {subtitle}
+            </div>
+        </div>
+    )
+}
+
+export const Modal = ({title, show, setShow, children}) => {
+    const onWindowClick = (e) => {
+        // If anywhere outside the modal is clicked, close the modal!
+        if(e.target.className === "modal") {
+            setShow(false);
+        }
+    }
+
+    useEffect(() => {
+        if(show) {
+            window.addEventListener('click', onWindowClick);
+        }
+    })
+
+    return (
+        <div className="modal" hidden={!show}>
+            <div className="modal-content">
+                <div className="modal-title-bar">
+                    <div className="modal-title">
+                        {title}
+                    </div>
+                    <div className="modal-close">
+                        <FaTimes className="close-button" onClick={() => {setShow(false)}}/>
+                    </div>
+                </div>
+                <div className="modal-children">
+                    {children}
+                </div>
             </div>
         </div>
     )

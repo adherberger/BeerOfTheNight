@@ -21,12 +21,18 @@ import {
   BOTN_RESTART_API,
   BOTN_GAME_STATE_TOPIC,
   PAGES,
-  GAME_STATE
+  GAME_STATE,
+  BOTN_SET_GAME_STATE,
 } from './utilities/constants';
+import {
+  Modal,
+  SecondaryButton
+} from './components/components';
 
 function App() {
   const [game, setGame] = useState();
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [showGameStateModal, setShowGameStateModal] = useState(false);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
 
@@ -115,6 +121,33 @@ function App() {
     setNavbarOpen(prev => !prev)
   }
 
+  const SetGameState = ({sendMessage, setShow}) => {
+    const gameContext = useGameContext();
+    const [gameState, setGameState] = useState(gameContext.game?.gameState);
+
+    const options = Object.entries(GAME_STATE).map(([key, value]) => (
+      <option key={key} value={key}>{key}</option>
+    ));
+
+    const applyChange = () => {
+      sendMessage(BOTN_SET_GAME_STATE(gameContext.game.gameId), {
+        gameState: gameState,
+      });
+      setShow(false);
+    }
+
+    return (
+      <div className="set-game-state">
+        <select
+          onChange={(e) => {setGameState(e.target.value)}}
+        >
+          {options}
+        </select>
+        <SecondaryButton text="Apply" onClick={applyChange}/>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
 
@@ -144,6 +177,9 @@ function App() {
                   <div className="menuNav-item" onClick={restartBackend}>
                     Restart Backend
                   </div>
+                  <div className="menuNav-item" onClick={() => setShowGameStateModal(true)}>
+                    Set Game State
+                  </div>
                   {
                     !gameContext.votingComplete ?
                       <>
@@ -160,6 +196,9 @@ function App() {
         </div>
       </div>
       {currentPage}
+      <Modal title="Set Game State" show={showGameStateModal} setShow={setShowGameStateModal}>
+          <SetGameState sendMessage={sendMessage} setShow={setShowGameStateModal}/>
+      </Modal>
     </div>
   );
 }
