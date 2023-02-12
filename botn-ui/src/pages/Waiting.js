@@ -68,8 +68,6 @@ const Waiting = ({ navigate, sendMessage, useSubscription }) => {
                 </>
                 }
                 <VoteList votes={votes} />
-                {
-                }
             </div>
             {
                 gameContext.game?.isAdmin ?

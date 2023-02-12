@@ -37,10 +37,10 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
     let index = event.target.value - 1;
     let entryid = parseInt(event.target.getAttribute("entryid"));
     console.log(event.target)
-    //Make a copy of votecs array for modification
+    //Make a copy of votes array for modification
     let items = [...votes];
 
-    //update the user's plae (1,2,3) choice with the etry ID
+    //update the user's place (1,2,3) choice with the etry ID
     items[index] = entryid
 
     //Clear that entryId from any of the other spots 

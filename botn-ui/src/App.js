@@ -3,7 +3,6 @@ import './styles/App.css';
 import { FaBeer } from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
-import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
 import AddBeer from './pages/AddBeer';
@@ -30,6 +29,8 @@ function App() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
+
+  // Subscribe to game state updates, but only after game is established (game is in deps)
   const gameState = useSubscription({
     topic: BOTN_GAME_STATE_TOPIC(game),
     deps: [game]
@@ -108,10 +109,11 @@ function App() {
     })
   }
 
-  // function addEntryFor() {
-  //   router.navigate("/addBeerFor")
-  //   setNavbarOpen(prev => !prev)
-  // }
+  // TODO I think we will want to accomplish the AddEntryFor functionality as a modal the pops over the screen, so it's not bound to go to a specific page when 
+  function addEntryFor() {
+    navigate(PAGES.ADD_BEER_FOR)
+    setNavbarOpen(prev => !prev)
+  }
 
   return (
     <div className="App">
@@ -145,7 +147,7 @@ function App() {
                   {
                     !gameContext.votingComplete ?
                       <>
-                        <div className="menuNav-item" onClick={() => {}}>
+                        <div className="menuNav-item" onClick={addEntryFor}>
                           Add Entry For...
                         </div>
                       </>

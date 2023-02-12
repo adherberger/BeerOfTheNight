@@ -6,7 +6,6 @@ import {
     StateInput,
     SecondaryButton,
 } from '../components/components';
-import { MdSettingsApplications } from 'react-icons/md';
 
 // Game member enters their name and a room code and fires off a joinGame request.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
@@ -15,7 +14,6 @@ const JoinRoom = ({onJoin}) => {
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
     const [roomCodeNotFound, setRoomCodeNotFound] = useState(false);
-    const [action, setAction] = useState();
 
     const updateRoomCode = (val) => {
         val = val.toUpperCase();

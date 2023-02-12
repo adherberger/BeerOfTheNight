@@ -15,9 +15,6 @@ const useWebSocket = (url) => {
     }
 
     const sendMessage = (destination, message) => {
-        console.log("Sending message to " + destination);
-        console.log("Message: ");
-        console.log(message);
         stompClient.current.send(destination, {}, JSON.stringify(message));
     }
 
@@ -26,7 +23,7 @@ const useWebSocket = (url) => {
      * @param {String} topic Topic to subscribe to, e.g. "/game-state"
      * @param {Function} callback Action to take as soon as you are subscribed, e.g. you might want to then send a message that drives a result sent to the subscription topic 
      * @param {Array.<*>} deps Any state vars for which the subscription should be retried on change. Will only subscribe when all deps are defined.
-     * @returns 
+     * @returns A lastMessage state variable that updates whenever a new message is received.
      */
     const useSubscription = ({
         topic,
