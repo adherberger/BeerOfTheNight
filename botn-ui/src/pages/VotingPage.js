@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES } from '../utilities/constants';
+import { BOTN_SUBMIT_VOTES } from '../utilities/constants';
 import '../styles/voting.css'
 
 // Game creator enters their name and fires off an initGame request to backend.
@@ -90,18 +90,21 @@ const VotingPage = ({sendMessage, useSubscription})  => {
                     {/*<td>{entry.beerName}</td>*/}
                     <td>{entry.beerStyle}</td>
                     <td width="10%"><input type="radio" value="1" entryid={entry.entryId}
+                      disabled={gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[0] === parseInt(entry.entryId)}
                       onChange={handleChange}
                     />
                     </td>
                     <td width="10%"><input type="radio" value="2" entryid={entry.entryId}
+                      disabled={gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[1] === parseInt(entry.entryId)}
                       onChange={handleChange}
                     />
                     </td>
                     <td width="10%"><input type="radio" value="3" entryid={entry.entryId}
+                      disabled={gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[2] === parseInt(entry.entryId)}
                       onChange={handleChange}
