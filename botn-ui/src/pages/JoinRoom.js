@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_JOIN_GAME, BOTN_INIT_GAME } from '../utilities/constants';
+import { BOTN_JOIN_GAME, BOTN_INIT_GAME, PAGES } from '../utilities/constants';
 import {
     StateInput,
     SecondaryButton,
@@ -9,7 +9,7 @@ import {
 
 // Game member enters their name and a room code and fires off a joinGame request.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const JoinRoom = ({onJoin}) => {
+const JoinRoom = ({navigate}) => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
@@ -26,7 +26,7 @@ const JoinRoom = ({onJoin}) => {
           { memberName: name }
         ).then((response) => {
           gameContext.setValue("game", {isAdmin: true, ...response.data});
-          onJoin({isAdmin: true, ...response.data});
+          navigate(PAGES.LOBBY);
         });
     }
 
@@ -36,17 +36,10 @@ const JoinRoom = ({onJoin}) => {
             { memberName: name, roomCode: roomCode }
         ).then((response) => {
             if (response.status === 200) {
-                //gameContext.setValue("game", response.data);
                 //Quick hack to allow Admin role for seeded game data
                 //Join one of the static games with name Admin!
-                if (response.data.brewerName === "Admin") {
-                    gameContext.setValue("game", {isAdmin: true, ...response.data});
-                } else {
-                    gameContext.setValue("game", {isAdmin: false, ...response.data});
-
-                }
-            
-                onJoin(response.data);
+                gameContext.setValue("game", {isAdmin: response.data.brewerName === "Admin", ...response.data});
+                navigate(PAGES.LOBBY);
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);
             }

@@ -121,6 +121,10 @@ public class BotnController {
 		System.out.println(gson.toJson(resp));
 		return resp;
 	}
+	@GetMapping("/game-state/{gameId}")
+	public GameState getGameState(@PathVariable Integer gameId) {
+		return handler.getGameStateForGame(gameId);
+	}
 	
 	// Admin tool to manually set the game state
 	@MessageMapping("/set-game-state/{gameId}")

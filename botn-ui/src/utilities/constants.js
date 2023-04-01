@@ -10,6 +10,10 @@ export const BOTN_ADD_ENTRY_FOR = BOTN_BASE_URL + "/addEntryFor";
 export const BOTN_GET_ENTRIES = BOTN_BASE_URL + "/getEntries";
 export const BOTN_SUBMIT_VOTES = BOTN_BASE_URL + "/submitVotes";
 export const BOTN_RESTART_API = BOTN_BASE_URL + "/restart";
+
+export const BOTN_GET_GAME_STATE = (gameId) => (
+    `${BOTN_BASE_URL}/game-state/${gameId}`
+)
 export const BOTN_SET_GAME_STATE = (gameId) => (
     `/set-game-state/${gameId}`
 )

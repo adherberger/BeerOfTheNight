@@ -32,7 +32,7 @@ const AttendeeList = ({attendees}) => {
             <div className="attendee-list">
             {
                 attendees ? attendees.map((att, index) => (
-                    <Attendee idx={index} name={att.name} hasEntry={att.hasEntry}/>
+                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry}/>
                 )) : <></>
             }
             </div>

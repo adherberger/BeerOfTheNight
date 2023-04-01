@@ -345,5 +345,9 @@ public class BeerOtnHandler {
 		gameRepo.save(game);
 		return game.getGameState();
 	}
-	
+
+	public GameState getGameStateForGame(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		return game.getGameState();
+	}
 }

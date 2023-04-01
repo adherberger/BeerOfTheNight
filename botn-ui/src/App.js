@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import './styles/App.css';
 import { FaBeer } from 'react-icons/fa';
 import { MdClose } from "react-icons/md"
@@ -22,6 +22,7 @@ import {
   BOTN_GAME_STATE_TOPIC,
   PAGES,
   GAME_STATE,
+  BOTN_GET_GAME_STATE,
   BOTN_SET_GAME_STATE,
 } from './utilities/constants';
 import {
@@ -30,34 +31,46 @@ import {
 } from './components/components';
 
 function App() {
-  const [game, setGame] = useState();
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [showGameStateModal, setShowGameStateModal] = useState(false);
+  const [ showRejoinGame, setShowRejoinGame ] = useState(false);
+  const [currentPage, setCurrentPage] = useState(<JoinRoom navigate={navigate}/>);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
+  const newGameState = useRef();
 
   // Subscribe to game state updates, but only after game is established (game is in deps)
   const gameState = useSubscription({
-    topic: BOTN_GAME_STATE_TOPIC(game),
-    deps: [game]
+    topic: BOTN_GAME_STATE_TOPIC(gameContext.game),
+    deps: [gameContext.game]
   });
 
-  const landingPage = (
-    <JoinRoom
-      onJoin={(game) => {
-        setGame(game);
-        navigate(PAGES.LOBBY);
-      }}
-    />
-  );
-
   useEffect(() => {
-    console.log("GAME STATE:");
-      console.log(gameState);
-      
+    const contextFromStorage = localStorage.getItem("gameContext");
+    if(contextFromStorage) {
+      const contextJson = JSON.parse(contextFromStorage);
+      axios.get(BOTN_GET_GAME_STATE(contextJson.game.gameId)).then(response => {
+        if(response.status === 404) {
+          // Game was not found
+        } else {
+          newGameState.current = response.data;
+
+          if(newGameState.current !== GAME_STATE.COMPLETE) {
+            
+            setShowRejoinGame(true);
+          } else {
+            gameContext.setContext(null);
+          }
+        }
+      })
+    }
+  }, []);
+
+  function goToPageForGameState(gameState) {
     switch(gameState) {
       case GAME_STATE.INIT:
         navigate(PAGES.LOBBY);
+        break;
       case GAME_STATE.VOTING:
         navigate(PAGES.VOTING);
         break;
@@ -74,11 +87,13 @@ function App() {
         navigate(PAGES.RESULTS);
         break;
     }
+  }
+
+  useEffect(() => {
+    goToPageForGameState(gameState);
   }, [gameState])
 
-  const [currentPage, setCurrentPage] = useState(landingPage);
-
-  const navigate = (page) => {
+  function navigate(page) {
     switch(page) {
       case PAGES.LOBBY:
         setCurrentPage(<Lobby navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
@@ -154,6 +169,27 @@ function App() {
     )
   }
 
+  const RejoinGame = ({setShow}) => {
+    const rejoinGame = () => {
+      goToPageForGameState(newGameState.current);
+    }
+
+    const decline = () => {
+      gameContext.setContext(null);
+      setShow(false);
+    }
+
+    return (
+      <div className="rejoin-game">
+        {`It looks like you were previously in a game. Would you like to rejoin?`}
+        <div style={{display: "flex", flexDirection: "row"}}>
+          <SecondaryButton text="Yes" onClick={rejoinGame}/>
+          <SecondaryButton text="No" onClick={decline}/>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
 
@@ -204,6 +240,9 @@ function App() {
       {currentPage}
       <Modal title="Set Game State" show={showGameStateModal} setShow={setShowGameStateModal}>
           <SetGameState sendMessage={sendMessage} setShow={setShowGameStateModal}/>
+      </Modal>
+      <Modal title="Rejoin Game" show={showRejoinGame} setShow={setShowRejoinGame}>
+          <RejoinGame setShow={setShowRejoinGame}/>
       </Modal>
     </div>
   );

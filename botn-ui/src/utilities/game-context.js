@@ -11,10 +11,16 @@ export const GameContextProvider = ({children}) => {
 
   const setValue = (key, value) => {
     setData({...data, [key]: value});
+    localStorage.setItem("gameContext", JSON.stringify({...data, [key]: value}));
+  }
+
+  const setContext = (context) => {
+    setData(context);
+    localStorage.setItem("gameContext", context);
   }
 
   return (
-    <GameContext.Provider value={{...data, setValue}}>
+    <GameContext.Provider value={{...data, setValue, setContext}}>
       {children}
     </GameContext.Provider>
   );

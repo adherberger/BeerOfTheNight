@@ -47,7 +47,7 @@ const useWebSocket = (url) => {
                 }
             }
 
-            if(connected && depsPass && !subscribed) {
+            if(connected.current && depsPass && !subscribed) {
                 stompClient.current.subscribe(topic, onMessageReceived);
                 setSubscribed(true);
                 callback();
