@@ -42,7 +42,8 @@ function App() {
   // Subscribe to game state updates, but only after game is established (game is in deps)
   const gameState = useSubscription({
     topic: BOTN_GAME_STATE_TOPIC(gameContext.game),
-    deps: [gameContext.game]
+    deps: [gameContext.game],
+    retry: [gameContext],
   });
 
   useEffect(() => {

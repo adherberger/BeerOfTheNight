@@ -28,7 +28,8 @@ const useWebSocket = (url) => {
     const useSubscription = ({
         topic,
         callback = () => {},
-        deps = []
+        deps = [],
+        retry = [],
     }) => {
         const [lastMessage, setLastMessage] = useState();
         const [subscribed, setSubscribed] = useState(false);
@@ -58,7 +59,7 @@ const useWebSocket = (url) => {
                     stompClient.current.unsubscribe(topic);
                 }
             }
-        }, [...deps]);
+        }, [...retry]);
 
         return lastMessage;
     }
