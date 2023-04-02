@@ -10,17 +10,23 @@ export const GameContextProvider = ({children}) => {
   const [ data, setData ] = useState({});
 
   const setValue = (key, value) => {
-    setData({...data, [key]: value});
-    localStorage.setItem("gameContext", JSON.stringify({...data, [key]: value}));
+    let context = {...data, [key]: value};
+    setData(context);
+    localStorage.setItem("gameContext", JSON.stringify(context));
   }
 
   const setContext = (context) => {
     setData(context);
-    localStorage.setItem("gameContext", context);
+    localStorage.setItem("gameContext", JSON.stringify(context));
+  }
+
+  const clear = () => {
+    setData({});
+    localStorage.removeItem("gameContext");
   }
 
   return (
-    <GameContext.Provider value={{...data, setValue, setContext}}>
+    <GameContext.Provider value={{...data, setValue, setContext, clear}}>
       {children}
     </GameContext.Provider>
   );

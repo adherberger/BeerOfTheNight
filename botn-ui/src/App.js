@@ -51,16 +51,11 @@ function App() {
       const contextJson = JSON.parse(contextFromStorage);
       axios.get(BOTN_GET_GAME_STATE(contextJson.game.gameId)).then(response => {
         if(response.status === 404) {
-          // Game was not found
+          // Game was not found, don't show the message to rejoin
         } else {
           newGameState.current = response.data;
-
-          if(newGameState.current !== GAME_STATE.COMPLETE) {
-            
-            setShowRejoinGame(true);
-          } else {
-            gameContext.setContext(null);
-          }
+          gameContext.setContext(contextJson);
+          setShowRejoinGame(true);
         }
       })
     }
@@ -172,10 +167,11 @@ function App() {
   const RejoinGame = ({setShow}) => {
     const rejoinGame = () => {
       goToPageForGameState(newGameState.current);
+      setShow(false);
     }
 
     const decline = () => {
-      gameContext.setContext(null);
+      gameContext.clear();
       setShow(false);
     }
 

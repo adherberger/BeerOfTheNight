@@ -39,6 +39,7 @@ const useWebSocket = (url) => {
 
         useEffect(() => {
             let depsPass = true;
+            console.log("Attempting to subscribe to " + topic);
 
             for(let i of deps) {
                 if(!i) {
