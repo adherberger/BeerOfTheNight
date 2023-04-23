@@ -5,6 +5,8 @@ import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_ATTENDEES_TOPIC,
     PAGES,
+    BOTN_SET_GAME_STATE,
+    GAME_STATE,
 } from '../utilities/constants';
 import {
     MainButton,
@@ -61,7 +63,9 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
     }
 
     function beginVoting() {
-        sendMessage("/startVoting/"+gameContext.game.gameId);
+        sendMessage(BOTN_SET_GAME_STATE(gameContext.game.gameId), {
+            gameState: GAME_STATE.VOTING,
+        });
     }
 
     return (

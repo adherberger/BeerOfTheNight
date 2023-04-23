@@ -114,6 +114,7 @@ public class BeerOtnHandler {
 		resp.setRoomCode(game.getRoomCode());
 		resp.setMemberId(gameMember.getMember().getMemberId());
 		resp.setBrewerName(req.getMemberName());
+		resp.setGameState(game.getGameState());
 		return resp;
 	}
 	

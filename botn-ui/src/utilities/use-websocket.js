@@ -39,6 +39,7 @@ const useWebSocket = (url) => {
         }
 
         useEffect(() => {
+            console.log("Retrying subscription, retry is " + retry)
             let depsPass = true;
             console.log("Attempting to subscribe to " + topic);
 

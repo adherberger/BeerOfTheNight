@@ -39,7 +39,6 @@ const JoinRoom = ({navigate}) => {
                 //Quick hack to allow Admin role for seeded game data
                 //Join one of the static games with name Admin!
                 gameContext.setValue("game", {isAdmin: response.data.brewerName === "Admin", ...response.data});
-                navigate(PAGES.LOBBY);
             } else if (response.status === 404) {
                 setRoomCodeNotFound(true);
             }

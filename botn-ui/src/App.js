@@ -38,6 +38,8 @@ function App() {
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
   const newGameState = useRef();
+  const newContextJson = useRef();
+  const oldGameState = useRef();
 
   // Subscribe to game state updates, but only after game is established (game is in deps)
   const gameState = useSubscription({
@@ -55,7 +57,7 @@ function App() {
           // Game was not found, don't show the message to rejoin
         } else {
           newGameState.current = response.data;
-          gameContext.setContext(contextJson);
+          newContextJson.current = contextJson;
           setShowRejoinGame(true);
         }
       })
@@ -86,8 +88,11 @@ function App() {
   }
 
   useEffect(() => {
-    goToPageForGameState(gameState);
-  }, [gameState])
+    if(gameContext?.game && gameContext.game.gameState !== oldGameState.current) {
+      oldGameState.current = gameContext.game.gameState;
+      goToPageForGameState(gameContext.game.gameState);
+    }
+  }, [gameContext])
 
   function navigate(page) {
     switch(page) {
@@ -168,6 +173,7 @@ function App() {
   const RejoinGame = ({setShow}) => {
     const rejoinGame = () => {
       goToPageForGameState(newGameState.current);
+      gameContext.setContext(newContextJson.current);
       setShow(false);
     }
 
