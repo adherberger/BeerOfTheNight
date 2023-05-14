@@ -10,6 +10,7 @@ import {
 } from '../utilities/constants';
 import {
     MainButton,
+    MainPage,
     SecondaryButton,
 } from '../components/components';
 
@@ -70,12 +71,9 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
 
     return (
         <>
-            <div className="main-page">
-                <div className="lobby">
-                    <div className="logo"><FaBeer /></div>
-                    <h3>Waiting for voting to begin</h3>
+            <MainPage title="Waiting for voting to begin">
+                <div>
                     <AttendeeList attendees={attendees}/>
-
                     {
                     gameContext.entry ?
                         <>
@@ -93,7 +91,7 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
                         </>
                     }
                 </div>
-            </div>
+            </MainPage>
             {
                 gameContext.game?.isAdmin ?
                 <MainButton

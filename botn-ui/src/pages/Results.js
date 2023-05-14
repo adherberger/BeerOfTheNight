@@ -138,6 +138,7 @@ const Results = ({sendMessage, useSubscription}) => {
         <>
             <div className="main-page">
                 <ResultsList results={results}/>
+                <div className="flex-spacer"/>
             </div>
             {
                 gameContext.game?.isAdmin && !resultsShown ?

@@ -34,21 +34,22 @@ const AddBeer = ({navigate}) => {
     return (
         <>
             <div className="main-page">
-                <div className="logo"><FaBeer /></div>
-                <p>Please tell us about your beer:</p>
-                <StateInput
-                    id="beer-name-input"
-                    title="Beer Name"
-                    stateVar={beerName}
-                    setStateVar={setBeerName}
-                    autoFocus
-                />
-                <StateInput
-                    id="beer-style-input"
-                    title="Beer Style"
-                    stateVar={beerStyle}
-                    setStateVar={setBeerStyle}
-                />
+                <div className="form">
+                    <div className="logo"><FaBeer /> Please tell us about your beer:</div>
+                    <StateInput
+                        id="beer-name-input"
+                        title="Beer Name"
+                        stateVar={beerName}
+                        setStateVar={setBeerName}
+                        autoFocus
+                    />
+                    <StateInput
+                        id="beer-style-input"
+                        title="Beer Style"
+                        stateVar={beerStyle}
+                        setStateVar={setBeerStyle}
+                    />
+                </div>
             </div>
             <MainButton
                 text={"Submit Entry"}

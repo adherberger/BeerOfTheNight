@@ -7,7 +7,7 @@ import {
     PAGES,
 } from '../utilities/constants';
 import {
-    MainButton
+    MainButton, MainPage
 } from '../components/components';
 
 const Vote = ({ name, didVote, idx }) => {
@@ -55,20 +55,9 @@ export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
 
     return (
         <>
-            <div className="main-page">
-                <div className="logo"><FaBeer /></div>
-                {
-                votes?.allVotesIn ?
-                <>
-                    <h2>All votes are in!</h2>
-                </>
-                :
-                <>
-                    <h3>Waiting for voting to end</h3>
-                </>
-                }
+            <MainPage title={votes?.allVotesIn ? "All votes are in!" : "Waiting for voting to end"}>
                 <VoteList votes={votes} />
-            </div>
+            </MainPage>
             {
                 gameContext.game?.isAdmin ?
                     <MainButton

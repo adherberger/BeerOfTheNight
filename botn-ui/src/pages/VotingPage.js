@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
 import Waiting from './Waiting';
+import { MainPage, SecondaryButton } from '../components/components';
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
@@ -75,7 +76,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
       {
         gameContext.votingComplete ?
         <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
-        <div className="main-page">
+        <MainPage title="Enter Votes">
           <table>
             <thead>
               <tr>
@@ -117,15 +118,19 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
               })}
             </tbody>
           </table>
-          <button className="small-button"
-            disabled={false}
-            onClick={clearVotes}>Clear
-          </button>
-          <button className="big-button"
-            disabled={votes[0]*votes[1]*votes[2] === 0}
-            onClick={submitVotes}>Submit Votes
-          </button>
-        </div>
+          <div style={{display: "flex"}}>
+            <SecondaryButton
+              text="Clear"
+              disabled={false}
+              onClick={clearVotes}>
+            </SecondaryButton>
+            <SecondaryButton
+              text="Submit Votes"
+              disabled={votes[0]*votes[1]*votes[2] === 0}
+              onClick={submitVotes}>
+            </SecondaryButton>
+          </div>
+        </MainPage>
       }
       </>
     )

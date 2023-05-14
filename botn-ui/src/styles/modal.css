@@ -46,3 +46,10 @@
 .modal-children {
     padding: var(--medium-padding);
 }
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: var(--medium-padding);
+}

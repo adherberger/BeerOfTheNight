@@ -182,7 +182,7 @@ function App() {
     return (
       <div className="rejoin-game">
         {`It looks like you were previously in a game. Would you like to rejoin?`}
-        <div style={{display: "flex", flexDirection: "row"}}>
+        <div className="button-row">
           <SecondaryButton text="Yes" onClick={rejoinGame}/>
           <SecondaryButton text="No" onClick={decline}/>
         </div>

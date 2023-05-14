@@ -3,6 +3,26 @@ import { IconContext } from 'react-icons';
 import { FaTimes } from 'react-icons/fa';
 import '../styles/modal.css';
 
+export const MainPage = ({
+    title,
+    children
+}) => {
+    return (
+        <>
+            {
+                title ?
+                <div className="main-page-title">
+                    <h2>{title}</h2>
+                </div> :
+                <></>
+            }
+            <div className="main-page">
+                {children}
+            </div>
+        </>
+    )
+}
+
 export const StateInput = ({
     id,
     title,
