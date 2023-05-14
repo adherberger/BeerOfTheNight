@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useRef } from 'react';
 import './styles/App.css';
 import { FaBeer } from 'react-icons/fa';
-import { MdClose } from "react-icons/md"
+import { MdClose, MdPerson } from "react-icons/md"
 import { FiMenu } from "react-icons/fi"
 import JoinRoom from './pages/JoinRoom';
 import Lobby from './pages/Lobby';
@@ -39,20 +39,20 @@ function App() {
   const gameContext = useGameContext();
   const newGameState = useRef();
   const newContextJson = useRef();
-  const oldGameState = useRef();
 
   // Subscribe to game state updates, but only after game is established (game is in deps)
   const gameState = useSubscription({
     topic: BOTN_GAME_STATE_TOPIC(gameContext.game),
     deps: [gameContext.game],
     retry: [gameContext],
+    initialValueURL: BOTN_GET_GAME_STATE(gameContext.game?.gameId),
   });
 
   useEffect(() => {
     const contextFromStorage = localStorage.getItem("gameContext");
     if(contextFromStorage) {
       const contextJson = JSON.parse(contextFromStorage);
-      axios.get(BOTN_GET_GAME_STATE(contextJson.game.gameId)).then(response => {
+      axios.get(BOTN_GET_GAME_STATE(contextJson.game.gameId)).then(response => { 
         if(response.status === 404) {
           // Game was not found, don't show the message to rejoin
         } else {
@@ -88,11 +88,8 @@ function App() {
   }
 
   useEffect(() => {
-    if(gameContext?.game && gameContext.game.gameState !== oldGameState.current) {
-      oldGameState.current = gameContext.game.gameState;
-      goToPageForGameState(gameContext.game.gameState);
-    }
-  }, [gameContext])
+    goToPageForGameState(gameState);
+  }, [gameState]);
 
   function navigate(page) {
     switch(page) {
@@ -207,6 +204,14 @@ function App() {
           }
         </div>
         <div className="flex-spacer" />
+        
+          {
+            gameContext.game?.brewerName ?
+            <div className="top-bar-item">
+              <MdPerson/>
+              {gameContext.game.brewerName}
+            </div> : <></>
+          }
         <div className="top-bar-menu">
           {
             gameContext.game?.isAdmin ?

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import axios from 'axios';
 
 const useWebSocket = (url) => {
     const connected = useRef(false);
@@ -30,6 +31,7 @@ const useWebSocket = (url) => {
         callback = () => {},
         deps = [],
         retry = [],
+        initialValueURL,
     }) => {
         const [lastMessage, setLastMessage] = useState();
         const [subscribed, setSubscribed] = useState(false);
@@ -54,6 +56,11 @@ const useWebSocket = (url) => {
                 stompClient.current.subscribe(topic, onMessageReceived);
                 setSubscribed(true);
                 callback();
+                if(initialValueURL) {
+                    axios.get(initialValueURL).then(result => {
+                        setLastMessage(result.data);
+                    })
+                }
 
                 // On component unmount, we then unsubscribe from the topic, thanks to this useEffect trick
                 return () => {

@@ -9,7 +9,7 @@ import {
 
 // Game member enters their name and a room code and fires off a joinGame request.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const JoinRoom = ({navigate}) => {
+const JoinRoom = ({sendMessage}) => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
@@ -26,7 +26,6 @@ const JoinRoom = ({navigate}) => {
           { memberName: name }
         ).then((response) => {
           gameContext.setValue("game", {isAdmin: true, ...response.data});
-          navigate(PAGES.LOBBY);
         });
     }
 

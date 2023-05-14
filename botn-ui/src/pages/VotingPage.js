@@ -3,6 +3,7 @@ import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
+import Waiting from './Waiting';
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
@@ -71,6 +72,9 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
   function htmlTable() {
     return (
       <>
+      {
+        gameContext.votingComplete ?
+        <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
         <div className="main-page">
           <table>
             <thead>
@@ -122,6 +126,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
             onClick={submitVotes}>Submit Votes
           </button>
         </div>
+      }
       </>
     )
   }

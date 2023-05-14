@@ -42,11 +42,9 @@ export const MainButton = ({text, onClick, disabled}) => {
 
 export const SecondaryButton = ({text, onClick, disabled, ...props}) => {
     return (
-        <div className="secondary-button-container">
-            <button className="secondary-button" onClick={onClick} disabled={disabled} {...props}>
-                {text}
-            </button>
-        </div>
+        <button className="secondary-button" onClick={onClick} disabled={disabled} {...props}>
+            {text}
+        </button>
     )
 }
 

@@ -39,7 +39,7 @@ const VoteList = ({ votes }) => {
     )
 }
 
-const Waiting = ({ navigate, sendMessage, useSubscription }) => {
+export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     const gameContext = useGameContext();
     const votes = useSubscription({
         topic: BOTN_VOTES_TOPIC+gameContext.game.gameId,
