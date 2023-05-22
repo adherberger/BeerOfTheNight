@@ -14,6 +14,7 @@ const JoinRoom = ({sendMessage}) => {
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
     const [roomCodeNotFound, setRoomCodeNotFound] = useState(false);
+    const [errorResponse, setErrorResponse] = useState();
 
     const updateRoomCode = (val) => {
         val = val.toUpperCase();
@@ -29,19 +30,26 @@ const JoinRoom = ({sendMessage}) => {
         });
     }
 
-    const joinGame = () => {
-        axios.post(
+    const joinGame = async () => {
+        try {
+        const response = await axios.post(
             BOTN_JOIN_GAME,
-            { memberName: name, roomCode: roomCode }
-        ).then((response) => {
+            { memberName: name, roomCode: roomCode })
             if (response.status === 200) {
                 //Quick hack to allow Admin role for seeded game data
                 //Join one of the static games with name Admin!
                 gameContext.setValue("game", {isAdmin: response.data.brewerName === "Admin", ...response.data});
             } else if (response.status === 404) {
-                setRoomCodeNotFound(true);
+                setErrorResponse("Unknown Error");
             }
-        })
+        }  catch (err) {
+            console.log(err)
+            if (err.response.status === 404) {
+            setErrorResponse("No active game with that room code");
+            } else if (err.response.status === 409) {
+                setErrorResponse("Game may no longer be joined")
+            }
+        }
     }
 
     return (
@@ -62,6 +70,15 @@ const JoinRoom = ({sendMessage}) => {
                         setStateVar={setName}
                         autoFocus
                     />
+                    {
+                        errorResponse ?
+                            <>
+                                <p>{errorResponse}</p>
+                            </>
+                            :
+                            <>
+                            </>
+                    }
                     <SecondaryButton
                         text={"Join Game"}
                         onClick={joinGame}

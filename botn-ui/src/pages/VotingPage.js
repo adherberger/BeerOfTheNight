@@ -96,18 +96,21 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
                     {/*<td>{entry.beerName}</td>*/}
                     <td>{entry.beerStyle}</td>
                     <td width="10%"><input type="radio" value="1" entryid={entry.entryId}
+                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[0] === parseInt(entry.entryId)}
                       onChange={handleChange}
                     />
                     </td>
                     <td width="10%"><input type="radio" value="2" entryid={entry.entryId}
+                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[1] === parseInt(entry.entryId)}
                       onChange={handleChange}
                     />
                     </td>
                     <td width="10%"><input type="radio" value="3" entryid={entry.entryId}
+                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
                       name={entry.brewer}
                       checked={votes[2] === parseInt(entry.entryId)}
                       onChange={handleChange}
