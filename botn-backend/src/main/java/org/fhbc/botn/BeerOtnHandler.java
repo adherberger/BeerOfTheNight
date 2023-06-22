@@ -116,6 +116,7 @@ public class BeerOtnHandler {
 		resp.setRoomCode(game.getRoomCode());
 		resp.setMemberId(gameMember.getMember().getMemberId());
 		resp.setBrewerName(req.getMemberName());
+		resp.setGameState(game.getGameState());
 		return resp;
 	}
 	
@@ -223,7 +224,7 @@ public class BeerOtnHandler {
 
 	public GameState startVotingForGame(Integer gameId) {
 		GameEntity game = gameRepo.findById(gameId).get();
-		game.setGameState(GameState.IN_PROGRESS);
+		game.setGameState(GameState.VOTING);
 		gameRepo.save(game);
 		return game.getGameState();
 	}
@@ -340,5 +341,16 @@ public class BeerOtnHandler {
 		gameRepo.save(game);
 		return GameState.COMPLETE;
 	}
-	
+
+	public GameState setGameStateForGame(Integer gameId, String gameState) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		game.setGameState(GameState.valueOf(gameState));
+		gameRepo.save(game);
+		return game.getGameState();
+	}
+
+	public GameState getGameStateForGame(Integer gameId) {
+		GameEntity game = gameRepo.findById(gameId).get();
+		return game.getGameState();
+	}
 }

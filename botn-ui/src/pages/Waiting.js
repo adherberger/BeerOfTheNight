@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { FaCheck, FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_VOTES_TOPIC,
+    PAGES,
 } from '../utilities/constants';
 import {
-    MainButton
+    MainButton, MainPage
 } from '../components/components';
 
 const Vote = ({ name, didVote, idx }) => {
@@ -39,45 +39,25 @@ const VoteList = ({ votes }) => {
     )
 }
 
-const Waiting = ({ sendMessage, useSubscription }) => {
+export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     const gameContext = useGameContext();
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
-    const votes = useSubscription(BOTN_VOTES_TOPIC+gameContext.game.gameId, () => {
-        sendMessage("/updateVotes/"+gameContext.game.gameId);
-    });
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(gameState === "RESULTS_RECEIVED") {
-            navigate("/results");
+    const votes = useSubscription({
+        topic: BOTN_VOTES_TOPIC+gameContext.game.gameId,
+        callback: () => {
+            sendMessage("/updateVotes/"+gameContext.game.gameId);
         }
-    }, [gameState]);
-
+    });
 
     function goToResults() {
         sendMessage("/votingComplete/"+gameContext.game.gameId);
-        navigate("/results")
+        navigate(PAGES.RESULTS);
     }
-
 
     return (
         <>
-            <div className="main-page">
-                <div className="logo"><FaBeer /></div>
-                {
-                votes?.allVotesIn ?
-                <>
-                    <h2>All votes are in!</h2>
-                </>
-                :
-                <>
-                    <h3>Waiting for voting to end</h3>
-                </>
-                }
+            <MainPage title={votes?.allVotesIn ? "All votes are in!" : "Waiting for voting to end"}>
                 <VoteList votes={votes} />
-                {
-                }
-            </div>
+            </MainPage>
             {
                 gameContext.game?.isAdmin ?
                     <MainButton

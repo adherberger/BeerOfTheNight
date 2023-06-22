@@ -12,6 +12,7 @@ import org.fhbc.botn.dto.InitGameRequest;
 import org.fhbc.botn.dto.JoinGameRequest;
 import org.fhbc.botn.dto.JoinGameResponse;
 import org.fhbc.botn.dto.Result;
+import org.fhbc.botn.dto.SetGameStateMessage;
 import org.fhbc.botn.dto.SubmitVotesRequest;
 import org.fhbc.botn.dto.UpdateVotesResponse;
 import org.fhbc.botn.entity.GameEntity.GameState;
@@ -105,6 +106,7 @@ public class BotnController {
 	@MessageMapping("/updateAttendees/{gameId}")
 	@SendTo("/botn/attendees/{gameId}")
 	public List<Attendee> getAttendees(@DestinationVariable Integer gameId) {
+		System.out.println("GOT TO ATTENDEES " + gameId);
 		List<Attendee> resp = handler.getAttendeesForGame(gameId);
 		return resp;
 	}
@@ -115,6 +117,17 @@ public class BotnController {
 		UpdateVotesResponse resp = handler.getVotesForGame(gameId);
 		log.info(gson.toJson(resp));
 		return resp;
+	}
+	@GetMapping("/game-state/{gameId}")
+	public GameState getGameState(@PathVariable Integer gameId) {
+		return handler.getGameStateForGame(gameId);
+	}
+	
+	// Admin tool to manually set the game state
+	@MessageMapping("/set-game-state/{gameId}")
+	@SendTo("/botn/game-state/{gameId}")
+	public GameState setGameState(@DestinationVariable Integer gameId, SetGameStateMessage gameStateMessage) {
+		return handler.setGameStateForGame(gameId, gameStateMessage.getGameState());
 	}
 
 	@PostMapping("/submitVotes")

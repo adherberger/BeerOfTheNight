@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
-import { useNavigate } from 'react-router-dom';
 import {
     BOTN_GAME_STATE_TOPIC,
     BOTN_ATTENDEES_TOPIC,
+    PAGES,
+    BOTN_SET_GAME_STATE,
+    GAME_STATE,
 } from '../utilities/constants';
 import {
     MainButton,
+    MainPage,
     SecondaryButton,
 } from '../components/components';
 
@@ -32,7 +35,7 @@ const AttendeeList = ({attendees}) => {
             <div className="attendee-list">
             {
                 attendees ? attendees.map((att, index) => (
-                    <Attendee idx={index} name={att.name} hasEntry={att.hasEntry}/>
+                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry}/>
                 )) : <></>
             }
             </div>
@@ -42,43 +45,35 @@ const AttendeeList = ({attendees}) => {
 
 // Waiting room until voting begins.  
 // Member may click to add their beer entry.
-const Lobby = ({sendMessage, useSubscription}) => {
+const Lobby = ({navigate, sendMessage, useSubscription}) => {
     const gameContext = useGameContext();
 
-    const gameState = useSubscription(BOTN_GAME_STATE_TOPIC+gameContext.game.gameId);
-    const attendees = useSubscription(BOTN_ATTENDEES_TOPIC+gameContext.game.gameId, () => {
-        sendMessage("/updateAttendees/"+gameContext.game.gameId);
+    const attendees = useSubscription({
+        topic: BOTN_ATTENDEES_TOPIC + gameContext.game.gameId,
+        callback: () => {
+            sendMessage("/updateAttendees/" + gameContext.game.gameId);
+        }
     });
-    const navigate = useNavigate();
-
-    //Quick hack to allow Admin role for seeded game data
-    //Join one of the static games with name Admin!
-    if (gameContext.game?.brewerName === "Admin") {
-        gameContext.game.isAdmin = true;
-    }
 
     useEffect(() => {
-        if(gameState === "IN_PROGRESS") {
-            navigate("/voting");
-        }
-    }, [gameState]);
+        console.log(attendees);
+    }, [attendees])
 
     function addMyBeer() {
-        navigate("/addBeer");
+        navigate(PAGES.ADD_BEER);
     }
 
     function beginVoting() {
-        sendMessage("/startVoting/"+gameContext.game.gameId);
+        sendMessage(BOTN_SET_GAME_STATE(gameContext.game.gameId), {
+            gameState: GAME_STATE.VOTING,
+        });
     }
 
     return (
         <>
-            <div className="main-page">
+            <MainPage title="Waiting for voting to begin">
                 <div>
-                    <div className="logo"><FaBeer /></div>
-                    <h3>Waiting for voting to begin</h3>
                     <AttendeeList attendees={attendees}/>
-
                     {
                     gameContext.entry ?
                         <>
@@ -96,7 +91,7 @@ const Lobby = ({sendMessage, useSubscription}) => {
                         </>
                     }
                 </div>
-            </div>
+            </MainPage>
             {
                 gameContext.game?.isAdmin ?
                 <MainButton

@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_SUBMIT_VOTES } from '../utilities/constants';
+import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
+import Waiting from './Waiting';
+import { MainPage, SecondaryButton } from '../components/components';
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const VotingPage = ({sendMessage, useSubscription})  => {
-  const navigate = useNavigate();
+const VotingPage = ({navigate, sendMessage, useSubscription})  => {
   const gameContext = useGameContext();
   const [votes, setVotes] = useState([0, 0, 0]);
-  const entries = useSubscription("/botn/entries/"+gameContext.game.gameId, () => {
-    sendMessage("/updateEntries/"+gameContext.game.gameId);
+  const entries = useSubscription({
+    topic: "/botn/entries/"+gameContext.game.gameId,
+    callback: () => {
+      sendMessage("/updateEntries/"+gameContext.game.gameId);
+    }
   });
 
   //Called when user chooses to submit their votes
@@ -25,7 +28,7 @@ const VotingPage = ({sendMessage, useSubscription})  => {
         sendMessage("/updateVotes"+gameContext.game.gameId);
         clearVotes()
         gameContext.setValue("votingComplete", {complete:true})
-        navigate("/waiting")
+        navigate(PAGES.WAITING);
       } else if (response.status === 404) {
       }
     })
@@ -70,7 +73,10 @@ const VotingPage = ({sendMessage, useSubscription})  => {
   function htmlTable() {
     return (
       <>
-        <div className="main-page">
+      {
+        gameContext.votingComplete ?
+        <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
+        <MainPage title="Enter Votes">
           <table>
             <thead>
               <tr>
@@ -115,15 +121,20 @@ const VotingPage = ({sendMessage, useSubscription})  => {
               })}
             </tbody>
           </table>
-          <button className="small-button"
-            disabled={false}
-            onClick={clearVotes}>Clear
-          </button>
-          <button className="big-button"
-            disabled={votes[0]*votes[1]*votes[2] === 0}
-            onClick={submitVotes}>Submit Votes
-          </button>
-        </div>
+          <div style={{display: "flex"}}>
+            <SecondaryButton
+              text="Clear"
+              disabled={false}
+              onClick={clearVotes}>
+            </SecondaryButton>
+            <SecondaryButton
+              text="Submit Votes"
+              disabled={votes[0]*votes[1]*votes[2] === 0}
+              onClick={submitVotes}>
+            </SecondaryButton>
+          </div>
+        </MainPage>
+      }
       </>
     )
   }
