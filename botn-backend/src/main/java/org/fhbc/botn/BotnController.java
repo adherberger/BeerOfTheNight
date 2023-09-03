@@ -21,6 +21,7 @@ import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,8 +81,14 @@ public class BotnController {
 
 	@MessageMapping("/updateEntries/{gameId}")
 	@SendTo("/botn/entries/{gameId}")
-	public List<GetEntriesResponse.Entry> getEntries(@RequestBody @DestinationVariable Integer gameId) {
-		GetEntriesResponse resp=  handler.getEntries(gameId);
+	public List<GetEntriesResponse.Entry> getEntries(@DestinationVariable Integer gameId) {
+		GetEntriesResponse resp = handler.getEntries(gameId);
+		return resp.getEntryList();
+	}
+	
+	@SubscribeMapping("/botn/entries/{gameId}")
+	public List<GetEntriesResponse.Entry> subscribeEntries(@DestinationVariable Integer gameId) {
+		GetEntriesResponse resp = handler.getEntries(gameId);
 		return resp.getEntryList();
 	}
 	
@@ -106,18 +113,25 @@ public class BotnController {
 	@MessageMapping("/updateAttendees/{gameId}")
 	@SendTo("/botn/attendees/{gameId}")
 	public List<Attendee> getAttendees(@DestinationVariable Integer gameId) {
-		System.out.println("GOT TO ATTENDEES " + gameId);
-		List<Attendee> resp = handler.getAttendeesForGame(gameId);
-		return resp;
+		return handler.getAttendeesForGame(gameId);
+	}
+	
+	@SubscribeMapping("/botn/attendees/{gameId}")
+	public List<Attendee> subscribeAttendees(@DestinationVariable Integer gameId) {
+		return handler.getAttendeesForGame(gameId);
 	}
 
 	@MessageMapping("/updateVotes/{gameId}")
 	@SendTo("/botn/votes/{gameId}")
 	public UpdateVotesResponse getVotes(@DestinationVariable Integer gameId) {
-		UpdateVotesResponse resp = handler.getVotesForGame(gameId);
-		log.info(gson.toJson(resp));
-		return resp;
+		return handler.getVotesForGame(gameId);
 	}
+	
+	@SubscribeMapping("/botn/votes/{gameId}")
+	public UpdateVotesResponse subscribeVotes(@DestinationVariable Integer gameId) {
+		return handler.getVotesForGame(gameId);
+	}
+	
 	@GetMapping("/game-state/{gameId}")
 	public GameState getGameState(@PathVariable Integer gameId) {
 		return handler.getGameStateForGame(gameId);
@@ -128,6 +142,11 @@ public class BotnController {
 	@SendTo("/botn/game-state/{gameId}")
 	public GameState setGameState(@DestinationVariable Integer gameId, SetGameStateMessage gameStateMessage) {
 		return handler.setGameStateForGame(gameId, gameStateMessage.getGameState());
+	}
+	
+	@SubscribeMapping("/botn/game-state/{gameId}")
+	public GameState subscribeToGameState(@DestinationVariable Integer gameId) {
+		return handler.getGameStateForGame(gameId);
 	}
 
 	@PostMapping("/submitVotes")

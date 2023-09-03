@@ -31,7 +31,6 @@ const useWebSocket = (url) => {
         callback = () => {},
         deps = [],
         retry = [],
-        initialValueURL,
     }) => {
         const [lastMessage, setLastMessage] = useState();
         const [subscribed, setSubscribed] = useState(false);
@@ -41,26 +40,15 @@ const useWebSocket = (url) => {
         }
 
         useEffect(() => {
-            console.log("Retrying subscription, retry is " + retry)
-            let depsPass = true;
-            console.log("Attempting to subscribe to " + topic);
+            console.log("Retrying subscription");
 
-            for(let i of deps) {
-                if(!i) {
-                    depsPass = false;
-                    break;
-                }
-            }
+            // This JS shorthand indicates the dependencies do NOT pass if any one of them is falsy
+            const depsPass = !deps.some(dep => (!dep));
 
             if(connected.current && depsPass && !subscribed) {
                 stompClient.current.subscribe(topic, onMessageReceived);
                 setSubscribed(true);
                 callback();
-                if(initialValueURL) {
-                    axios.get(initialValueURL).then(result => {
-                        setLastMessage(result.data);
-                    })
-                }
 
                 // On component unmount, we then unsubscribe from the topic, thanks to this useEffect trick
                 return () => {

@@ -45,7 +45,6 @@ function App() {
     topic: BOTN_GAME_STATE_TOPIC(gameContext.game),
     deps: [gameContext.game],
     retry: [gameContext],
-    initialValueURL: BOTN_GET_GAME_STATE(gameContext.game?.gameId),
   });
 
   useEffect(() => {
@@ -57,7 +56,7 @@ function App() {
           // Game was not found, don't show the message to rejoin
         } else {
           newGameState.current = response.data;
-          newContextJson.current = contextJson;
+          newContextJson.current = {...contextJson, game: {...contextJson.game, gameState: response.data}};
           setShowRejoinGame(true);
         }
       })
@@ -169,7 +168,6 @@ function App() {
 
   const RejoinGame = ({setShow}) => {
     const rejoinGame = () => {
-      goToPageForGameState(newGameState.current);
       gameContext.setContext(newContextJson.current);
       setShow(false);
     }
@@ -181,7 +179,7 @@ function App() {
 
     return (
       <div className="rejoin-game">
-        {`It looks like you were previously in a game. Would you like to rejoin?`}
+        {`It looks like you were previously in a game (as ${newContextJson?.current?.game?.brewerName}). Would you like to rejoin?`}
         <div className="button-row">
           <SecondaryButton text="Yes" onClick={rejoinGame}/>
           <SecondaryButton text="No" onClick={decline}/>

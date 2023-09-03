@@ -13,9 +13,6 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
   const [votes, setVotes] = useState([0, 0, 0]);
   const entries = useSubscription({
     topic: "/botn/entries/"+gameContext.game.gameId,
-    callback: () => {
-      sendMessage("/updateEntries/"+gameContext.game.gameId);
-    }
   });
 
   //Called when user chooses to submit their votes
