@@ -9,7 +9,7 @@ import {
 
 // Game member enters their name and a room code and fires off a joinGame request.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
-const JoinRoom = ({sendMessage}) => {
+const JoinRoom = ({}) => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
@@ -19,15 +19,6 @@ const JoinRoom = ({sendMessage}) => {
     const updateRoomCode = (val) => {
         val = val.toUpperCase();
         setRoomCode(val);
-    }
-
-    const initGame = () => {
-        axios.post(
-          BOTN_INIT_GAME,
-          { memberName: name }
-        ).then((response) => {
-          gameContext.setValue("game", {isAdmin: true, ...response.data});
-        });
     }
 
     const joinGame = async () => {
@@ -83,11 +74,6 @@ const JoinRoom = ({sendMessage}) => {
                         text={"Join Game"}
                         onClick={joinGame}
                         disabled={roomCode.length < 4 || !name}
-                    />
-                    <SecondaryButton
-                        text={"Create Game"}
-                        onClick={initGame}
-                        disabled={!name}
                     />
                 </div>
             </div>

@@ -29,12 +29,19 @@ import {
   Modal,
   SecondaryButton
 } from './components/components';
+import {
+  createBrowserRouter,
+  useNavigate,
+  RouterProvider,
+} from 'react-router-dom';
+import CreateRoom from './pages/CreateRoom';
+import Game from './pages/Game';
 
 function App() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [showGameStateModal, setShowGameStateModal] = useState(false);
   const [ showRejoinGame, setShowRejoinGame ] = useState(false);
-  const [currentPage, setCurrentPage] = useState(<JoinRoom navigate={navigate}/>);
+  // const [currentPage, setCurrentPage] = useState(<JoinRoom navigate={navigate}/>);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
   const newGameState = useRef();
@@ -46,6 +53,17 @@ function App() {
     deps: [gameContext.game],
     retry: [gameContext],
   });
+
+  const router = createBrowserRouter([
+    {
+      path: "/create-room",
+      element: <CreateRoom/>
+    },
+    {
+      path: "/",
+      element: <Game gameState={gameState} sendMessage={sendMessage} useSubscription={useSubscription}/>
+    }
+  ])
 
   useEffect(() => {
     const contextFromStorage = localStorage.getItem("gameContext");
@@ -63,58 +81,58 @@ function App() {
     }
   }, []);
 
-  function goToPageForGameState(gameState) {
-    switch(gameState) {
-      case GAME_STATE.INIT:
-        navigate(PAGES.LOBBY);
-        break;
-      case GAME_STATE.VOTING:
-        navigate(PAGES.VOTING);
-        break;
-      case GAME_STATE.RESULTS_RECEIVED:
-        if(gameContext.game.isAdmin) {
-          navigate(PAGES.RESULTS);
-        } else {
-          navigate(PAGES.WAITING_FOR_RESULTS);
-        }
-        // Need to make this a separate page that just has the icon + message. Right now 
-        // navigate(PAGES.RESULTS_RECEIVED);
-        break;
-      case GAME_STATE.COMPLETE:
-        navigate(PAGES.RESULTS);
-        break;
-    }
-  }
+  // function goToPageForGameState(gameState) {
+  //   switch(gameState) {
+  //     case GAME_STATE.INIT:
+  //       navigate(PAGES.LOBBY);
+  //       break;
+  //     case GAME_STATE.VOTING:
+  //       navigate(PAGES.VOTING);
+  //       break;
+  //     case GAME_STATE.RESULTS_RECEIVED:
+  //       if(gameContext.game.isAdmin) {
+  //         navigate(PAGES.RESULTS);
+  //       } else {
+  //         navigate(PAGES.WAITING_FOR_RESULTS);
+  //       }
+  //       // Need to make this a separate page that just has the icon + message. Right now 
+  //       // navigate(PAGES.RESULTS_RECEIVED);
+  //       break;
+  //     case GAME_STATE.COMPLETE:
+  //       navigate(PAGES.RESULTS);
+  //       break;
+  //   }
+  // }
 
-  useEffect(() => {
-    goToPageForGameState(gameState);
-  }, [gameState]);
+  // useEffect(() => {
+  //   goToPageForGameState(gameState);
+  // }, [gameState]);
 
-  function navigate(page) {
-    switch(page) {
-      case PAGES.LOBBY:
-        setCurrentPage(<Lobby navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
-        break;
-      case PAGES.ADD_BEER:
-        setCurrentPage(<AddBeer navigate={navigate}/>)
-        break;
-      case PAGES.ADD_BEER_FOR:
-        setCurrentPage(<AddBeerFor navigate={navigate}/>);
-        break;
-      case PAGES.VOTING:
-        setCurrentPage(<VotingPage navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
-        break;
-      case PAGES.WAITING:
-        setCurrentPage(<Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription} />);
-        break;
-      case PAGES.WAITING_FOR_RESULTS:
-        setCurrentPage(<WaitingForResults/>);
-        break;
-      case PAGES.RESULTS:
-        setCurrentPage(<Results sendMessage={sendMessage} useSubscription={useSubscription} />);
-        break;
-    }
-  }
+  // function navigate(page) {
+  //   switch(page) {
+  //     case PAGES.LOBBY:
+  //       setCurrentPage(<Lobby navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
+  //       break;
+  //     case PAGES.ADD_BEER:
+  //       setCurrentPage(<AddBeer navigate={navigate}/>)
+  //       break;
+  //     case PAGES.ADD_BEER_FOR:
+  //       setCurrentPage(<AddBeerFor navigate={navigate}/>);
+  //       break;
+  //     case PAGES.VOTING:
+  //       setCurrentPage(<VotingPage navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
+  //       break;
+  //     case PAGES.WAITING:
+  //       setCurrentPage(<Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription} />);
+  //       break;
+  //     case PAGES.WAITING_FOR_RESULTS:
+  //       setCurrentPage(<WaitingForResults/>);
+  //       break;
+  //     case PAGES.RESULTS:
+  //       setCurrentPage(<Results sendMessage={sendMessage} useSubscription={useSubscription} />);
+  //       break;
+  //   }
+  // }
 
   function handleToggle() {
     setNavbarOpen(prev => !prev)
@@ -134,7 +152,7 @@ function App() {
 
   // TODO I think we will want to accomplish the AddEntryFor functionality as a modal the pops over the screen, so it's not bound to go to a specific page when 
   function addEntryFor() {
-    navigate(PAGES.ADD_BEER_FOR)
+    //navigate(PAGES.ADD_BEER_FOR)
     setNavbarOpen(prev => !prev)
   }
 
@@ -243,7 +261,7 @@ function App() {
           }
         </div>
       </div>
-      {currentPage}
+      <RouterProvider router={router}/>
       <Modal title="Set Game State" show={showGameStateModal} setShow={setShowGameStateModal}>
           <SetGameState sendMessage={sendMessage} setShow={setShowGameStateModal}/>
       </Modal>
