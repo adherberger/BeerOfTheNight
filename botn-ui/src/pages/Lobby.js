@@ -7,6 +7,7 @@ import {
     PAGES,
     BOTN_SET_GAME_STATE,
     GAME_STATE,
+    BOTN_UPDATE_ATTENDEES,
 } from '../utilities/constants';
 import {
     MainButton,
@@ -53,8 +54,8 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
     });
 
     useEffect(() => {
-        console.log(attendees);
-    }, [attendees])
+        sendMessage(BOTN_UPDATE_ATTENDEES(gameContext.game.gameId));
+    }, [])
 
     function addMyBeer() {
         navigate(PAGES.ADD_BEER);

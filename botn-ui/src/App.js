@@ -44,7 +44,6 @@ function App() {
   // const [currentPage, setCurrentPage] = useState(<JoinRoom navigate={navigate}/>);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
-  const newGameState = useRef();
   const newContextJson = useRef();
 
   // Subscribe to game state updates, but only after game is established (game is in deps)
@@ -73,7 +72,6 @@ function App() {
         if(response.status === 404) {
           // Game was not found, don't show the message to rejoin
         } else {
-          newGameState.current = response.data;
           newContextJson.current = {...contextJson, game: {...contextJson.game, gameState: response.data}};
           setShowRejoinGame(true);
         }

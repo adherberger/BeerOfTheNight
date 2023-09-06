@@ -22,6 +22,9 @@ export const BOTN_WEBSOCKET_BASE = BOTN_API_ROOT + "/game";
 export const BOTN_GAME_STATE_TOPIC = (game) => (
     `/botn/game-state/${game?.gameId}`
 )
+export const BOTN_UPDATE_ATTENDEES = (gameId) => (
+    `/updateAttendees/${gameId}`
+)
 export const BOTN_ATTENDEES_TOPIC = "/botn/attendees/";
 export const BOTN_VOTES_TOPIC = "/botn/votes/";
 export const GAME_STATE = {
