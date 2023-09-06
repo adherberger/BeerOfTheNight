@@ -41,7 +41,6 @@ function App() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [showGameStateModal, setShowGameStateModal] = useState(false);
   const [ showRejoinGame, setShowRejoinGame ] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(<JoinRoom navigate={navigate}/>);
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const gameContext = useGameContext();
   const newContextJson = useRef();
@@ -78,59 +77,6 @@ function App() {
       })
     }
   }, []);
-
-  // function goToPageForGameState(gameState) {
-  //   switch(gameState) {
-  //     case GAME_STATE.INIT:
-  //       navigate(PAGES.LOBBY);
-  //       break;
-  //     case GAME_STATE.VOTING:
-  //       navigate(PAGES.VOTING);
-  //       break;
-  //     case GAME_STATE.RESULTS_RECEIVED:
-  //       if(gameContext.game.isAdmin) {
-  //         navigate(PAGES.RESULTS);
-  //       } else {
-  //         navigate(PAGES.WAITING_FOR_RESULTS);
-  //       }
-  //       // Need to make this a separate page that just has the icon + message. Right now 
-  //       // navigate(PAGES.RESULTS_RECEIVED);
-  //       break;
-  //     case GAME_STATE.COMPLETE:
-  //       navigate(PAGES.RESULTS);
-  //       break;
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   goToPageForGameState(gameState);
-  // }, [gameState]);
-
-  // function navigate(page) {
-  //   switch(page) {
-  //     case PAGES.LOBBY:
-  //       setCurrentPage(<Lobby navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
-  //       break;
-  //     case PAGES.ADD_BEER:
-  //       setCurrentPage(<AddBeer navigate={navigate}/>)
-  //       break;
-  //     case PAGES.ADD_BEER_FOR:
-  //       setCurrentPage(<AddBeerFor navigate={navigate}/>);
-  //       break;
-  //     case PAGES.VOTING:
-  //       setCurrentPage(<VotingPage navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/>);
-  //       break;
-  //     case PAGES.WAITING:
-  //       setCurrentPage(<Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription} />);
-  //       break;
-  //     case PAGES.WAITING_FOR_RESULTS:
-  //       setCurrentPage(<WaitingForResults/>);
-  //       break;
-  //     case PAGES.RESULTS:
-  //       setCurrentPage(<Results sendMessage={sendMessage} useSubscription={useSubscription} />);
-  //       break;
-  //   }
-  // }
 
   function handleToggle() {
     setNavbarOpen(prev => !prev)
