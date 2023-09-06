@@ -115,11 +115,6 @@ public class BotnController {
 	public List<Attendee> getAttendees(@DestinationVariable Integer gameId) {
 		return handler.getAttendeesForGame(gameId);
 	}
-	
-	@SubscribeMapping("/botn/attendees/{gameId}")
-	public List<Attendee> subscribeAttendees(@DestinationVariable Integer gameId) {
-		return handler.getAttendeesForGame(gameId);
-	}
 
 	@MessageMapping("/updateVotes/{gameId}")
 	@SendTo("/botn/votes/{gameId}")

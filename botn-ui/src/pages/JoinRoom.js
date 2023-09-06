@@ -13,7 +13,6 @@ const JoinRoom = ({}) => {
     const gameContext = useGameContext();
     const [name, setName] = useState("");
     const [roomCode, setRoomCode] = useState("");
-    const [roomCodeNotFound, setRoomCodeNotFound] = useState(false);
     const [errorResponse, setErrorResponse] = useState();
 
     const updateRoomCode = (val) => {
