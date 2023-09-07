@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
-import { BOTN_JOIN_GAME, BOTN_INIT_GAME, PAGES } from '../utilities/constants';
-import {
-    StateInput,
-    SecondaryButton,
-} from '../components/components';
+import React, { useState } from 'react';
+import { FaBeer } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import {
+    SecondaryButton,
+    StateInput,
+} from '../components/components';
+import { BOTN_INIT_GAME } from '../utilities/constants';
+import { useGameContext } from '../utilities/game-context';
 
 function CreateRoom({}) {
     const gameContext = useGameContext();
@@ -27,6 +28,12 @@ function CreateRoom({}) {
 
     return (
         <>
+            <div className="bar top-bar">
+                <div className="logo"><FaBeer /></div>
+                <div className="top-bar-item">
+                    {"Beer Of The Night"}
+                </div>
+            </div>
             <div className="main-page">
                 <div className="form join-game-form">
                     <StateInput

@@ -45,8 +45,12 @@ export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
         topic: BOTN_VOTES_TOPIC+gameContext.game.gameId,
     });
 
+    useEffect(() => {
+        sendMessage("/updateVotes" + gameContext.game.gameId);
+    })
+
     function goToResults() {
-        sendMessage("/votingComplete/"+gameContext.game.gameId);
+        sendMessage("/votingComplete/" + gameContext.game.gameId);
         navigate(PAGES.RESULTS);
     }
 

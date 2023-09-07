@@ -22,7 +22,6 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
         { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
     ).then((response) => {
       if (response.status === 200) {
-        sendMessage("/updateVotes"+gameContext.game.gameId);
         clearVotes()
         gameContext.setValue("votingComplete", {complete:true})
         navigate(PAGES.WAITING);
