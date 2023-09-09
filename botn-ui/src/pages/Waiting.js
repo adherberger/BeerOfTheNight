@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FaCheck, FaBeer } from 'react-icons/fa';
+import { FaCheck, FaBeer, FaVoteYea } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import {
     BOTN_GAME_STATE_TOPIC,
@@ -13,11 +13,11 @@ import {
 const Vote = ({ name, didVote, idx }) => {
     return (
         <div className={"attendee" + (idx % 2 === 0 ? " even" : " odd")}>
-            <div className="attendee-name">{name}</div>
+            <div className={`attendee-name${didVote ? "" : " vote-not-received"}`}>{name}</div>
             <div className="flex-spacer" />
             {
                 didVote ?
-                    <div className="entry-indicator"><FaCheck /></div> :
+                    <div className="entry-indicator"><FaVoteYea /></div> :
                     <></>
             }
         </div>
@@ -27,7 +27,7 @@ const Vote = ({ name, didVote, idx }) => {
 const VoteList = ({ votes }) => {
     return (
         <div className="attendee-list-wrapper">
-            <div className="attendee-list-title">{"Voters (" + votes?.voteList.length + "):"}</div>
+            <div className="attendee-list-title">{"Voters (" + votes?.voteList.filter((vote) => (vote.didVote)).length + "/" + votes?.voteList.length + "):"}</div>
             <div className="attendee-list">
                 {
                     votes ? votes.voteList.map((vote, index) => (
@@ -46,8 +46,8 @@ export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     });
 
     useEffect(() => {
-        sendMessage("/updateVotes" + gameContext.game.gameId);
-    })
+        sendMessage("/updateVotes/" + gameContext.game.gameId);
+    }, [])
 
     function goToResults() {
         sendMessage("/votingComplete/" + gameContext.game.gameId);

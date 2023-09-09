@@ -27,30 +27,22 @@ function CreateRoom({}) {
     }
 
     return (
-        <>
-            <div className="bar top-bar">
-                <div className="logo"><FaBeer /></div>
-                <div className="top-bar-item">
-                    {"Beer Of The Night"}
-                </div>
+        <div className="main-page">
+            <div className="form join-game-form">
+                <StateInput
+                    id="name-input"
+                    title="Your Name"
+                    stateVar={name}
+                    setStateVar={setName}
+                    autoFocus
+                />
+                <SecondaryButton
+                    text={"Create Room"}
+                    onClick={initGame}
+                    disabled={!name}
+                />
             </div>
-            <div className="main-page">
-                <div className="form join-game-form">
-                    <StateInput
-                        id="name-input"
-                        title="Your Name"
-                        stateVar={name}
-                        setStateVar={setName}
-                        autoFocus
-                    />
-                    <SecondaryButton
-                        text={"Create Room"}
-                        onClick={initGame}
-                        disabled={!name}
-                    />
-                </div>
-            </div>
-        </>
+        </div>
     );
 }
 

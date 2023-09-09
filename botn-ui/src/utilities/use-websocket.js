@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import axios from 'axios';
 
 const useWebSocket = (url) => {
     const connected = useRef(false);
@@ -22,13 +21,11 @@ const useWebSocket = (url) => {
     /**
      * Sets up subscription on connection obtained from useWebSocket.
      * @param {String} topic Topic to subscribe to, e.g. "/botn/game-state"
-     * @param {Function} callback Action to take as soon as you are subscribed, e.g. you might want to then send a message that drives a result sent to the subscription topic 
      * @param {Array.<*>} deps Any state vars for which the subscription should be retried on change. Will only subscribe when all deps are truthy.
      * @returns A lastMessage state variable that updates whenever a new message is received.
      */
     const useSubscription = ({
         topic,
-        callback = () => {},
         deps = [],
         retry = [],
     }) => {
@@ -48,7 +45,6 @@ const useWebSocket = (url) => {
             if(connected.current && depsPass && !subscribed) {
                 stompClient.current.subscribe(topic, onMessageReceived);
                 setSubscribed(true);
-                callback();
 
                 // On component unmount, we then unsubscribe from the topic, thanks to this useEffect trick
                 return () => {
