@@ -116,3 +116,46 @@ export const Modal = ({title, show, setShow, children}) => {
         </div>
     )
 }
+
+export const BeerCard = ({
+    id,
+    /* isOwn, */
+    onClick,
+    badge = <></>,
+    title,
+    description,
+    tail,
+    footer,
+    className = "",
+}) => {
+    return (
+        <div
+            id={id}
+            style={{ margin: "16px", }}
+            onClick={onClick}
+        >
+            <div
+                className={"beer-card" + (onClick ? " cursor-pointer" : "") + (className ? ` ${className}` : "")}
+                onClick={onClick ? onClick : () => {}}
+            >
+                <div className="beer-info">
+                    <div className="beer-badge">
+                        { badge }
+                    </div>
+                    <div className="beer-text">
+                        <div className="beer-title">
+                            { title }
+                        </div>
+                        <div className="beer-description">
+                            { description }
+                        </div>
+                    </div>
+                </div>
+                <div className="beer-tail">
+                    { tail }
+                </div>
+            </div>
+            { footer }
+        </div>
+    )
+}

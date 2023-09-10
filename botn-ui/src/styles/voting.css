@@ -4,3 +4,39 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     background-color: brown;
     color: #FFF;
 }
+
+.vote-radios {
+    display: flex;
+    align-items: center;
+}
+
+.vote-radio-button {
+    background: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 0 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.vote-radio-button > .selection {
+    background: black;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+}
+
+.vote-radio-button:hover {
+    background: lightgray;
+}
+
+.vote-radio-text {
+    font-size: 12px;
+    text-align: center;
+    padding: 6px;
+}

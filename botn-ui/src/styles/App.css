@@ -283,7 +283,7 @@ a {
   margin-top: 7rem;
 }
 
-.results-list {
+.results-list, .entry-list {
   width: calc(100% - 64px);
 }
 
@@ -291,7 +291,7 @@ a {
   margin: 16px;
 }
 
-.result-item {
+.result-item, .beer-card {
   border-radius: 12px;
   border: 3px solid var(--button-background-color);
   background: var(--secondary-background-color);
@@ -300,29 +300,39 @@ a {
   padding: 18px 24px;
 }
 
-.result.own-entry .result-item {
+.beer-card {
+  display: flex;
+  align-items: center;
+}
+
+.beer-card > .beer-info {
+  margin-right: auto;
+}
+
+.result.own-entry .result-item, .beer-card.own-entry {
   border-color: black;
 }
 
-.result-item.admin {
+.result-item.admin, .cursor-pointer {
   cursor: pointer;
 }
 
-.result-item.first {
+.result-item.first, .beer-card.first {
   background: #ffc600;
   border-color: #c59e16;
 }
 
-.result-item.second {
+.result-item.second, .beer-card.second {
   background: silver;
   border-color: gray;
 }
 
-.result-item.third {
+.result-item.third, .beer-card.third {
   background: #c1740e;
   border-color: #8d550c;
 }
 
+/* TODO will need to be handled with custom className given to BeerCard in Results */
 .result-item.votes-shown {
   border-radius: 12px 12px 0px 0px;
 }
@@ -350,7 +360,7 @@ a {
   margin-left: 20px;
 }
 
-.result-given-name {
+.result-given-name, .beer-description {
   font-style: italic;
   font-size: calc(6px + 1.5vmin);
   color: var(--disabled-text-color);
@@ -362,6 +372,11 @@ a {
   text-align: right;
   font-size: calc(18px + 2vmin);
   vertical-align: middle;
+}
+
+.beer-tail {
+  margin-left: auto;
+  /* font-size: calc(18px + 2vmin); */
 }
 
 .result-votes {
