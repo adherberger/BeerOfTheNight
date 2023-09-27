@@ -69,7 +69,7 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
 
     return (
         <>
-            <MainPage title="Waiting for voting to begin">
+            <MainPage>
                 <div>
                     <AttendeeList attendees={attendees}/>
                     {

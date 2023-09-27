@@ -84,15 +84,15 @@
   font-weight: bold;
   font-size: 20px;
   flex-direction: row;
+  width: 100%;
+  position: fixed;
 }
 
 .bottom-bar {
-  position: sticky;
   bottom: 0;
 }
 
 .top-bar {
-  position: sticky; 
   top: 0;
   border-bottom: 2px solid var(--button-background-color);
 }

@@ -9,14 +9,14 @@ export const MainPage = ({
 }) => {
     return (
         <>
-            {
-                title ?
-                <div className="main-page-title">
-                    <h2>{title}</h2>
-                </div> :
-                <></>
-            }
             <div className="main-page">
+                {
+                    title ?
+                    <div className="main-page-title">
+                        <h2>{title}</h2>
+                    </div> :
+                    <></>
+                }
                 {children}
             </div>
         </>
