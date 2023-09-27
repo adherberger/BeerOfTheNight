@@ -31,19 +31,17 @@
 
 .main-page {
   background-color: var(--primary-background-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
   overflow-y: auto;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-page > * {
   margin: auto;
-  padding: 32px;
 }
 
 .attendee-list-wrapper {
@@ -96,6 +94,7 @@
 .top-bar {
   position: sticky; 
   top: 0;
+  border-bottom: 2px solid var(--button-background-color);
 }
 
 .flex-spacer {
@@ -284,74 +283,66 @@ a {
 }
 
 .results-list, .entry-list {
-  width: calc(100% - 64px);
+  width: calc(100% - 2 * var(--large-padding));
+  max-width: 1200px;
+  padding: var(--large-padding);
 }
 
 .result {
   margin: 16px;
 }
 
-.result-item, .beer-card {
+.beer-card-wrapper {
+  margin-bottom: var(--large-padding);
+}
+
+.beer-card {
   border-radius: 12px;
   border: 3px solid var(--button-background-color);
   background: var(--secondary-background-color);
   text-align: left;
   font-weight: bold;
   padding: 18px 24px;
-}
-
-.beer-card {
   display: flex;
   align-items: center;
 }
 
-.beer-card > .beer-info {
-  margin-right: auto;
-}
-
-.result.own-entry .result-item, .beer-card.own-entry {
+.beer-card.selected, .beer-card.own-entry {
   border-color: black;
 }
 
-.result-item.admin, .cursor-pointer {
+.beer-card > .beer-info {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.cursor-pointer {
   cursor: pointer;
 }
 
-.result-item.first, .beer-card.first {
+.beer-card.first {
   background: #ffc600;
   border-color: #c59e16;
 }
 
-.result-item.second, .beer-card.second {
+.beer-card.second {
   background: silver;
   border-color: gray;
 }
-
-.result-item.third, .beer-card.third {
+.beer-card.third {
   background: #c1740e;
   border-color: #8d550c;
 }
 
-/* TODO will need to be handled with custom className given to BeerCard in Results */
-.result-item.votes-shown {
+.beer-card.votes-shown {
   border-radius: 12px 12px 0px 0px;
 }
 
-.result-item .medal-icon {
-  display: inline-block;
+.beer-card .medal-icon {
   margin-right: 14px;
   color: rgba(0, 0, 0, 0.4);
   font-size: 1.5em;
-}
-
-.result-item > .result-text {
-  display: inline-block;
-  width: 90%;
-  vertical-align: middle;
-}
-
-.result-name {
-  display: inline-block;
 }
 
 .own-entry-indicator {
@@ -360,13 +351,17 @@ a {
   margin-left: 20px;
 }
 
-.result-given-name, .beer-description {
+.beer-title {
+  font-size: calc(12px + 2vmin);
+}
+
+.beer-description {
   font-style: italic;
-  font-size: calc(6px + 1.5vmin);
+  font-size: calc(8px + 1.5vmin);
   color: var(--disabled-text-color);
 }
 
-.result-item > .result-score {
+.beer-score {
   display: inline-block;
   width: 10%;
   text-align: right;

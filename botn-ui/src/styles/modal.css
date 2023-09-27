@@ -9,11 +9,11 @@
 
 .modal > .modal-content {
     position: relative;
-    top: 200px;
+    top: 30vh;
     background: var(--primary-background-color);
     display: block;
     margin: auto;
-    max-width: 40vw;
+    max-width: 80vmin;
     max-height: 40vh;
     border-radius: 12px;
 }

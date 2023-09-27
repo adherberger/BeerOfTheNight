@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '../utilities/constants';
 import { FaMedal, FaBeer } from 'react-icons/fa';
-import { BigIconWithMessage, MainButton } from '../components/components';
+import { BeerCard, BigIconWithMessage, MainButton } from '../components/components';
 
 const Voter = ({name, place, index, last}) => {
     return (
@@ -53,49 +53,16 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
     }
 
     return (
-        <div
+        <BeerCard
             id={"result-" + result.entryId}
-            className={"result" + (isOwnEntry ? " own-entry" : "")}
+            badge={place ? <FaMedal className="medal-icon"/> : <></>}
+            title={`${result.brewer}'s ${result.beerStyle} ${isOwnEntry ? "(Your Entry)" : ""}`}
+            description={`"${result.beerName}"`}
+            tail={<div className="beer-score">{result.score}</div>}
+            className={(place ? ` ${place}` : "") + (showVotes ? " votes-shown" : "") + (isOwnEntry ? " own-entry" : "")}
             onClick={onClick}
-        >
-            <div className={"result-item" + (place ? ` ${place}` : "") + (isAdmin ? " admin" : "") + (showVotes ? " votes-shown" : "")}>
-                <div className="result-text">
-                    {
-                        place ?
-                        <FaMedal className="medal-icon"/>
-                        : <></>
-                    }
-                    <div className="result-name">
-                        <div className="result-description">
-                            {`${result.brewer}'s ${result.beerStyle}`}
-                            {
-                                isOwnEntry ?
-                                <div className="own-entry-indicator">
-                                    &#40;Your Entry&#41;
-                                </div> :
-                                <></>
-                            }
-                        </div>
-                        
-                        {
-                            result.beerName ?
-                            <div className="result-given-name">
-                                {`"${result.beerName}"`}
-                            </div> :
-                            <></>
-                        }
-                    </div>
-                </div>
-                <div className="result-score">
-                    {`${result.score}`}
-                </div>
-            </div>
-            {
-                showVotes ?
-                <VoterList voters={result.voters}/> :
-                <></>
-            }
-        </div>
+            footer={showVotes ? <VoterList voters={result.voters}/> : <></>}
+        />
     );
 }
 

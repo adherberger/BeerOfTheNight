@@ -52,7 +52,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
       <div className="vote-radio">
         <div
           className={`vote-radio-button`}
-          onClick={() => updateVotes()}
+          onClick={updateVotes}
         >
           {
             votes?.[place - 1] === entryId ? 
@@ -110,6 +110,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
         title={`${entry.brewer}'s ${entry.beerStyle}${isOwn ? " (Your Entry)" : ""}`}
         description={`"${entry.beerName}"`}
         tail={!isOwn ? <VoteRadios votes={votes} setVotes={setVotes} entryId={entry.entryId}/> : <></>}
+        className={votes.includes(entry.entryId) ? "selected" : ""}
       />
     )
   }
@@ -179,7 +180,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
     {
       gameContext.votingComplete ?
       <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
-      <MainPage title="Enter Votes">
+      <MainPage>
         <EntryList
           entries={entries}
           votes={votes}

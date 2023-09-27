@@ -1,10 +1,5 @@
 td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
-.selected {
-    background-color: brown;
-    color: #FFF;
-}
-
 .vote-radios {
     display: flex;
     align-items: center;
@@ -14,9 +9,9 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
     background: white;
     border: 2px solid black;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    margin: 0 12px;
+    width: calc(16px + 2vmin);
+    height: calc(16px + 2vmin);
+    margin: 0 2vmin;
     cursor: pointer;
     position: relative;
 }
@@ -24,11 +19,11 @@ td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 .vote-radio-button > .selection {
     background: black;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: calc(14px + 1vmin);
+    height: calc(14px + 1vmin);
     position: absolute;
-    left: 4px;
-    top: 4px;
+    left: calc(1px + 0.5vmin);
+    top: calc(1px + 0.5vmin);
 }
 
 .vote-radio-button:hover {

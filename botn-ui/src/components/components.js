@@ -120,7 +120,7 @@ export const Modal = ({title, show, setShow, children}) => {
 export const BeerCard = ({
     id,
     /* isOwn, */
-    onClick,
+    onClick = () => {},
     badge = <></>,
     title,
     description,
@@ -131,12 +131,11 @@ export const BeerCard = ({
     return (
         <div
             id={id}
-            style={{ margin: "16px", }}
-            onClick={onClick}
+            className="beer-card-wrapper"
         >
             <div
                 className={"beer-card" + (onClick ? " cursor-pointer" : "") + (className ? ` ${className}` : "")}
-                onClick={onClick ? onClick : () => {}}
+                onClick={onClick}
             >
                 <div className="beer-info">
                     <div className="beer-badge">
