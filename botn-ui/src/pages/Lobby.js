@@ -70,20 +70,22 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
     return (
         <>
             <MainPage title="Waiting for voting to begin">
-                <AttendeeList attendees={attendees}/>
-                {
-                gameContext.entry ?
-                    <>
-                        <p>Hey now, we have recorded your entry!</p>
-                        <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
-                    </>
-                    :
-                    <SecondaryButton
-                        text="Add Your Entry"
-                        onClick={addMyBeer}
-                        disabled={!!gameContext.entry}
-                    />
-                }
+                <div>
+                    <AttendeeList attendees={attendees}/>
+                    {
+                    gameContext.entry ?
+                        <>
+                            <p>Hey now, we have recorded your entry!</p>
+                            <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
+                        </>
+                        :
+                        <SecondaryButton
+                            text="Add Your Entry"
+                            onClick={addMyBeer}
+                            disabled={!!gameContext.entry}
+                        />
+                    }
+                </div>
             </MainPage>
             {
                 gameContext.game?.isAdmin ?
