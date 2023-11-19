@@ -28,3 +28,6 @@ botn-ui/dot-env
 botn-ui/build
 botn-ui/build/
 botn-ui/dotenv
+
+### IntelliJ IDEA ###
+**/.idea

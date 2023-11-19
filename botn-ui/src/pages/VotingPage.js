@@ -4,7 +4,8 @@ import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
 import Waiting from './Waiting';
-import { MainPage, SecondaryButton } from '../components/components';
+import { BeerCard, MainPage, SecondaryButton } from '../components/components';
+import { useCallback } from 'react';
 
 // Game creator enters their name and fires off an initGame request to backend.
 // Response is stored in game context and consists of gameId, roomCode and memberId.
@@ -28,6 +29,110 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
       } else if (response.status === 404) {
       }
     })
+  }
+
+  const VoteRadio = ({
+    place,
+    entryId,
+    votes,
+    setVotes,
+  }) => {
+    const updateVotes = useCallback(() => {
+      const _votes = [...votes];
+
+      if(_votes.includes(entryId)) {
+        _votes[_votes.indexOf(entryId)] = 0;
+      }
+
+      _votes[place - 1] = entryId;
+      setVotes(_votes);
+    })
+
+    return (
+      <div className="vote-radio">
+        <div
+          className={`vote-radio-button`}
+          onClick={updateVotes}
+        >
+          {
+            votes?.[place - 1] === entryId ? 
+            <div className="selection"/> : <></>
+          }
+        </div>
+        <div className="vote-radio-text">
+          {
+            place === 1 ?
+            "1st" :
+            place === 2 ?
+            "2nd" :
+            place === 3 ?
+            "3rd" :
+            ""
+          }
+        </div>
+      </div>
+    )
+  }
+
+  const VoteRadios = ({
+    entryId,
+    votes,
+    setVotes,
+  }) => {
+    return (
+      <div className="vote-radios">
+        <VoteRadio place={1} entryId={entryId} votes={votes} setVotes={setVotes}/>
+        <VoteRadio place={2} entryId={entryId} votes={votes} setVotes={setVotes}/>
+        <VoteRadio place={3} entryId={entryId} votes={votes} setVotes={setVotes}/>
+      </div>
+    )
+  }
+
+  const Entry = ({
+    index,
+    entry,
+    isOwn,
+    votes,
+    setVotes,
+  }) => {
+    const placeNum = votes.indexOf(entry.entryId);
+    let place = "";
+
+    switch(placeNum) {
+      case 0: place = "first"; break;
+      case 1: place = "second"; break;
+      case 2: place = "third"; break;
+    }
+
+    return (
+      <BeerCard
+        id={`entry-${entry.entryId}`}
+        title={`${entry.brewer}'s ${entry.beerStyle}${isOwn ? " (Your Entry)" : ""}`}
+        description={`"${entry.beerName}"`}
+        tail={!isOwn ? <VoteRadios votes={votes} setVotes={setVotes} entryId={entry.entryId}/> : <></>}
+        className={votes.includes(entry.entryId) ? "selected" : ""}
+      />
+    )
+  }
+
+  const EntryList = ({entries, votes, setVotes}) => {
+    return (
+      <div className="entry-list">
+        {
+          entries ?
+          entries.map((entry, index) => (
+            <Entry
+              key={index}
+              index={index}
+              entry={entry}
+              isOwn={gameContext.entry?.entryId === entry.entryId}
+              votes={votes}
+              setVotes={setVotes}
+            />
+          )) : <></>
+        }
+      </div>
+    )
   }
 
   // Called when any of the radiobuttons are selected.
@@ -66,85 +171,37 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
     setVotes(items)
   }
 
-  function htmlTable() {
-    return (
-      <>
-      {
-        gameContext.votingComplete ?
-        <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
-        <MainPage title="Enter Votes">
-          <table>
-            <thead>
-              <tr>
-                <th>Brewer</th>
-                {/* <th>Beer Name</th> */}
-                <th>Style</th>
-                <th>1st</th>
-                <th>2nd</th>
-                <th>3rd</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map(entry => {
-                return (
-                  <tr key={entry.entryId}>
-                    <td>{entry.brewer}</td>
-                    {/*<td>{entry.beerName}</td>*/}
-                    <td>{entry.beerStyle}</td>
-                    <td width="10%"><input type="radio" value="1" entryid={entry.entryId}
-                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
-                      name={entry.brewer}
-                      checked={votes[0] === parseInt(entry.entryId)}
-                      onChange={handleChange}
-                    />
-                    </td>
-                    <td width="10%"><input type="radio" value="2" entryid={entry.entryId}
-                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
-                      name={entry.brewer}
-                      checked={votes[1] === parseInt(entry.entryId)}
-                      onChange={handleChange}
-                    />
-                    </td>
-                    <td width="10%"><input type="radio" value="3" entryid={entry.entryId}
-                      disabled={gameContext.entry && gameContext.entry.entryId===entry.entryId}
-                      name={entry.brewer}
-                      checked={votes[2] === parseInt(entry.entryId)}
-                      onChange={handleChange}
-                    />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div style={{display: "flex"}}>
-            <SecondaryButton
-              text="Clear"
-              disabled={false}
-              onClick={clearVotes}>
-            </SecondaryButton>
-            <SecondaryButton
-              text="Submit Votes"
-              disabled={votes[0]*votes[1]*votes[2] === 0}
-              onClick={submitVotes}>
-            </SecondaryButton>
-          </div>
-        </MainPage>
-      }
-      </>
-    )
-  }
+  useEffect(() => {
+    console.log(votes);
+  }, [votes])
 
-  // Determine which html to render based on if entries have been loaded
-  if (entries) {
-    return htmlTable()
-  } else {
-    return (
-      <>
-      </>
-    )
-  }
-
+  return (
+    <>
+    {
+      gameContext.votingComplete ?
+      <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
+      <MainPage>
+        <EntryList
+          entries={entries}
+          votes={votes}
+          setVotes={setVotes}
+        />
+        <div style={{display: "flex"}}>
+          <SecondaryButton
+            text="Clear"
+            disabled={false}
+            onClick={clearVotes}>
+          </SecondaryButton>
+          <SecondaryButton
+            text="Submit Votes"
+            disabled={votes[0]*votes[1]*votes[2] === 0}
+            onClick={submitVotes}>
+          </SecondaryButton>
+        </div>
+      </MainPage>
+    }
+    </>
+  )
 }
 
 
