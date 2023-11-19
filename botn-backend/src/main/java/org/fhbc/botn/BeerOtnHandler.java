@@ -243,6 +243,7 @@ public class BeerOtnHandler {
 		for(GameMemberEntity gameMember : gameMembers) {
 			Attendee att = new Attendee();
 			att.setName(gameMember.getMember().getMemberName());
+			att.setPresent(gameMember.getIsPresent());
 
 			EntryEntity entry = entryRepo.findByGameAndMember(gameMember.getGame(), gameMember.getMember());
 			att.setHasEntry(entry != null);
