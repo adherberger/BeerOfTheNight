@@ -21,10 +21,12 @@ import { useWebSocket } from './utilities/use-websocket';
 import { FaBeer } from 'react-icons/fa';
 import { MdClose, MdPerson } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
+import AddBeerFor from './pages/AddBeerFor';
 
 function App() {
   const { sendMessage, useSubscription } = useWebSocket(BOTN_WEBSOCKET_BASE);
   const [ showRejoinGame, setShowRejoinGame ] = useState(false);
+  const [ showAddBeerFor, setShowAddBeerFor ] = useState(false);
   const [showGameStateModal, setShowGameStateModal] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const gameContext = useGameContext();
@@ -107,10 +109,8 @@ function App() {
     )
   }
 
-  // TODO I think we will want to accomplish the AddEntryFor functionality as a modal the pops over the screen, so it's not bound to go to a specific page when 
   function addEntryFor() {
-    //navigate(PAGES.ADD_BEER_FOR)
-    setNavbarOpen(prev => !prev)
+    setShowAddBeerFor(true);
   }
 
   const restartBackend = () => {
@@ -185,6 +185,9 @@ function App() {
       </Modal>
       <Modal title="Rejoin Game" show={showRejoinGame} setShow={setShowRejoinGame}>
           <RejoinGame setShow={setShowRejoinGame}/>
+      </Modal>
+      <Modal title="Add Entry" show={showAddBeerFor} setShow={setShowAddBeerFor}>
+          <AddBeerFor setShow={setShowAddBeerFor}/>
       </Modal>
     </div>
   );

@@ -26,7 +26,7 @@ const Vote = ({ name, didVote, idx }) => {
 
 const VoteList = ({ votes }) => {
     return (
-        <div className="attendee-list-wrapper">
+        <div className="center">
             <div className="attendee-list-title">{"Voters (" + votes?.voteList.filter((vote) => (vote.didVote)).length + "/" + votes?.voteList.length + "):"}</div>
             <div className="attendee-list">
                 {

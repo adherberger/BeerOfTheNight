@@ -31,9 +31,8 @@ const Attendee = ({name, hasEntry, idx}) => {
 
 const AttendeeList = ({attendees}) => {
     return (
-        <div className="attendee-list-wrapper">
-            <div className="attendee-list-title">{"Attendees (" + attendees?.length + "):"}</div>
-            <div className="attendee-list">
+        <div className="attendee-list center">
+            <div>
             {
                 attendees ? attendees.map((att, index) => (
                     <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry}/>
@@ -70,22 +69,25 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
     return (
         <>
             <MainPage>
-                <div>
+                <div className="center">
+                    <div className="attendee-list-title">
+                        {`Attendees (${attendees?.length}):`}
+                    </div>
                     <AttendeeList attendees={attendees}/>
-                    {
-                    gameContext.entry ?
-                        <>
-                            <p>Hey now, we have recorded your entry!</p>
-                            <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
-                        </>
-                        :
-                        <SecondaryButton
-                            text="Add Your Entry"
-                            onClick={addMyBeer}
-                            disabled={!!gameContext.entry}
-                        />
-                    }
                 </div>
+                {
+                    gameContext.entry ?
+                    <>
+                        <p>Hey now, we have recorded your entry!</p>
+                        <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
+                    </>
+                    :
+                    <SecondaryButton
+                        text="Add Your Entry"
+                        onClick={addMyBeer}
+                        disabled={!!gameContext.entry}
+                    />
+                }
             </MainPage>
             {
                 gameContext.game?.isAdmin ?

@@ -8,6 +8,7 @@
   --primary-text-color: white;
   --secondary-text-color: black;
   --disabled-text-color: rgba(0, 0, 0, 0.3);
+  --medium-font-size: calc(12px + 2vmin);
 
   /* Spacing */
   --small-padding: 6px;
@@ -16,11 +17,10 @@
 }
 
 .App {
-  text-align: center;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
 }
 
 .main-page-title {
@@ -34,18 +34,25 @@
   font-size: calc(10px + 2vmin);
   color: white;
   overflow-y: auto;
-  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: var(--large-padding);
+  align-items: center;
 }
 
 .main-page > * {
+  margin: 0 auto;
+}
+
+.main-page > .center {
   margin: auto;
 }
 
-.attendee-list-wrapper {
-  width: 80vw;
+.big-icon-with-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .big-icon-with-message > .big-icon {
@@ -67,8 +74,11 @@
 }
 
 .form {
-  width: calc(70% - 10vw);
+  width: 60%;
   max-width: 800px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .lobby {
@@ -77,6 +87,7 @@
 }
 
 .bar {
+  position: sticky;
   background: var(--secondary-background-color);
   color: var(--primary-text-color);
   display: flex;
@@ -85,11 +96,16 @@
   font-size: 20px;
   flex-direction: row;
   width: 100%;
-  position: fixed;
 }
 
-.bottom-bar {
+.main-button-bar {
+  position: sticky;
   bottom: 0;
+  border-top: 2px solid var(--button-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--large-padding) 0;
 }
 
 .top-bar {
@@ -113,7 +129,6 @@
 }
 
 .top-bar-menu {
-  display: block;
   background: #CC9933;
 }
 
@@ -143,7 +158,6 @@
   height: 60px;
   cursor: pointer;
   font-size: 16px;
-  margin: 18px;
 }
 
 .big-button:disabled {
@@ -176,27 +190,19 @@
 }
 
 .botn-input {
-  display: block;
-  text-align: left;
-  padding: 12px;
   font-size: calc(10px + 2vmin);
   font-weight: bold;
 }
 
-.botn-input * {
-}
-
 .text-input-label {
   padding-left: 8px;
-  display: block;
 }
 
 .text-input {
   height: calc(18px + 2vmin);
   padding: 8px;
   border-radius: 8px;
-  display: block;
-  font-size: calc(12px + 2vmin);
+  font-size: var(--medium-font-size);
   font-weight: bold;
 }
 
@@ -209,12 +215,16 @@
   background: var(--list-background-color);
   color: var(--secondary-text-color);
   border: 2px solid var(--list-border-color);
-  max-height: 40vh;
+  height: 50vh;
+
   overflow-y: scroll;
+  width: 80vw;
 }
 
 .attendee-list-title {
   padding: 6px;
+  font-weight: bold;
+  font-size: var(--medium-font-size)
 }
 
 .attendee {
@@ -269,23 +279,8 @@
   background: rgba(0, 0, 0, 0.4);
 }
 
-a {
-  display: block;
-  padding: 10px 40px;
-  text-decoration: none;
-  color: #3fffd2;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
 .menuNav li:first-child {
   margin-top: 7rem;
-}
-
-.results-list, .entry-list {
-  width: calc(100% - 2 * var(--large-padding));
-  max-width: 1200px;
-  padding: var(--large-padding);
 }
 
 .result {
@@ -297,6 +292,7 @@ a {
 }
 
 .beer-card {
+  width: 80vw;
   border-radius: 12px;
   border: 3px solid var(--button-background-color);
   background: var(--secondary-background-color);
@@ -345,14 +341,8 @@ a {
   font-size: 1.5em;
 }
 
-.own-entry-indicator {
-  display: inline-block;
-  font-size: 0.6em;
-  margin-left: 20px;
-}
-
 .beer-title {
-  font-size: calc(12px + 2vmin);
+  font-size: var(--medium-font-size);
 }
 
 .beer-description {
@@ -362,11 +352,7 @@ a {
 }
 
 .beer-score {
-  display: inline-block;
-  width: 10%;
-  text-align: right;
   font-size: calc(18px + 2vmin);
-  vertical-align: middle;
 }
 
 .beer-tail {
@@ -375,6 +361,8 @@ a {
 }
 
 .result-votes {
+  display: flex;
+  flex-direction: column;
   color: var(--secondary-text-color);
   background: white;
   border-radius: 0px 0px 12px 12px;
@@ -383,8 +371,9 @@ a {
 }
 
 .voter {
-  display: block;
   padding: 6px 16px;
+  display: flex;
+  align-items: center;
 }
 
 .voter.odd {
@@ -397,15 +386,11 @@ a {
 }
 
 .voter > .voter-name {
-  display: inline-block;
-  width: 90%;
-  text-align: left;
+  margin-right: auto;
 }
 
 .voter > .voter-place {
-  display: inline-block;
-  width: 10%;
-  text-align: right;
+  margin-left: auto;
   font-weight: bold;
   font-size: 0.8em;
 }

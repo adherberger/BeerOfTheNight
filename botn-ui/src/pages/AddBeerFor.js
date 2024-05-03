@@ -6,12 +6,13 @@ import { BOTN_ADD_ENTRY_FOR, PAGES } from '../utilities/constants';
 
 import {
     StateInput,
-    MainButton
+    MainButton,
+    SecondaryButton
 } from '../components/components';
 
 // Member enters their beer name and style.  Then addEntry is called on backened.
 // The entryId along with beerName and beerStyle stored in game context.
-const AddBeerFor = ({navigate}) => {
+const AddBeerFor = ({setShow}) => {
     const [brewerName, setBrewerName] = useState("");
     const [beerName, setBeerName] = useState("");
     const [beerStyle, setBeerStyle] = useState("");
@@ -20,19 +21,25 @@ const AddBeerFor = ({navigate}) => {
     const addEntry = () => {
         axios.post(
             BOTN_ADD_ENTRY_FOR,
-            { gameId: gameContext.game.gameId, brewerName: brewerName, beerName: beerName, beerStyle: beerStyle }
+            {
+                gameId: gameContext.game.gameId,
+                brewerName: brewerName,
+                beerName: beerName,
+                beerStyle: beerStyle
+            }
         ).then((response) => {
             if (response.status === 200) {
-                console.log(response.data)
-                navigate(PAGES.LOBBY);
+                // show notification!
             } else if (response.status === 404) {
             }
+
+            setShow(false);
         })
     }
 
     return (
         <>
-            <div className="main-page">
+            <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
                 <div className="logo"><FaBeer /></div>
                 <p>Enter member and beer info:</p>
                 <StateInput
@@ -54,12 +61,11 @@ const AddBeerFor = ({navigate}) => {
                     stateVar={beerStyle}
                     setStateVar={setBeerStyle}
                 />
+                <SecondaryButton
+                    onClick={addEntry}
+                    text="Submit"
+                />
             </div>
-            <MainButton
-                text={"Submit Entry"}
-                onClick={addEntry}
-                disabled={!beerName || !beerStyle || !brewerName}
-            />
         </>
 
     );
