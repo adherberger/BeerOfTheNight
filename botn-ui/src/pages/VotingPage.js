@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BOTN_GET_ENTRIES, BOTN_SUBMIT_VOTES, PAGES } from '../utilities/constants';
 import '../styles/voting.css'
 import Waiting from './Waiting';
-import { BeerCard, MainPage, SecondaryButton } from '../components/components';
+import { BeerCard, MainButton, MainPage, SecondaryButton } from '../components/components';
 import { useCallback } from 'react';
 
 // Game creator enters their name and fires off an initGame request to backend.
@@ -135,33 +135,6 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
     )
   }
 
-  // Called when any of the radiobuttons are selected.
-  function handleChange(event) {
-    let index = event.target.value - 1;
-    let entryid = parseInt(event.target.getAttribute("entryid"));
-    console.log(event.target)
-    //Make a copy of votes array for modification
-    let items = [...votes];
-
-    //update the user's place (1,2,3) choice with the etry ID
-    items[index] = entryid
-
-    //Clear that entryId from any of the other spots 
-    if (index === 0) {
-      if (items[1] === entryid) items[1] = 0;
-      if (items[2] === entryid) items[2] = 0;
-    } else if (index === 1) {
-      if (items[0] === entryid) items[0] = 0;
-      if (items[2] === entryid) items[2] = 0;
-    } else {
-      if (items[1] === entryid) items[1] = 0;
-      if (items[0] === entryid) items[0] = 0;
-    }
-
-    console.log(items)
-    setVotes(items);
-  }
-
   function clearVotes() {
     let items = [...votes]
     items[0] = 0
@@ -180,25 +153,23 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
     {
       gameContext.votingComplete ?
       <Waiting navigate={navigate} sendMessage={sendMessage} useSubscription={useSubscription}/> :
-      <MainPage>
-        <EntryList
-          entries={entries}
-          votes={votes}
-          setVotes={setVotes}
-        />
-        <div style={{display: "flex"}}>
-          <SecondaryButton
-            text="Clear"
-            disabled={false}
-            onClick={clearVotes}>
-          </SecondaryButton>
-          <SecondaryButton
+      <>
+        <MainPage>
+          <EntryList
+            entries={entries}
+            votes={votes}
+            setVotes={setVotes}
+          />
+        </MainPage>
+        {
+          votes[0]*votes[1]*votes[2] === 0 ?
+          <></> :
+          <MainButton
             text="Submit Votes"
-            disabled={votes[0]*votes[1]*votes[2] === 0}
-            onClick={submitVotes}>
-          </SecondaryButton>
-        </div>
-      </MainPage>
+            onClick={submitVotes}
+          />
+        }
+      </>
     }
     </>
   )

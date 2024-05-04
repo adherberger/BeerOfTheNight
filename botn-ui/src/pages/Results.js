@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
 import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '../utilities/constants';
 import { FaMedal, FaBeer } from 'react-icons/fa';
-import { BeerCard, BigIconWithMessage, MainButton } from '../components/components';
+import { BeerCard, BigIconWithMessage, MainButton, MainPage } from '../components/components';
 
 const Voter = ({name, place, index, last}) => {
     return (
@@ -67,7 +67,6 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
 }
 
 const ResultsList = ({results}) => {
-    const [ resultsShown, setResultsShown ] = useState(false);
     const gameContext = useGameContext();
 
     return (
@@ -103,9 +102,9 @@ const Results = ({sendMessage, useSubscription}) => {
 
     return (
         <>
-            <div className="main-page">
+            <MainPage>
                 <ResultsList results={results}/>
-            </div>
+            </MainPage>
             {
                 gameContext.game?.isAdmin && !resultsShown ?
                     <MainButton

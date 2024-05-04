@@ -69,7 +69,7 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
     return (
         <>
             <MainPage>
-                <div className="center">
+                <div>
                     <div className="attendee-list-title">
                         {`Attendees (${attendees?.length}):`}
                     </div>
