@@ -15,10 +15,10 @@ import {
     SecondaryButton,
 } from '../components/components';
 
-const Attendee = ({name, hasEntry, idx}) => {
+const Attendee = ({name, present, hasEntry, idx}) => {
     return (
         <div className={"attendee" + (idx % 2 === 0 ? " even" : " odd")}>
-            <div className="attendee-name">{name}</div>
+            <div className={`attendee-name${!present ? " not-present" : ""}`}>{(!present ? "*" : "") + name}</div>
             <div className="flex-spacer"/>
             {
                 hasEntry ?
@@ -35,7 +35,7 @@ const AttendeeList = ({attendees}) => {
             <div>
             {
                 attendees ? attendees.map((att, index) => (
-                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry}/>
+                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry} present={att.present}/>
                 )) : <></>
             }
             </div>

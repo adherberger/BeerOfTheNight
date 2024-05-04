@@ -111,6 +111,12 @@ function App() {
 
   function addEntryFor() {
     setShowAddBeerFor(true);
+    setNavbarOpen(false);
+  }
+
+  function onSetGameState() {
+    setShowGameStateModal(true);
+    setNavbarOpen(false);
   }
 
   const restartBackend = () => {
@@ -121,7 +127,7 @@ function App() {
           if (response.status === 200) {
           } else if (response.status === 404) {
           }
-          setNavbarOpen(prev => !prev)
+          setNavbarOpen(false)
       })
   }
 
@@ -161,7 +167,7 @@ function App() {
               <div className="menuNav-item" onClick={restartBackend}>
                   Restart Backend
               </div>
-              <div className="menuNav-item" onClick={() => setShowGameStateModal(true)}>
+              <div className="menuNav-item" onClick={onSetGameState}>
                   Set Game State
               </div>
               {
@@ -187,7 +193,7 @@ function App() {
           <RejoinGame setShow={setShowRejoinGame}/>
       </Modal>
       <Modal title="Add Entry" show={showAddBeerFor} setShow={setShowAddBeerFor}>
-          <AddBeerFor setShow={setShowAddBeerFor}/>
+          <AddBeerFor sendMessage={sendMessage} setShow={setShowAddBeerFor}/>
       </Modal>
     </div>
   );

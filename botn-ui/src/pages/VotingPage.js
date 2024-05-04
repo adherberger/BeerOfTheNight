@@ -108,7 +108,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
       <BeerCard
         id={`entry-${entry.entryId}`}
         title={`${entry.brewer}'s ${entry.beerStyle}${isOwn ? " (Your Entry)" : ""}`}
-        description={`"${entry.beerName}"`}
+        description={`${entry.beerName ? "\"" + entry.beerName + "\"" : ""}`}
         tail={!isOwn ? <VoteRadios votes={votes} setVotes={setVotes} entryId={entry.entryId}/> : <></>}
         className={votes.includes(entry.entryId) ? "selected" : ""}
       />

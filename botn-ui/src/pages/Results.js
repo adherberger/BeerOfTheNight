@@ -57,7 +57,7 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
             id={"result-" + result.entryId}
             badge={place ? <FaMedal className="medal-icon"/> : <></>}
             title={`${result.brewer}'s ${result.beerStyle} ${isOwnEntry ? "(Your Entry)" : ""}`}
-            description={`"${result.beerName}"`}
+            description={`${result.beerName ? "\"" + result.beerName + "\"" : ""}`}
             tail={<div className="beer-score">{result.score}</div>}
             className={(place ? ` ${place}` : "") + (showVotes ? " votes-shown" : "") + (isOwnEntry ? " own-entry" : "")}
             onClick={onClick}

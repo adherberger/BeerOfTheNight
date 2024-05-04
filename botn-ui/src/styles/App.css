@@ -241,6 +241,11 @@
   float: left;
 }
 
+.attendee-name.not-present {
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+}
+
 .attendee .entry-indicator {
   float: right;
 }

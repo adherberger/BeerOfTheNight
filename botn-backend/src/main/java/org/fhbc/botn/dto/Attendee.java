@@ -3,12 +3,14 @@ package org.fhbc.botn.dto;
 public class Attendee {
 	private String name;
 	private Boolean hasEntry;
+	private Boolean isPresent;
 	
 	public Attendee() {}
 
-	public Attendee(String name, Boolean hasEntry) {
+	public Attendee(String name, Boolean hasEntry, Boolean isPresent) {
 		this.name = name;
 		this.hasEntry = hasEntry;
+		this.isPresent = isPresent;
 	}
 
 	public String getName() {
@@ -27,4 +29,11 @@ public class Attendee {
 		this.hasEntry = hasEntry;
 	}
 
+	public Boolean getPresent() {
+		return isPresent;
+	}
+
+	public void setPresent(Boolean present) {
+		isPresent = present;
+	}
 }
