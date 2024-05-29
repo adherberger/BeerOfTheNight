@@ -52,10 +52,8 @@ export const StateInput = ({
 
 export const MainButton = ({text, onClick, disabled}) => {
     return (
-        <div className="bar bottom-bar">
-            <div className="flex-spacer">
-                <button className="big-button" disabled={disabled} onClick={() => { onClick(); }}>{text}</button>
-            </div>
+        <div className="bar main-button-bar">
+            <button className="big-button" disabled={disabled} onClick={() => { onClick(); }}>{text}</button>
         </div>
     )
 }
@@ -70,7 +68,7 @@ export const SecondaryButton = ({text, onClick, disabled, ...props}) => {
 
 export const BigIconWithMessage = ({title, subtitle, icon}) => {
     return (
-        <div className="big-icon-with-message">
+        <div className="center big-icon-with-message">
             <IconContext.Provider value={{className: "big-icon"}}>
                 {icon}
             </IconContext.Provider>
