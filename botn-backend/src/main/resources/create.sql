@@ -1,0 +1,18 @@
+create sequence entry_id_seq start with 1001 increment by 50;
+create sequence game_id_seq start with 1001 increment by 1;
+create sequence member_id_seq start with 1001 increment by 1;
+create table entry (entry_id integer not null, beer_name varchar(255), beer_style varchar(255), game_id integer not null, member_id integer, primary key (entry_id));
+create table game_main (game_id integer not null, game_date timestamp, game_state integer, room_code varchar(255), member_id integer, primary key (game_id));
+create table game_member (game_id integer not null, member_id integer not null, is_present boolean, primary key (game_id, member_id));
+create table member (member_id integer not null, member_name varchar(255), primary key (member_id));
+create table vote (game_id integer not null, member_id integer not null, first_id integer, second_id integer, third_id integer, primary key (game_id, member_id));
+alter table entry add constraint FKptaky8822hn6mw4evfk3xdhuc foreign key (game_id) references game_main;
+alter table entry add constraint FKant1v9nuotv4eueo2lbpga8vj foreign key (member_id) references member;
+alter table game_main add constraint FKk6rjoxf79f5t7oe67w1eijaa0 foreign key (member_id) references member;
+alter table game_member add constraint FKhxepgl4188i0ipvjb6u7iuuxa foreign key (game_id) references game_main;
+alter table game_member add constraint FKersd2yd18a8kd000irs2h1dtu foreign key (member_id) references member;
+alter table vote add constraint FK62fbkswmg2t1ldu17xu61doex foreign key (first_id) references entry;
+alter table vote add constraint FKfyod7eik035q1vu26fei32v6a foreign key (game_id) references game_main;
+alter table vote add constraint FKgkbgl6xp2rpgwghb7mtyuv48h foreign key (member_id) references member;
+alter table vote add constraint FKhrfssbfeqkigy0p1w2osuohlk foreign key (second_id) references entry;
+alter table vote add constraint FK579ba5vg4oi4nvlo19yuoallc foreign key (third_id) references entry;
