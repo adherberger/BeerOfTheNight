@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaBeer } from 'react-icons/fa';
+import { FaBeer, FaBan } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
+import axios from 'axios';
+
 import {
-    BOTN_GAME_STATE_TOPIC,
+    BOTN_NO_ENTRY,
     BOTN_ATTENDEES_TOPIC,
     PAGES,
     BOTN_SET_GAME_STATE,
@@ -15,15 +17,24 @@ import {
     SecondaryButton,
 } from '../components/components';
 
-const Attendee = ({name, present, hasEntry, idx}) => {
+const Attendee = ({name, present, hasEntry, noEntry, idx}) => {
     return (
         <div className={"attendee" + (idx % 2 === 0 ? " even" : " odd")}>
             <div className={`attendee-name${!present ? " not-present" : ""}`}>{(!present ? "*" : "") + name}</div>
             <div className="flex-spacer"/>
             {
+                
                 hasEntry ?
                 <div className="entry-indicator"><FaBeer/></div> :
                 <></>
+                
+            }
+            {
+                
+                noEntry ?
+                <div className="entry-indicator"><FaBan/></div> :
+                <></>
+                
             }
         </div>
     )
@@ -35,7 +46,7 @@ const AttendeeList = ({attendees}) => {
             <div>
             {
                 attendees ? attendees.map((att, index) => (
-                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry} present={att.present}/>
+                    <Attendee key={index} idx={index} name={att.name} hasEntry={att.hasEntry && !att.noEntry} noEntry={att.noEntry}present={att.present}/>
                 )) : <></>
             }
             </div>
@@ -62,6 +73,25 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
         navigate(PAGES.ADD_BEER);
     }
 
+    function noEntry() {
+        console.log("Alo?");
+
+        axios.post(
+            BOTN_NO_ENTRY,
+            { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, beerName: '', beerStyle: ''}
+        ).then((response) => {
+            if (response.status === 200) {
+                console.log(response.data)
+                if (response.data.entryId > 0) {
+                    gameContext.setValue("noEntry", { entryId: response.data.entryId, beerName: '', beerStyle: '' })
+                }
+                console.log(gameContext)
+                navigate(PAGES.LOBBY);
+            } else if (response.status === 404) {
+            }
+        })
+    }
+
     function beginVoting() {
         sendMessage(BOTN_SET_GAME_STATE(gameContext.game.gameId), {
             gameState: GAME_STATE.VOTING,
@@ -80,18 +110,35 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
                 {
                     gameContext.entry ?
                     <>
-                        <p>Hey now, we have recorded your entry!</p>
-                        <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
+                        <p>We have recorded your entry!</p>
+                        <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>( {gameContext.entry.beerStyle})</p>
                         <SecondaryButton
                             text="Edit Entry"
                             onClick={addMyBeer}
                         />
                     </>
                     :
+                    gameContext.noEntry ?
+                    <>
+                        <p>We have you down as not having a beer to enter!</p>
+                        <SecondaryButton
+                            text="Edit Entry"
+                            onClick={addMyBeer}
+                        />
+                    </>
+                    :
+                    <>
                     <SecondaryButton
                         text="Add Your Entry"
                         onClick={addMyBeer}
                     />
+                    <p>or</p>
+                    <SecondaryButton
+                        text="I do not have an Entry"
+                        onClick={noEntry}
+                    />
+                    </>
+
                 }
             </MainPage>
             {

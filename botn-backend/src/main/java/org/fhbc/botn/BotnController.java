@@ -79,6 +79,13 @@ public class BotnController {
 		return resp;
 	}
 
+	@PostMapping("/noEntry")
+	public AddEntryResponse noEntry(@RequestBody AddEntryRequest req) {
+		AddEntryResponse resp = handler.noEntry(req);
+		messagingTemplate.convertAndSend("/botn/attendees/" + req.getGameId(), handler.getAttendeesForGame(req.getGameId()));
+		return resp;
+	}
+
 	@PostMapping("/addEntryFor")
 	public void addEntryFor(@RequestBody AddEntryForRequest req) {
 		handler.addEntryFor(req);
