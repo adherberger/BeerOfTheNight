@@ -123,21 +123,29 @@ public class BeerOtnHandler {
 	// This is called when a member has a beer to enter in the game.
 	public AddEntryResponse addEntry(AddEntryRequest req) {
 		EntryEntity entry = entryRepo.findByGame_GameIdAndMember_MemberId(req.getGameId(),req.getMemberId());
-		if (entry == null) {
-			entry = new EntryEntity();
-			MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
-			GameEntity game = gameRepo.findById(req.getGameId()).get();
-			entry.setGame(game);
-			entry.setMember(brewer);
-		}
-		
-		//save the beer information, associated with the member and game
-		entry.setBeerName(req.getBeerName());
-		entry.setBeerStyle(req.getBeerStyle());
-		entryRepo.save(entry);
-		
 		AddEntryResponse resp = new AddEntryResponse();
-		resp.setEntryId(entry.getEntryId());
+		
+		if (req.getBeerName() == null || req.getBeerName().trim().isEmpty()) {
+			if (entry != null) {
+				entryRepo.delete(entry);
+			}
+			resp.setEntryId(0);
+		} else {
+			if (entry == null) {
+				entry = new EntryEntity();
+				MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
+				GameEntity game = gameRepo.findById(req.getGameId()).get();
+				entry.setGame(game);
+				entry.setMember(brewer);
+			}
+			
+			//save the beer information, associated with the member and game
+			entry.setBeerName(req.getBeerName());
+			entry.setBeerStyle(req.getBeerStyle());
+			entryRepo.save(entry);
+			
+			resp.setEntryId(entry.getEntryId());
+		}
 		return resp;
 	}
 

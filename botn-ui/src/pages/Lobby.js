@@ -52,6 +52,8 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
         topic: BOTN_ATTENDEES_TOPIC + gameContext.game.gameId
     });
 
+    const canBeginVoting = attendees && attendees.every(att => !att.present || att.hasEntry);
+
     useEffect(() => {
         sendMessage(BOTN_UPDATE_ATTENDEES(gameContext.game.gameId));
     }, [])
@@ -80,12 +82,15 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
                     <>
                         <p>Hey now, we have recorded your entry!</p>
                         <p>{gameContext.game.brewerName}'s {gameContext.entry.beerName}<br/>(an expertly brewed {gameContext.entry.beerStyle})<br/>has been added!</p>
+                        <SecondaryButton
+                            text="Edit Entry"
+                            onClick={addMyBeer}
+                        />
                     </>
                     :
                     <SecondaryButton
                         text="Add Your Entry"
                         onClick={addMyBeer}
-                        disabled={!!gameContext.entry}
                     />
                 }
             </MainPage>
@@ -94,6 +99,7 @@ const Lobby = ({navigate, sendMessage, useSubscription}) => {
                 <MainButton
                 text={"Begin Voting"}
                 onClick={() => beginVoting()}
+                disabled={!canBeginVoting}
                 /> :
                 <></>
             }

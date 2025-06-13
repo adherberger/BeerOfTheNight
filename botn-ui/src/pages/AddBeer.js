@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaBeer } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import axios from 'axios';
@@ -12,9 +12,35 @@ import {
 // Member enters their beer name and style.  Then addEntry is called on backened.
 // The entryId along with beerName and beerStyle stored in game context.
 const AddBeer = ({navigate}) => {
+    const gameContext = useGameContext();
     const [beerName, setBeerName] = useState("");
     const [beerStyle, setBeerStyle] = useState("");
-    const gameContext = useGameContext();
+    const [isEditing, setIsEditing] = useState(false);
+    const didRemove = useRef(false);
+
+    // Pre-populate form if editing existing entry
+    useEffect(() => {
+        if (gameContext.entry) {
+            setBeerName(gameContext.entry.beerName || "");
+            setBeerStyle(gameContext.entry.beerStyle || "");
+            setIsEditing(true);
+            if (!didRemove.current) {
+                didRemove.current = true;
+                removeEntry();
+            }
+        }
+    }, [gameContext.entry]);
+
+    const removeEntry = () => {
+        axios.post(
+            BOTN_ADD_ENTRY,
+            { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, beerName: '', beerStyle: '' }
+        ).then((response) => {
+            if (response.status === 200 && response.data.entryId === 0) {
+                gameContext.setValue("entry", null);
+            }
+        })
+    }
 
     const addEntry = () => {
         axios.post(
@@ -23,7 +49,9 @@ const AddBeer = ({navigate}) => {
         ).then((response) => {
             if (response.status === 200) {
                 console.log(response.data)
-                gameContext.setValue("entry", { entryId: response.data.entryId, beerName: beerName, beerStyle: beerStyle })
+                if (response.data.entryId > 0) {
+                    gameContext.setValue("entry", { entryId: response.data.entryId, beerName: beerName, beerStyle: beerStyle })
+                }
                 console.log(gameContext)
                 navigate(PAGES.LOBBY);
             } else if (response.status === 404) {
@@ -52,7 +80,7 @@ const AddBeer = ({navigate}) => {
                 </div>
             </div>
             <MainButton
-                text={"Submit Entry"}
+                text={isEditing ? "Update Entry" : "Submit Entry"}
                 onClick={addEntry}
                 disabled={!beerStyle}
             />

@@ -24,14 +24,39 @@ const Vote = ({ name, didVote, idx }) => {
     )
 }
 
+const UserVotesList = ({ userVotes }) => {
+    if (!userVotes || userVotes.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="center" style={{ marginBottom: '20px' }}>
+            <div className="attendee-list-title">Your Votes:</div>
+            <div className="attendee-list">
+                {userVotes.map((vote, index) => (
+                    <div key={index} className={"attendee" + (index % 2 === 0 ? " even" : " odd")}>
+                        <div className="attendee-name">{vote.place}. {vote.brewer}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 const VoteList = ({ votes }) => {
+    const gameContext = useGameContext();
+    console.log(gameContext.userVotes[0].brewer);
+
+    const votesString = gameContext.userVotes[0].brewer + " 1st,  " + gameContext.userVotes[1].brewer + " 2nd,  " + gameContext.userVotes[2].brewer + " 3rd";
+
     return (
         <div className="center">
+            <div className="attendee-list-title">{"Your votes: " + votesString }</div>
             <div className="attendee-list-title">{"Voters (" + votes?.voteList.filter((vote) => (vote.didVote)).length + "/" + votes?.voteList.length + "):"}</div>
             <div className="attendee-list">
                 {
                     votes ? votes.voteList.map((vote, index) => (
-                        <Vote idx={index} name={vote.name} didVote={vote.didVote} />
+                        <Vote key={index} idx={index} name={vote.name} didVote={vote.didVote} />
                     )) : <></>
                 }
             </div>
@@ -41,6 +66,7 @@ const VoteList = ({ votes }) => {
 
 export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
     const gameContext = useGameContext();
+
     const votes = useSubscription({
         topic: BOTN_VOTES_TOPIC+gameContext.game.gameId,
     });

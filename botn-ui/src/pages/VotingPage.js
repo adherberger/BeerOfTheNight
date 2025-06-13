@@ -18,6 +18,15 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
 
   //Called when user chooses to submit their votes
   const submitVotes = () => {
+    // Store the votes with brewer names for display on waiting page
+    const submittedVotes = votes.map((entryId, index) => {
+      const entry = entries?.find(e => e.entryId === entryId);
+      return {
+        place: index + 1,
+        brewer: entry?.brewer || 'Unknown'
+      };
+    });
+
     axios.post(
       BOTN_SUBMIT_VOTES,
         { gameId: gameContext.game.gameId, memberId: gameContext.game.memberId, first:votes[0], second:votes[1], third:votes[2] }
@@ -25,6 +34,7 @@ const VotingPage = ({navigate, sendMessage, useSubscription})  => {
       if (response.status === 200) {
         clearVotes()
         gameContext.setValue("votingComplete", {complete:true})
+        gameContext.setValue("userVotes", submittedVotes)
         navigate(PAGES.WAITING);
       } else if (response.status === 404) {
       }

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,9 @@ public class BotnController {
 	
 	@Autowired
 	private RestartEndpoint restartEndpoint;
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
     @GetMapping("/restart")
     public void restart() {
@@ -70,12 +74,15 @@ public class BotnController {
 
 	@PostMapping("/addEntry")
 	public AddEntryResponse addEntry(@RequestBody AddEntryRequest req) {
-		return handler.addEntry(req);
+		AddEntryResponse resp = handler.addEntry(req);
+		messagingTemplate.convertAndSend("/botn/attendees/" + req.getGameId(), handler.getAttendeesForGame(req.getGameId()));
+		return resp;
 	}
 
 	@PostMapping("/addEntryFor")
 	public void addEntryFor(@RequestBody AddEntryForRequest req) {
 		handler.addEntryFor(req);
+		messagingTemplate.convertAndSend("/botn/attendees/" + req.getGameId(), handler.getAttendeesForGame(req.getGameId()));
 	}
 
 
