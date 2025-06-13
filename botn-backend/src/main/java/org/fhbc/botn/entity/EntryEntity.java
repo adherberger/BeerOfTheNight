@@ -32,9 +32,19 @@ public class EntryEntity {
 	@Column(name = "beer_name")
 	private String beerName;
 
-	@NotNull
 	@Column(name = "beer_style")
 	private String beerStyle;
+
+	@Column(name = "no_entry")
+	private Boolean noEntry;
+
+	public Boolean getNoEntry() {
+		return noEntry;
+	}
+
+	public void setNoEntry(Boolean noEntry) {
+		this.noEntry = noEntry;
+	}
 
 	public int getEntryId() {
 		return entryId;

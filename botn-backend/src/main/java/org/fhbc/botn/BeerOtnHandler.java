@@ -142,10 +142,28 @@ public class BeerOtnHandler {
 			//save the beer information, associated with the member and game
 			entry.setBeerName(req.getBeerName());
 			entry.setBeerStyle(req.getBeerStyle());
+			entry.setNoEntry(false);
+
 			entryRepo.save(entry);
 			
 			resp.setEntryId(entry.getEntryId());
 		}
+		return resp;
+	}
+
+	public AddEntryResponse noEntry(AddEntryRequest req) {
+		EntryEntity entry = entryRepo.findByGame_GameIdAndMember_MemberId(req.getGameId(), req.getMemberId());
+		AddEntryResponse resp = new AddEntryResponse();
+
+		entry = new EntryEntity();
+		MemberEntity brewer = memberRepo.findById(req.getMemberId()).get();
+		GameEntity game = gameRepo.findById(req.getGameId()).get();
+		entry.setGame(game);
+		entry.setMember(brewer);
+		entry.setNoEntry(true);
+		entryRepo.save(entry);
+
+		resp.setEntryId(entry.getEntryId());
 		return resp;
 	}
 
@@ -195,14 +213,16 @@ public class BeerOtnHandler {
 		
 		List<EntryEntity> entryEntityList = entryRepo.findAllByGame_GameId(gameId);
 		
-		for (EntryEntity e:entryEntityList) {
-			GetEntriesResponse.Entry entry = resp.new Entry();
-			entry.setBeerName(e.getBeerName());
-			entry.setBeerStyle(e.getBeerStyle());
-			entry.setBrewer(e.getMember().getMemberName());
-			entry.setEntryId(e.getEntryId());
-			
-			resp.getEntryList().add(entry);
+		for (EntryEntity e : entryEntityList) {
+			if (!e.getNoEntry()) {
+				GetEntriesResponse.Entry entry = resp.new Entry();
+				entry.setBeerName(e.getBeerName());
+				entry.setBeerStyle(e.getBeerStyle());
+				entry.setBrewer(e.getMember().getMemberName());
+				entry.setEntryId(e.getEntryId());
+
+				resp.getEntryList().add(entry);
+			}
 		}
 		
 		resp.getEntryList().sort((e1, e2) -> {
@@ -255,6 +275,9 @@ public class BeerOtnHandler {
 
 			EntryEntity entry = entryRepo.findByGameAndMember(gameMember.getGame(), gameMember.getMember());
 			att.setHasEntry(entry != null);
+			if (entry != null) {
+				att.setNoEntry(entry.getNoEntry());
+			}
 			
 			attendees.add(att);
 		}
