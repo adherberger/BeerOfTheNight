@@ -24,25 +24,6 @@ const Vote = ({ name, didVote, idx }) => {
     )
 }
 
-const UserVotesList = ({ userVotes }) => {
-    if (!userVotes || userVotes.length === 0) {
-        return null;
-    }
-
-    return (
-        <div className="center" style={{ marginBottom: '20px' }}>
-            <div className="attendee-list-title">Your Votes:</div>
-            <div className="attendee-list">
-                {userVotes.map((vote, index) => (
-                    <div key={index} className={"attendee" + (index % 2 === 0 ? " even" : " odd")}>
-                        <div className="attendee-name">{vote.place}. {vote.brewer}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
-
 const VoteList = ({ votes }) => {
     const gameContext = useGameContext();
     console.log(gameContext.userVotes[0].brewer);
