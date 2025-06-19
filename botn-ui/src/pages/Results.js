@@ -67,10 +67,13 @@ const Result = ({result, index, isOwnEntry, isAdmin}) => {
 }
 
 const ResultsList = ({results}) => {
+
     const gameContext = useGameContext();
+    const votesString = gameContext.userVotes[0].brewer + " 1st,  " + gameContext.userVotes[1].brewer + " 2nd,  " + gameContext.userVotes[2].brewer + " 3rd";
 
     return (
         <div className="results-list">
+        <div className="attendee-list-title">{"Your votes: " + votesString }</div>
         {
             results.length > 0 ?
             results.map((result, index) =>
@@ -103,6 +106,7 @@ const Results = ({sendMessage, useSubscription}) => {
     return (
         <>
             <MainPage>
+                
                 <ResultsList results={results}/>
             </MainPage>
             {
