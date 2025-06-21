@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useGameContext } from '../utilities/game-context';
-import { BOTN_GET_RESULTS_FOR_GAME, BOTN_GAME_STATE_TOPIC, GAME_STATE } from '../utilities/constants';
-import { FaMedal, FaBeer } from 'react-icons/fa';
-import { BeerCard, BigIconWithMessage, MainButton, MainPage } from '../components/components';
+import { BOTN_GET_RESULTS_FOR_GAME} from '../utilities/constants';
+import { FaMedal } from 'react-icons/fa';
+import { BeerCard, MainButton, MainPage } from '../components/components';
 
 const Voter = ({name, place, index, last}) => {
     return (
@@ -95,7 +95,7 @@ const Results = ({sendMessage, useSubscription}) => {
             console.log(response);
             setResults(response.data);
         });
-    }, []);
+    });
 
     // updates game state so that everyone in the game gets brought to results page
     const revealResults = () => {

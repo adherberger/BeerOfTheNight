@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { FaCheck, FaBeer, FaVoteYea } from 'react-icons/fa';
+import {FaVoteYea } from 'react-icons/fa';
 import { useGameContext } from '../utilities/game-context';
 import {
-    BOTN_GAME_STATE_TOPIC,
     BOTN_VOTES_TOPIC,
     PAGES,
 } from '../utilities/constants';
@@ -54,7 +53,7 @@ export const Waiting = ({ navigate, sendMessage, useSubscription }) => {
 
     useEffect(() => {
         sendMessage("/updateVotes/" + gameContext.game.gameId);
-    }, [])
+    })
 
     function goToResults() {
         sendMessage("/votingComplete/" + gameContext.game.gameId);

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.fhbc.botn.dto.AddEntryForRequest;
@@ -382,7 +383,11 @@ public class BeerOtnHandler {
 	}
 
 	public GameState getGameStateForGame(Integer gameId) {
-		GameEntity game = gameRepo.findById(gameId).get();
-		return game.getGameState();
+		Optional gameEntity = gameRepo.findById(gameId);
+		if (!gameEntity.isPresent()) {
+			return null;
+		}
+		
+		return ((GameEntity)gameEntity.get()).getGameState();
 	}
 }
